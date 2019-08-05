@@ -51,4 +51,4 @@ jobs:
 cache:
   packages: true
   directories:
-  - "~/.m2"
+  - ~/.m2
