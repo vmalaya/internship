@@ -11,45 +11,42 @@ import java.util.*;
 public class InitializationTest {
 
     @Test
-    public void should_create_empty_array_list (){
+    public void should_create_empty_array_list() {
 
-        // given
+        //given
         List arrayList;
         int initialCapacity = 10;
 
-        // when
+        //when
         arrayList = new ArrayList();
         int size = arrayList.size();
 
-        // then
-        Assert.assertEquals(0,size);
+        //then
+        Assert.assertEquals(0, size);
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void should__fail_init_array_list_by_given_capacity (){
+    public void should__fail_init_array_list_by_given_capacity() {
 
         //given
         List arrayList;
         int initCapacity = -1;
 
-        // when
+        //when
         arrayList = new ArrayList(initCapacity);
     }
 
     @Test
-    public void should_create_array_list_from_given_collection (){
+    public void should_create_array_list_from_given_collection() {
 
         //given
-
         Collection collection = Arrays.asList(new Integer(1), new Integer(2), new Integer(3));
         List arrayList;
 
-        // where
+        //where
         arrayList = new ArrayList(collection);
 
         //then
-
         Assert.assertTrue(arrayList.containsAll(collection));
-
     }
 }
