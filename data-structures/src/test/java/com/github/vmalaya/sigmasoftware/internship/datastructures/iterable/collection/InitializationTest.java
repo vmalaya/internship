@@ -40,7 +40,7 @@ public class InitializationTest {
     public void should_create_array_list_from_given_collection() {
 
         //given
-        Collection collection = Arrays.asList(new Integer(1), new Integer(2), new Integer(3));
+        Collection collection = Arrays.asList(1, 2, 3);
         List arrayList;
 
         //where
