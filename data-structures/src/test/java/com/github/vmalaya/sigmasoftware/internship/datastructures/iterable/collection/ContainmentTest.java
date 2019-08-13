@@ -1,24 +1,25 @@
 package com.github.vmalaya.sigmasoftware.internship.datastructures.iterable.collection;
 
+import org.junit.Assert;
 import org.junit.Test;
 
 import java.util.*;
 import java.util.concurrent.*;
 
 /**
- * Testing following classes as collection for adding:
+ * Testing following classes as collection for checking element containment:
  * ArrayList
  * LinkedList
  * Vector
  * Stack
  * HashSet
- *
+ * <p>
  * LinkedHashSet
  * TreeSet
  * ConcurrentSkipListSet
  * RegularEnumSet
  * CopyOnWriteArraySet
- *
+ * <p>
  * ConcurrentLinkedQueue
  * PriorityQueue
  * LinkedBlockingDeque
@@ -32,10 +33,10 @@ import java.util.concurrent.*;
  * SynchronousQueue
  * LinkedTransferQueue
  */
-public class AddingTest {
+public class ContainmentTest {
 
     @Test
-    public void should_add_an_element() {
+    public void should_check_element_containment() {
 
         //given
         int capacity = 1;
@@ -58,14 +59,11 @@ public class AddingTest {
         PriorityBlockingQueue priorityBlockingQueue = new PriorityBlockingQueue<>();
         TreeSet treeSet = new TreeSet<>();
         CopyOnWriteArraySet copyOnWriteArraySet = new CopyOnWriteArraySet<>();
-
-        //type of input element needs to implement Delayed
         DelayQueue<Delayed> delayQueue = new DelayQueue<>();
 
-        SynchronousQueue synchronousQueue = new SynchronousQueue(); //TODO: should be tested for adding an element
+        SynchronousQueue synchronousQueue = new SynchronousQueue(); //TODO: should be tested for containment an element
 
-        //when
-        Arrays.asList(arrayList,
+        List<? extends Collection> collections = Arrays.asList(arrayList,
                 linkedList,
                 vector,
                 stack,
@@ -84,16 +82,22 @@ public class AddingTest {
                 priorityBlockingQueue,
                 treeSet,
                 copyOnWriteArraySet
-        ).forEach(this::add);
+        );
+        collections.forEach(n -> n.add(true));
 
-        delayQueue.add(new DelayObject("TEST", 1));
+        DelayObject delayObject = new DelayObject("TEST", 1);
+        delayQueue.add(delayObject);
+
+        //then
+        collections.forEach(n -> Assert.assertTrue(n.contains(true)));
+        Assert.assertTrue(delayQueue.contains(delayObject));
     }
 
     @Test
-    public void should_add_given_collection() {
+    public void should_check_containment_all_elements_given_collection() {
 
         //given
-        int capacity = 1;
+        int capacity = 3;
         ArrayList<Object> arrayList = new ArrayList<>();
         LinkedList<Object> linkedList = new LinkedList<>();
         Vector<Object> vector = new Vector<>();
@@ -113,14 +117,11 @@ public class AddingTest {
         PriorityBlockingQueue priorityBlockingQueue = new PriorityBlockingQueue<>();
         TreeSet treeSet = new TreeSet<>();
         CopyOnWriteArraySet copyOnWriteArraySet = new CopyOnWriteArraySet<>();
-
-        //type of input element needs to implement Delayed
         DelayQueue<Delayed> delayQueue = new DelayQueue<>();
 
-        SynchronousQueue synchronousQueue = new SynchronousQueue(); //TODO: should be tested for adding a collection
+        SynchronousQueue synchronousQueue = new SynchronousQueue(); //TODO: should be tested for containment a collection
 
-        //when
-        Arrays.asList(arrayList,
+        List<? extends Collection> collections = Arrays.asList(arrayList,
                 linkedList,
                 vector,
                 stack,
@@ -139,18 +140,20 @@ public class AddingTest {
                 priorityBlockingQueue,
                 treeSet,
                 copyOnWriteArraySet
-        ).forEach(this::addCollection);
+        );
+        collections.forEach(n -> n.addAll(Arrays.asList(true, true, true)));
 
-        delayQueue.addAll(new ArrayList<DelayObject>());
-    }
+        List<DelayObject> delayObjectList = Arrays.asList(new DelayObject("TEST", 1),
+                new DelayObject("TEST", 2),
+                new DelayObject("TEST", 3));
+        delayQueue.addAll(delayObjectList);
 
-    private void add(Collection collection) {
-        Boolean b = new Boolean(true);
-        collection.add(b);
-    }
-
-    private void addCollection(Collection collection) {
-        Collection newCollection = new ArrayList();
-        collection.addAll(newCollection);
+        //then
+        collections.forEach(n -> Assert.assertTrue(n.containsAll(Arrays.asList(true))));
+        collections.forEach(n -> Assert.assertFalse(n.containsAll(Arrays.asList(true, false))));
+        Assert.assertTrue(delayQueue.containsAll(delayObjectList));
+        Assert.assertFalse(delayQueue.containsAll(Arrays.asList(new DelayObject("TEST", 1),
+                new DelayObject("TEST", 2),
+                new DelayObject("TEST", 4))));
     }
 }

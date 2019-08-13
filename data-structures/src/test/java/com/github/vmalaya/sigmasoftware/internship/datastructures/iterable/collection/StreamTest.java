@@ -1,24 +1,25 @@
 package com.github.vmalaya.sigmasoftware.internship.datastructures.iterable.collection;
 
+import org.junit.Assert;
 import org.junit.Test;
 
 import java.util.*;
 import java.util.concurrent.*;
 
 /**
- * Testing following classes as collection for adding:
+ * Testing following classes as collection for returning stream:
  * ArrayList
  * LinkedList
  * Vector
  * Stack
  * HashSet
- *
+ * <p>
  * LinkedHashSet
  * TreeSet
  * ConcurrentSkipListSet
  * RegularEnumSet
  * CopyOnWriteArraySet
- *
+ * <p>
  * ConcurrentLinkedQueue
  * PriorityQueue
  * LinkedBlockingDeque
@@ -32,13 +33,13 @@ import java.util.concurrent.*;
  * SynchronousQueue
  * LinkedTransferQueue
  */
-public class AddingTest {
+public class StreamTest {
 
     @Test
-    public void should_add_an_element() {
+    public void should_return_stream() {
 
         //given
-        int capacity = 1;
+        int capacity = 2;
         ArrayList<Object> arrayList = new ArrayList<>();
         LinkedList<Object> linkedList = new LinkedList<>();
         Vector<Object> vector = new Vector<>();
@@ -58,14 +59,10 @@ public class AddingTest {
         PriorityBlockingQueue priorityBlockingQueue = new PriorityBlockingQueue<>();
         TreeSet treeSet = new TreeSet<>();
         CopyOnWriteArraySet copyOnWriteArraySet = new CopyOnWriteArraySet<>();
-
-        //type of input element needs to implement Delayed
         DelayQueue<Delayed> delayQueue = new DelayQueue<>();
+        SynchronousQueue synchronousQueue = new SynchronousQueue();
 
-        SynchronousQueue synchronousQueue = new SynchronousQueue(); //TODO: should be tested for adding an element
-
-        //when
-        Arrays.asList(arrayList,
+        List<? extends Collection> collections = Arrays.asList(arrayList,
                 linkedList,
                 vector,
                 stack,
@@ -83,17 +80,20 @@ public class AddingTest {
                 concurrentSkipListSet,
                 priorityBlockingQueue,
                 treeSet,
-                copyOnWriteArraySet
-        ).forEach(this::add);
+                copyOnWriteArraySet,
+                delayQueue,
+                synchronousQueue
+        );
 
-        delayQueue.add(new DelayObject("TEST", 1));
+        //when
+        collections.forEach(n -> n.stream());
     }
 
     @Test
-    public void should_add_given_collection() {
+    public void should_return_parallel_stream() {
 
         //given
-        int capacity = 1;
+        int capacity = 2;
         ArrayList<Object> arrayList = new ArrayList<>();
         LinkedList<Object> linkedList = new LinkedList<>();
         Vector<Object> vector = new Vector<>();
@@ -113,14 +113,10 @@ public class AddingTest {
         PriorityBlockingQueue priorityBlockingQueue = new PriorityBlockingQueue<>();
         TreeSet treeSet = new TreeSet<>();
         CopyOnWriteArraySet copyOnWriteArraySet = new CopyOnWriteArraySet<>();
-
-        //type of input element needs to implement Delayed
         DelayQueue<Delayed> delayQueue = new DelayQueue<>();
+        SynchronousQueue synchronousQueue = new SynchronousQueue();
 
-        SynchronousQueue synchronousQueue = new SynchronousQueue(); //TODO: should be tested for adding a collection
-
-        //when
-        Arrays.asList(arrayList,
+        List<? extends Collection> collections = Arrays.asList(arrayList,
                 linkedList,
                 vector,
                 stack,
@@ -138,19 +134,12 @@ public class AddingTest {
                 concurrentSkipListSet,
                 priorityBlockingQueue,
                 treeSet,
-                copyOnWriteArraySet
-        ).forEach(this::addCollection);
+                copyOnWriteArraySet,
+                delayQueue,
+                synchronousQueue
+        );
 
-        delayQueue.addAll(new ArrayList<DelayObject>());
-    }
-
-    private void add(Collection collection) {
-        Boolean b = new Boolean(true);
-        collection.add(b);
-    }
-
-    private void addCollection(Collection collection) {
-        Collection newCollection = new ArrayList();
-        collection.addAll(newCollection);
+        //then
+        collections.forEach(n -> Assert.assertTrue(n.parallelStream().isParallel()));
     }
 }
