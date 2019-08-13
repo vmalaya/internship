@@ -218,7 +218,7 @@ public class RemovingTest {
     }
 
     private void removeIf(Collection collection) {
-        collection.removeIf(n ->(n.equals(true)));
+        collection.removeIf(n -> (n.equals(true)));
     }
 
     private boolean removeCollection(Collection collection) {
