@@ -1,4 +1,4 @@
-package com.github.vmalaya.sigmasoftware.internship.datastructures.iterable;
+package com.github.vmalaya.sigmasoftware.internship.datastructures.iterable.collection;
 
 import org.junit.Assert;
 import org.junit.Test;
@@ -7,7 +7,7 @@ import java.util.*;
 import java.util.concurrent.*;
 
 /**
- * All collections are iterable:
+ * All collections can remove an element or collection:
  * List:
  *   ArrayList
  *   LinkedList
@@ -32,13 +32,15 @@ import java.util.concurrent.*;
  *   PriorityBlockingQueue
  *   LinkedTransferQueue
  */
-public class IterableTest {
+public class CollectionRemoveTest {
 
     @Test
-    public void should_do_action_for_each_element() {
+    public void should_remove_an_element() {
 
         //given
         int capacity = 1;
+
+        //when
         List<? extends Collection<Object>> collections = Arrays.asList(new ArrayList<>(),
                 new LinkedList<>(),
                 new Vector<>(),
@@ -59,12 +61,18 @@ public class IterableTest {
                 new TreeSet<>(),
                 new CopyOnWriteArraySet<>());
 
+        //and
+        collections.forEach(collection -> collection.add("string"));
+
+        //when
+        collections.forEach(collection -> collection.remove("string"));
+
         //then
-        collections.forEach(collection -> Assert.assertTrue(true));
+        collections.forEach(collection -> Assert.assertFalse(collection.contains("string")));
     }
 
     @Test
-    public void should_return_iterator() {
+    public void should_remove_a_collection() {
 
         //given
         int capacity = 1;
@@ -88,16 +96,24 @@ public class IterableTest {
                 new TreeSet<>(),
                 new CopyOnWriteArraySet<>());
 
+        //and
+        List<String> strings = Arrays.asList("str1");
+
+        //and
+        collections.forEach(collection -> collection.addAll(strings));
+
+        //when
+        collections.forEach(collection -> collection.removeAll(strings));
+
         //then
-        collections.forEach(collection ->
-                Assert.assertTrue(collection.iterator() instanceof Iterator));
+        collections.forEach(collection -> Assert.assertFalse(collection.containsAll(strings)));
     }
 
     @Test
-    public void should_return_spliterator() {
+    public void should_remove_if() {
 
         //given
-        int capacity = 1;
+        int capacity = 2;
         List<? extends Collection<Object>> collections = Arrays.asList(new ArrayList<>(),
                 new LinkedList<>(),
                 new Vector<>(),
@@ -117,9 +133,16 @@ public class IterableTest {
                 new PriorityBlockingQueue<>(),
                 new TreeSet<>(),
                 new CopyOnWriteArraySet<>());
+        //and
+        List<String> strings = Arrays.asList("str1", "str2");
+
+        //and
+        collections.forEach(collection -> collection.addAll(strings));
+
+        //when
+        collections.forEach(collection -> collection.removeIf(element -> element.equals("str1")));
 
         //then
-        collections.forEach(collection ->
-                Assert.assertTrue(collection.spliterator() instanceof Spliterator));
+        collections.forEach(collection -> Assert.assertFalse(collection.contains("str1")));
     }
 }
