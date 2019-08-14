@@ -1,4 +1,4 @@
-package com.github.vmalaya.sigmasoftware.internship.datastructures.iterable;
+package com.github.vmalaya.sigmasoftware.internship.datastructures.iterable.collection;
 
 import org.junit.Assert;
 import org.junit.Test;
@@ -7,7 +7,7 @@ import java.util.*;
 import java.util.concurrent.*;
 
 /**
- * All collections are iterable:
+ * All collections can add an element:
  * List:
  *   ArrayList
  *   LinkedList
@@ -32,10 +32,10 @@ import java.util.concurrent.*;
  *   PriorityBlockingQueue
  *   LinkedTransferQueue
  */
-public class IterableTest {
+public class CollectionAddTest {
 
     @Test
-    public void should_do_action_for_each_element() {
+    public void should_add_an_element() {
 
         //given
         int capacity = 1;
@@ -59,15 +59,20 @@ public class IterableTest {
                 new TreeSet<>(),
                 new CopyOnWriteArraySet<>());
 
+        //when
+        collections.forEach(collection -> collection.add("string"));
+
         //then
-        collections.forEach(collection -> Assert.assertTrue(true));
+        collections.forEach(collection -> Assert.assertTrue(collection.contains("string")));
     }
 
     @Test
-    public void should_return_iterator() {
+    public void should_add_given_collection() {
 
         //given
         int capacity = 1;
+
+        //when
         List<? extends Collection<Object>> collections = Arrays.asList(new ArrayList<>(),
                 new LinkedList<>(),
                 new Vector<>(),
@@ -87,39 +92,13 @@ public class IterableTest {
                 new PriorityBlockingQueue<>(),
                 new TreeSet<>(),
                 new CopyOnWriteArraySet<>());
+        //and
+        List<String> strings = Arrays.asList("str1");
+
+        //when
+        collections.forEach(collection -> collection.addAll(strings));
 
         //then
-        collections.forEach(collection ->
-                Assert.assertTrue(collection.iterator() instanceof Iterator));
-    }
-
-    @Test
-    public void should_return_spliterator() {
-
-        //given
-        int capacity = 1;
-        List<? extends Collection<Object>> collections = Arrays.asList(new ArrayList<>(),
-                new LinkedList<>(),
-                new Vector<>(),
-                new Stack<>(),
-                new CopyOnWriteArrayList<>(),
-                new ArrayBlockingQueue<>(capacity),
-                new PriorityQueue<>(),
-                new ConcurrentLinkedQueue<>(),
-                new LinkedBlockingQueue<>(),
-                new LinkedTransferQueue<>(),
-                new ArrayDeque<>(),
-                new ConcurrentLinkedDeque<>(),
-                new LinkedBlockingDeque<>(),
-                new HashSet<>(),
-                new LinkedHashSet<>(),
-                new ConcurrentSkipListSet<>(),
-                new PriorityBlockingQueue<>(),
-                new TreeSet<>(),
-                new CopyOnWriteArraySet<>());
-
-        //then
-        collections.forEach(collection ->
-                Assert.assertTrue(collection.spliterator() instanceof Spliterator));
+        collections.forEach(collection -> Assert.assertTrue(collection.containsAll(strings)));
     }
 }
