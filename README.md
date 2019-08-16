@@ -1,4 +1,4 @@
-# Valentina internship [![Build Status](https://travis-ci.org/vmalaya/java-core.svg?branch=master)](https://travis-ci.org/vmalaya/java-core)
+# Valentina internship [![Build Status](https://travis-ci.org/vmalaya/internship.svg?branch=master)](https://travis-ci.org/vmalaya/internship)
 This sets of projects are using during my internship in Sigmas Software
 
 <!--
