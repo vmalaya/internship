@@ -13,6 +13,10 @@
     <modelVersion>4.0.0</modelVersion>
     <artifactId>data-structures</artifactId>
 
+    <properties>
+        <assertj.version>3.13.2</assertj.version>
+    </properties>
+
     <build>
         <plugins>
             <plugin>
@@ -60,12 +64,22 @@
             <groupId>org.codehaus.groovy</groupId>
             <artifactId>groovy-all</artifactId>
             <version>${groovy-all.version}</version>
+            <!-- do not use it! we don't wanna bring that dependency as a compile scope library into our project -->
+            <!--<scope>compile</scope>-->
+            <scope>provided</scope>
             <type>pom</type>
         </dependency>
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
             <version>${junit.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.assertj</groupId>
+            <artifactId>assertj-core</artifactId>
+            <version>${assertj.version}</version>
+            <scope>test</scope>
         </dependency>
     </dependencies>
 
