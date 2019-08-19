@@ -13,10 +13,6 @@
     <modelVersion>4.0.0</modelVersion>
     <artifactId>data-structures</artifactId>
 
-    <properties>
-        <assertj.version>3.13.2</assertj.version>
-    </properties>
-
     <build>
         <plugins>
             <plugin>

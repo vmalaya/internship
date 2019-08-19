@@ -19,19 +19,37 @@
         <maven.compiler.target>${java.version}</maven.compiler.target>
 
         <junit.version>4.12</junit.version>
+        <assertj.version>3.13.2</assertj.version>
         <groovy-all.version>2.5.7</groovy-all.version>
+        <junit-jupiter.version>5.5.1</junit-jupiter.version>
         <spock-core.version>1.3-groovy-2.5</spock-core.version>
         <gmavenplus-plugin.version>1.6</gmavenplus-plugin.version>
         <maven-deploy-plugin.version>2.8.2</maven-deploy-plugin.version>
-        <maven-surefire-plugin.version>2.20.1</maven-surefire-plugin.version>
+        <maven-compiler-plugin.version>3.8.1</maven-compiler-plugin.version>
+        <maven-surefire-plugin.version>3.0.0-M3</maven-surefire-plugin.version>
+        <!--<maven-surefire-plugin.version>2.22.2</maven-surefire-plugin.version>-->
     </properties>
 
     <modules>
         <module>data-structures</module>
+        <module>message-repository</module>
     </modules>
 
     <build>
         <defaultGoal>clean package</defaultGoal>
+
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>${maven-compiler-plugin.version}</version>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>${maven-surefire-plugin.version}</version>
+            </plugin>
+        </plugins>
     </build>
 
 </project>

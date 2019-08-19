@@ -9,11 +9,15 @@ The [data-structures] project demonstrates the Java Collections
 functionality covered by unit test for quick guide or future
 refinements
 
+The [message-repository] project contains Sigma Software Message
+Repository implementation
+
 <!--
 references
 -->
 
 [data-structures]: data-structures
+[message-repository]: message-repository
 
 # Iterable
 ## 1
