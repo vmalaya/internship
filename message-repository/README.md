@@ -5,13 +5,20 @@
 ### functional
 #### user stories (features)
 + As a user I want to be able to save new message
-+ As a owner I want to be able to reveal last number of messages in descent order
++ As an owner I want to be able to reveal last number of messages in descent order
+- As an owner I want to be able to fetch all messages in descent order
+- As an owner I want to be able to gain last number of saved messages on the screen(?)
+- As an owner I want to be able to know receiver name when I get message
+- As an owner I want to be able to get message id by message content and receiver 
+- As an owner I want to be able to update message by given id
+- As a user I want to be able to see list of all executable commands 
+
 ### non-functional (TODO)
 #### should be executable from shell
 #### should be platform independent
 #### should have auth. mechanism
 
-Home work 1: complete full list of ser stories
+Home work 1: complete full list of user stories
 - should find last number of messages in DESC order
 - should find all messages in DESC order since beginning
 - should find last saved messages by given limit
