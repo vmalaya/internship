@@ -1,17 +1,21 @@
 package sigma.software.messagerepository;
 
 import io.vavr.API;
+import sigma.software.messagerepository.command.AcceptFriendRequestCommand;
 import sigma.software.messagerepository.command.CreateUserCommand;
 import sigma.software.messagerepository.command.SendFriendRequestCommand;
 import sigma.software.messagerepository.event.DomainEvent;
+import sigma.software.messagerepository.event.FriendRequestAcceptedEvent;
 import sigma.software.messagerepository.event.FriendRequestSentEvent;
 import sigma.software.messagerepository.event.UserCreatedEvent;
 
+import java.awt.*;
 import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.function.Function;
 
 import static io.vavr.API.$;
@@ -23,7 +27,8 @@ public class User implements Function<DomainEvent, User> {
     // state:
     private UUID id;
     private String username;
-    private Collection<UUID> friendRequest = new CopyOnWriteArrayList<>();
+    private Collection<UUID> friendRequest = new CopyOnWriteArraySet<>();
+    private Collection<UUID> friends = new CopyOnWriteArraySet<>();
 
     public User() {
     }
@@ -56,7 +61,7 @@ public class User implements Function<DomainEvent, User> {
 
     // CQRS
 
-    // command: sign-in/sign-up
+    // sign-in/sign-up
     public void handle(CreateUserCommand command) { // cmd
         if (Objects.isNull(command.getId())) throw new IllegalArgumentException("id may not be null."); // nack
         if (Objects.isNull(command.getUsername())) throw new IllegalArgumentException("username may not be null.");
@@ -64,7 +69,6 @@ public class User implements Function<DomainEvent, User> {
         on(new UserCreatedEvent(command.getId(), command.getUsername())); // ack
     }
 
-    // event
     private User on(UserCreatedEvent event) { // evt
         domainEvents.add(event);
         id = event.getId();
@@ -72,6 +76,7 @@ public class User implements Function<DomainEvent, User> {
         return this;
     }
 
+    // send friend request
     public void handle(SendFriendRequestCommand command) {
         if (Objects.isNull(command.getFriendId())) throw new IllegalArgumentException("id may not be null."); // nack
         on(new FriendRequestSentEvent(command.getFriendId()));
@@ -80,6 +85,18 @@ public class User implements Function<DomainEvent, User> {
     private User on(FriendRequestSentEvent event) {
         domainEvents.add(event);
         friendRequest.add(event.getFriendId());
+        return this;
+    }
+
+    // accept friend request
+    public void handle(AcceptFriendRequestCommand command) {
+        if (Objects.isNull(command.getId())) throw new IllegalArgumentException("id may not be null."); // nack
+        on(new FriendRequestAcceptedEvent(command.getId()));
+    }
+
+    private User on(FriendRequestAcceptedEvent event) {
+        domainEvents.add(event);
+        friends.add(event.getFriendId());
         return this;
     }
 
@@ -108,5 +125,9 @@ public class User implements Function<DomainEvent, User> {
 
     public Collection<UUID> getFriendRequest() {
         return friendRequest;
+    }
+
+    public Collection<UUID> getFriends() {
+        return friends;
     }
 }

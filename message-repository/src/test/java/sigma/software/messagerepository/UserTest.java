@@ -3,6 +3,7 @@ package sigma.software.messagerepository;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.Test;
+import sigma.software.messagerepository.command.AcceptFriendRequestCommand;
 import sigma.software.messagerepository.command.CreateUserCommand;
 import sigma.software.messagerepository.command.SendFriendRequestCommand;
 
@@ -46,5 +47,26 @@ class UserTest {
 
         // then:
         assertThat(user.getFriendRequest()).hasSize(1);
+    }
+
+    @Test
+    void should_accept_friend_request() {
+
+        // given:
+        User user = new User();
+        UUID userId = UUID.fromString("00000000-0000-0000-0000-000000000000");
+        user.handle(new CreateUserCommand(userId, "valentyna.mala"));
+        // and
+        User friend = new User();
+        UUID friendId = UUID.fromString("11111111-1111-1111-1111-111111111111");
+        friend.handle(new CreateUserCommand(friendId, "valentyna.mala"));
+
+        // when:
+        user.handle(new SendFriendRequestCommand(friendId));
+        // and
+        friend.handle(new AcceptFriendRequestCommand(userId));
+
+        // then:
+        assertThat(friend.getFriends()).hasSize(1);
     }
 }
