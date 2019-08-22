@@ -3,13 +3,13 @@ package sigma.software.messagerepository;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.Test;
-import sigma.software.messagerepository.User;
 import sigma.software.messagerepository.command.CreateUserCommand;
-import sigma.software.messagerepository.UserRepository;
+import sigma.software.messagerepository.command.SaveMessageCommand;
 
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
 class UserTest {
@@ -17,7 +17,7 @@ class UserTest {
     UserRepository userRepository = new UserRepository();
 
     @Test
-    void User_should_be_create() {
+    void should_create_user() {
 
         // given:
         User user = new User();
@@ -37,22 +37,39 @@ class UserTest {
     }
 
     @Test
-    void As_a_user_I_should_not_be_able_to_save_null_message() {
+    void should_not_be_able_to_save_null_message_as_a_user() {
 
         // given:
-
-        // when:
+        User user = new User();
+        // and
+        UUID userId = UUID.randomUUID();
+        // and
+        UUID messageId = UUID.randomUUID();
+        // and
+        user.handle(new CreateUserCommand(userId, "valentyna.mala"));
 
         // then:
+        assertThatThrownBy(() -> {
+            user.handle(new SaveMessageCommand(messageId, null, "mr.receiver"));
+        }).isInstanceOf(IllegalArgumentException.class).hasMessage("message may not be null");
     }
 
     @Test
-    void As_a_user_I_want_to_be_able_to_save_new_message() {
+    void should_save_new_message() {
 
         // given:
+        User user = new User();
+        // and
+        UUID userId = UUID.randomUUID();
+        // and
+        UUID messageId = UUID.randomUUID();
+        // and
+        user.handle(new CreateUserCommand(userId, "valentyna.mala"));
 
         // when:
+        user.handle(new SaveMessageCommand(messageId, "valentyna.mala", "mr.receiver"));
 
         // then:
+        assertThat(user.getMessageRepository().find(user, messageId)).isTrue();
     }
 }
