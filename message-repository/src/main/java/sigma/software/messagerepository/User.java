@@ -1,16 +1,16 @@
 package sigma.software.messagerepository;
 
 import io.vavr.API;
-import sigma.software.messagerepository.command.ChangeUsernameCommand;
 import sigma.software.messagerepository.command.CreateUserCommand;
-import sigma.software.messagerepository.event.DomainEvent;
-import sigma.software.messagerepository.event.UserCreatedEvent;
-import sigma.software.messagerepository.event.UsernameChangedEvent;
+import sigma.software.messagerepository.command.SaveMessageCommand;
+import sigma.software.messagerepository.event.*;
 
-import java.util.*;
+import java.util.Collection;
+import java.util.List;
+import java.util.Objects;
+import java.util.UUID;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.function.Function;
-import java.util.stream.IntStream;
 
 import static io.vavr.API.$;
 import static io.vavr.API.Case;
@@ -40,6 +40,13 @@ public class User implements Function<DomainEvent, User> {
         return domainEvents;
     }
 
+    //message repo
+    private final MessageRepository messageRepository = new MessageRepository();
+
+    public MessageRepository getMessageRepository() {
+        return messageRepository;
+    }
+
     public void flushEvents() {
         domainEvents.clear();
     }
@@ -63,21 +70,21 @@ public class User implements Function<DomainEvent, User> {
     }
 
     // commands
-    public void handle(ChangeUsernameCommand command) { // cmd
-        if (Objects.isNull(command.getId())) throw new IllegalArgumentException("id may not be null."); // nack
-        if (Objects.isNull(command.getFrom())) throw new IllegalArgumentException("from username may not be null.");
-        if (command.getFrom().isEmpty()) throw new IllegalArgumentException("from username may not be empty.");
-        if (Objects.isNull(command.getTo())) throw new IllegalArgumentException("to username may not be null.");
-        if (command.getTo().isEmpty()) throw new IllegalArgumentException("to username may not be empty.");
-        if (!command.getFrom().equals(username)) throw new IllegalArgumentException("wrong from username.");
-        on(new UsernameChangedEvent(command.getId(), command.getFrom(), command.getTo())); // ack
+    public void handle(SaveMessageCommand command) {
+        if (Objects.isNull(command.getId())) throw new IllegalArgumentException("id may not be null."); //nack
+        if (Objects.isNull(command.getMessage())) throw new IllegalArgumentException("message may not be null");
+        if (command.getMessage().isEmpty()) throw new IllegalArgumentException("message may not be empty");
+        if (Objects.isNull(command.getReceiverUsername()))
+            throw new IllegalArgumentException("receiver username may not be null");
+        if (command.getReceiverUsername().isEmpty())
+            throw new IllegalArgumentException("receiver username may not be empty");
+        on(new MessageSavedEvent(command.getId(), command.getMessage(), command.getReceiverUsername()));
     }
 
     // events
-    private User on(UsernameChangedEvent event) { // evt
+    private void on(MessageSavedEvent event) {
         domainEvents.add(event);
-        username = event.getTo();
-        return this;
+        messageRepository.save(this, event);
     }
 
     // event sourcing
@@ -91,7 +98,7 @@ public class User implements Function<DomainEvent, User> {
     public User apply(DomainEvent domainEvent) {
         return API.Match(domainEvent).of(
                 Case($(instanceOf(UserCreatedEvent.class)), this::on),
-                Case($(instanceOf(UsernameChangedEvent.class)), this::on),
+                // Case($(instanceOf(UsernameChangedEvent.class)), this::on),
                 Case($(), event -> this)
         );
     }

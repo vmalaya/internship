@@ -4,14 +4,15 @@
 ## requirements
 ### functional
 #### user stories (features)
-+ As a user I want to be able to save new message
-+ As an owner I want to be able to reveal last number of messages in descent order
-- As an owner I want to be able to fetch all messages in descent order
-- As an owner I want to be able to gain last number of saved messages on the screen(?)
-- As an owner I want to be able to know receiver name when I get message
-- As an owner I want to be able to get message id by message content and receiver 
-- As an owner I want to be able to update message by given id
-- As a user I want to be able to see list of all executable commands 
+- As a user I should be able to sign-in/sign-up
+- As a user I should be able send friend request
+- As a user I should be able accept friend request
+- As a user I should be able decline friend request
+- As a user I should be able to send new message
+- As a user I should be able to receive new message
+- As a user I should be able to reveal last messages in descent order by limit
+- As a user I should be able to fetch all messages in descent order
+- As a user I should be able to see list of all executable commands 
 
 ### non-functional (TODO)
 #### should be executable from shell
