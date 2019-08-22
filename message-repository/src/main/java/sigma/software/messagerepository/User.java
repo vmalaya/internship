@@ -3,13 +3,10 @@ package sigma.software.messagerepository;
 import io.vavr.API;
 import sigma.software.messagerepository.command.AcceptFriendRequestCommand;
 import sigma.software.messagerepository.command.CreateUserCommand;
+import sigma.software.messagerepository.command.DeclineFriendRequestCommand;
 import sigma.software.messagerepository.command.SendFriendRequestCommand;
-import sigma.software.messagerepository.event.DomainEvent;
-import sigma.software.messagerepository.event.FriendRequestAcceptedEvent;
-import sigma.software.messagerepository.event.FriendRequestSentEvent;
-import sigma.software.messagerepository.event.UserCreatedEvent;
+import sigma.software.messagerepository.event.*;
 
-import java.awt.*;
 import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
@@ -44,6 +41,8 @@ public class User implements Function<DomainEvent, User> {
         return API.Match(domainEvent).of(
                 Case($(instanceOf(UserCreatedEvent.class)), this::on),
                 Case($(instanceOf(FriendRequestSentEvent.class)), this::on),
+                Case($(instanceOf(FriendRequestAcceptedEvent.class)), this::on),
+                Case($(instanceOf(FriendRequestDeclinedEvent.class)), this::on),
                 Case($(), event -> this)
         );
     }
@@ -97,6 +96,17 @@ public class User implements Function<DomainEvent, User> {
     private User on(FriendRequestAcceptedEvent event) {
         domainEvents.add(event);
         friends.add(event.getFriendId());
+        return this;
+    }
+
+    // decline friend request
+    public void handle(DeclineFriendRequestCommand command) {
+        if (Objects.isNull(command.getUserId())) throw new IllegalArgumentException("id may not be null."); // nack
+        on(new FriendRequestDeclinedEvent(command.getUserId()));
+    }
+
+    private User on(FriendRequestDeclinedEvent event) {
+        domainEvents.add(event);
         return this;
     }
 
