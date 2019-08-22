@@ -2,7 +2,10 @@ package sigma.software.messagerepository;
 
 import sigma.software.messagerepository.event.DomainEvent;
 
-import java.util.*;
+import java.util.Collection;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.stream.Collectors;
@@ -11,6 +14,7 @@ import java.util.stream.Stream;
 public class UserRepository {
 
     private final Map<UUID, Collection<DomainEvent>> eventStore = new ConcurrentHashMap<>();
+
     public void save(User user) {
         Collection<DomainEvent> tail = eventStore.getOrDefault(user.getId(), new CopyOnWriteArrayList<>());
         Collection<DomainEvent> head = user.getDomainEvents();

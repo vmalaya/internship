@@ -1,6 +1,5 @@
 package sigma.software.messagerepository.event;
 
-import java.util.Objects;
 import java.util.UUID;
 
 public class UserCreatedEvent implements DomainEvent {

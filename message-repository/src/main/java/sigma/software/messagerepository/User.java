@@ -2,8 +2,10 @@ package sigma.software.messagerepository;
 
 import io.vavr.API;
 import sigma.software.messagerepository.command.CreateUserCommand;
-import sigma.software.messagerepository.command.SaveMessageCommand;
-import sigma.software.messagerepository.event.*;
+import sigma.software.messagerepository.command.SendFriendRequestCommand;
+import sigma.software.messagerepository.event.DomainEvent;
+import sigma.software.messagerepository.event.FriendRequestSentEvent;
+import sigma.software.messagerepository.event.UserCreatedEvent;
 
 import java.util.Collection;
 import java.util.List;
@@ -18,77 +20,15 @@ import static io.vavr.Predicates.instanceOf;
 
 public class User implements Function<DomainEvent, User> {
 
+    // state:
     private UUID id;
     private String username;
-
-    // in java we trust
-    public UUID getId() {
-        return id;
-    }
-
-    public String getUsername() {
-        return username;
-    }
+    private Collection<UUID> friendRequest = new CopyOnWriteArrayList<>();
 
     public User() {
     }
 
-    // event stream:
-    private final List<DomainEvent> domainEvents = new CopyOnWriteArrayList<>();
-
-    public Collection<DomainEvent> getDomainEvents() {
-        return domainEvents;
-    }
-
-    //message repo
-    private final MessageRepository messageRepository = new MessageRepository();
-
-    public MessageRepository getMessageRepository() {
-        return messageRepository;
-    }
-
-    public void flushEvents() {
-        domainEvents.clear();
-    }
-
-    // CQRS
-
-    // commands
-    public void handle(CreateUserCommand command) { // cmd
-        if (Objects.isNull(command.getId())) throw new IllegalArgumentException("id may not be null."); // nack
-        if (Objects.isNull(command.getUsername())) throw new IllegalArgumentException("username may not be null.");
-        if (command.getUsername().isEmpty()) throw new IllegalArgumentException("username may not be empty.");
-        on(new UserCreatedEvent(command.getId(), command.getUsername())); // ack
-    }
-
-    // events
-    private User on(UserCreatedEvent event) { // evt
-        domainEvents.add(event);
-        id = event.getId();
-        username = event.getUsername();
-        return this;
-    }
-
-    // commands
-    public void handle(SaveMessageCommand command) {
-        if (Objects.isNull(command.getId())) throw new IllegalArgumentException("id may not be null."); //nack
-        if (Objects.isNull(command.getMessage())) throw new IllegalArgumentException("message may not be null");
-        if (command.getMessage().isEmpty()) throw new IllegalArgumentException("message may not be empty");
-        if (Objects.isNull(command.getReceiverUsername()))
-            throw new IllegalArgumentException("receiver username may not be null");
-        if (command.getReceiverUsername().isEmpty())
-            throw new IllegalArgumentException("receiver username may not be empty");
-        on(new MessageSavedEvent(command.getId(), command.getMessage(), command.getReceiverUsername()));
-    }
-
-    // events
-    private void on(MessageSavedEvent event) {
-        domainEvents.add(event);
-        messageRepository.save(this, event);
-    }
-
     // event sourcing
-
     public static User recreate(User snapshot, Collection<DomainEvent> history) {
         return io.vavr.collection.List.ofAll(history)
                                       .foldLeft(snapshot, User::apply);
@@ -98,11 +38,52 @@ public class User implements Function<DomainEvent, User> {
     public User apply(DomainEvent domainEvent) {
         return API.Match(domainEvent).of(
                 Case($(instanceOf(UserCreatedEvent.class)), this::on),
-                // Case($(instanceOf(UsernameChangedEvent.class)), this::on),
+                Case($(instanceOf(FriendRequestSentEvent.class)), this::on),
                 Case($(), event -> this)
         );
     }
 
+    // event stream:
+    private final List<DomainEvent> domainEvents = new CopyOnWriteArrayList<>();
+
+    public Collection<DomainEvent> getDomainEvents() {
+        return domainEvents;
+    }
+
+    public void flushEvents() {
+        domainEvents.clear();
+    }
+
+    // CQRS
+
+    // command: sign-in/sign-up
+    public void handle(CreateUserCommand command) { // cmd
+        if (Objects.isNull(command.getId())) throw new IllegalArgumentException("id may not be null."); // nack
+        if (Objects.isNull(command.getUsername())) throw new IllegalArgumentException("username may not be null.");
+        if (command.getUsername().isEmpty()) throw new IllegalArgumentException("username may not be empty.");
+        on(new UserCreatedEvent(command.getId(), command.getUsername())); // ack
+    }
+
+    // event
+    private User on(UserCreatedEvent event) { // evt
+        domainEvents.add(event);
+        id = event.getId();
+        username = event.getUsername();
+        return this;
+    }
+
+    public void handle(SendFriendRequestCommand command) {
+        if (Objects.isNull(command.getFriendId())) throw new IllegalArgumentException("id may not be null."); // nack
+        on(new FriendRequestSentEvent(command.getFriendId()));
+    }
+
+    private User on(FriendRequestSentEvent event) {
+        domainEvents.add(event);
+        friendRequest.add(event.getFriendId());
+        return this;
+    }
+
+    // in java we trust
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -115,5 +96,17 @@ public class User implements Function<DomainEvent, User> {
     @Override
     public int hashCode() {
         return Objects.hash(id, username);
+    }
+
+    public UUID getId() {
+        return id;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public Collection<UUID> getFriendRequest() {
+        return friendRequest;
     }
 }

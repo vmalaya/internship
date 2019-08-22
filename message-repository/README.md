@@ -1,5 +1,9 @@
 # message-repository
 
+```shell script
+mvnw clean package -f message-repository\pom.xml
+```
+
 # Software Requirements Specification (SRS)
 ## requirements
 ### functional

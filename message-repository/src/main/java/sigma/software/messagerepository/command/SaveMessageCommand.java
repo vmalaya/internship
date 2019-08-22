@@ -8,7 +8,6 @@ public class SaveMessageCommand {
     private final String message;
     private final String receiverUsername;
 
-
     public SaveMessageCommand(UUID id, String message, String receiverUsername) {
         this.id = id;
         this.message = message;

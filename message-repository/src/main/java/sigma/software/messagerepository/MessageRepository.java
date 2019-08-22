@@ -1,9 +1,10 @@
 package sigma.software.messagerepository;
 
 import sigma.software.messagerepository.event.DomainEvent;
-import sigma.software.messagerepository.event.MessageSavedEvent;
 
-import java.util.*;
+import java.util.Collection;
+import java.util.Map;
+import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 
@@ -25,21 +26,9 @@ public class MessageRepository {
         if (messageStore.containsKey(user.getId())) {
             Collection<DomainEvent> collection = messageStore.get(user.getId());
             for (DomainEvent d : collection) {
-                if (d.getId().equals(s)) return true;
+                // TODO: // FIXME: if (d.getId().equals(s)) return true;
             }
         }
         return false;
-    }
-
-    public boolean isEmpty() {
-        return messageStore.isEmpty();
-    }
-
-    public Collection<String> getAllMessages(UUID id) {
-        Collection<DomainEvent> collection = messageStore.get(id);
-        Iterator<DomainEvent> iterator = collection.iterator();
-        List<String> list = new ArrayList<>(collection.size() - 1);
-
-        return list;
     }
 }
