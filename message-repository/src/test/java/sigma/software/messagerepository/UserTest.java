@@ -170,4 +170,37 @@ class UserTest {
         // then:
         assertThat(user.getLastRevealedMessages()).hasSize(2);
     }
+
+    @Test
+    public void should_get_all_messages_in_desc_order() {
+
+        // given:
+        User user = new User();
+        user.handle(new CreateUserCommand(UUID.randomUUID(), "valentyna.mala"));
+        // and
+        User friend = new User();
+        friend.handle(new CreateUserCommand(UUID.randomUUID(), "friend"));
+        // and
+        user.handle(new SendFriendRequestCommand(friend.getId()));
+        // and
+        friend.handle(new AcceptFriendRequestCommand(user.getId()));
+        user.handle(new AcceptFriendRequestCommand(friend.getId()));
+        // and
+        Message firstMessage = new Message();
+        Message secondMessage = new Message();
+        Message thirdMessage = new Message();
+        firstMessage.handle(new CreateMessageCommand(UUID.randomUUID(), "Hi"));
+        secondMessage.handle(new CreateMessageCommand(UUID.randomUUID(), "What's"));
+        thirdMessage.handle(new CreateMessageCommand(UUID.randomUUID(), "up"));
+        // and
+        user.handle(new ReceiveMessageCommand(friend.getId(), firstMessage));
+        user.handle(new ReceiveMessageCommand(friend.getId(), secondMessage));
+        user.handle(new ReceiveMessageCommand(friend.getId(), thirdMessage));
+
+        // when:
+        user.handle(new RevealAllMessagesInDescOrderCommand());
+
+        // then:
+        assertThat(user.getLastRevealedMessages()).hasSize(user.getReceivedMessage().size());
+    }
 }
