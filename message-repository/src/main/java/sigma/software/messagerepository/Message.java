@@ -1,37 +1,35 @@
 package sigma.software.messagerepository;
 
-import sigma.software.messagerepository.command.CreateMessageCommand;
-import sigma.software.messagerepository.event.MessageCreatedEvent;
-
-import java.util.Objects;
+import java.time.ZonedDateTime;
 import java.util.UUID;
 
 public class Message {
-    private UUID id;
-    private String text;
 
-    public Message() {
+    private final UUID sender;
+    private final UUID recipient;
+    private final String body;
+    private final ZonedDateTime at;
+
+    public Message(UUID sender, UUID recipient, String body, ZonedDateTime at) {
+        this.sender = sender;
+        this.recipient = recipient;
+        this.body = body;
+        this.at = at;
     }
 
-    // create message
-    public void handle(CreateMessageCommand command) {
-        if (Objects.isNull(command.getId())) throw new IllegalArgumentException("id may not be null.");// nack
-        if (Objects.isNull(command.getText())) throw new IllegalArgumentException("text may not be null.");
-        if (command.getText().isEmpty()) throw new IllegalArgumentException("message should not be empty.");
-        on(new MessageCreatedEvent(command.getId(), command.getText()));
+    public UUID getSender() {
+        return sender;
     }
 
-    private Message on(MessageCreatedEvent event) {
-        id = event.getId();
-        text = event.getText();
-        return this;
+    public UUID getRecipient() {
+        return recipient;
     }
 
-    public UUID getId() {
-        return id;
+    public String getBody() {
+        return body;
     }
 
-    public String getText() {
-        return text;
+    public ZonedDateTime getAt() {
+        return at;
     }
 }

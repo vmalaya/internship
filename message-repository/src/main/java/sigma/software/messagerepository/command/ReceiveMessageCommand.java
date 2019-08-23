@@ -1,24 +1,28 @@
 package sigma.software.messagerepository.command;
 
-import sigma.software.messagerepository.Message;
-
 import java.util.UUID;
 
 public class ReceiveMessageCommand {
 
-    private final UUID friendId;
-    private final Message message;
+    private final UUID sender;
+    private final UUID recipient;
+    private final String message;
 
-    public ReceiveMessageCommand(UUID friendId, Message message) {
-        this.friendId = friendId;
+    public ReceiveMessageCommand(UUID sender, UUID recipient, String message) {
+        this.sender = sender;
+        this.recipient = recipient;
         this.message = message;
     }
 
-    public UUID getFriendId() {
-        return friendId;
+    public UUID getSender() {
+        return sender;
     }
 
-    public Message getMessage() {
+    public UUID getRecipient() {
+        return recipient;
+    }
+
+    public String getMessage() {
         return message;
     }
 }
