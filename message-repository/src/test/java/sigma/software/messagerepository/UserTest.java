@@ -106,11 +106,35 @@ class UserTest {
 
         // when:
         Message message = new Message();
-        message.handle(new CreateMessageCommand(UUID.randomUUID(), friend.getId(), "Hi"));
-        // and
-        user.handle(new SendMessageCommand(message));
+        message.handle(new CreateMessageCommand(UUID.randomUUID(), "Hi"));
+        user.handle(new SendMessageCommand(friend.getId(), message));
 
         // then:
-        assertThat(user.getSentMessages()).hasSize(1).contains(message);
+        assertThat(user.getSentMessages()).hasSize(1);
+    }
+
+    @Test
+    public void should_receive_message() {
+
+        // given:
+        User user = new User();
+        user.handle(new CreateUserCommand(UUID.randomUUID(), "valentyna.mala"));
+        // and
+        User friend = new User();
+        friend.handle(new CreateUserCommand(UUID.randomUUID(), "friend"));
+        // and
+        user.handle(new SendFriendRequestCommand(friend.getId()));
+        // and
+        friend.handle(new AcceptFriendRequestCommand(user.getId()));
+        user.handle(new AcceptFriendRequestCommand(friend.getId()));
+        // and
+        Message message = new Message();
+        message.handle(new CreateMessageCommand(UUID.randomUUID(),"Hi"));
+
+        // when:
+        user.handle(new ReceiveMessageCommand(friend.getId(),message));
+
+        // then:
+        assertThat(user.getReceivedMessage()).hasSize(1);
     }
 }

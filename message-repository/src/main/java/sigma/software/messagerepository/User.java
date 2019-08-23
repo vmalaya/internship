@@ -4,11 +4,8 @@ import io.vavr.API;
 import sigma.software.messagerepository.command.*;
 import sigma.software.messagerepository.event.*;
 
-import java.awt.*;
-import java.util.Collection;
-import java.util.List;
-import java.util.Objects;
-import java.util.UUID;
+import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.function.Function;
@@ -24,7 +21,8 @@ public class User implements Function<DomainEvent, User> {
     private String username;
     private Collection<UUID> friendRequest = new CopyOnWriteArraySet<>();
     private Collection<UUID> friends = new CopyOnWriteArraySet<>();
-    private Collection<Message> sentMessages = new CopyOnWriteArraySet<>();
+    private Map<UUID,Message> sentMessages = new ConcurrentHashMap<>();
+    private Map<UUID, Message> receivedMessage = new ConcurrentHashMap<>();
 
     public User() {
     }
@@ -111,15 +109,29 @@ public class User implements Function<DomainEvent, User> {
 
     // send message
     public void handle(SendMessageCommand command) {
-        if (Objects.isNull(command.getMessage())) throw new IllegalArgumentException("message may not be null.");// nack
-        if (!friends.contains(command.getMessage().getIdFriend()))
-            throw new IllegalArgumentException("you don't have such friend.");
-        on(new MessageSentEvent(command.getMessage()));
+        if (Objects.isNull(command.getFriendId())) throw new IllegalArgumentException("id may not be null."); // nack
+        if (Objects.isNull(command.getMessage())) throw new IllegalArgumentException("message may not be null.");
+        if (!friends.contains(command.getFriendId())) throw new IllegalArgumentException("you don't have such friend.");
+        on(new MessageSentEvent(command.getFriendId(),command.getMessage()));
     }
 
     private User on(MessageSentEvent event) {
         domainEvents.add(event);
-        sentMessages.add(event.getMessage());
+        sentMessages.put(event.getFriendId(),event.getMessage());
+        return this;
+    }
+
+    // receive message
+    public void handle(ReceiveMessageCommand command) {
+        if (Objects.isNull(command.getFriendId())) throw new IllegalArgumentException("id may not be null.");
+        if (!friends.contains(command.getFriendId())) throw new IllegalArgumentException("you don't have such friend.");
+        if (Objects.isNull(command.getMessage())) throw new IllegalArgumentException("message should not be null.");
+        on(new MessageReceivedEvent(command.getFriendId(), command.getMessage()));
+    }
+
+    private User on(MessageReceivedEvent event) {
+        domainEvents.add(event);
+        receivedMessage.put(event.getFriendId(), event.getMessage());
         return this;
     }
 
@@ -154,7 +166,11 @@ public class User implements Function<DomainEvent, User> {
         return friends;
     }
 
-    public Collection<Message> getSentMessages() {
+    public Map<UUID, Message> getSentMessages() {
         return sentMessages;
+    }
+
+    public Map<UUID, Message> getReceivedMessage() {
+        return receivedMessage;
     }
 }
