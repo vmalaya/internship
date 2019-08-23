@@ -10,8 +10,8 @@ public class ReceiveMessageCommand {
     private final Message message;
 
     public ReceiveMessageCommand(UUID friendId, Message message) {
-    this.friendId = friendId;
-    this.message = message;
+        this.friendId = friendId;
+        this.message = message;
     }
 
     public UUID getFriendId() {
