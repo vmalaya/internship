@@ -9,6 +9,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 
 import static io.vavr.API.$;
 import static io.vavr.API.Case;
@@ -21,8 +22,9 @@ public class User implements Function<DomainEvent, User> {
     private String username;
     private Collection<UUID> friendRequest = new CopyOnWriteArraySet<>();
     private Collection<UUID> friends = new CopyOnWriteArraySet<>();
-    private Map<UUID,Message> sentMessages = new ConcurrentHashMap<>();
-    private Map<UUID, Message> receivedMessage = new ConcurrentHashMap<>();
+    private Map<Message, UUID> sentMessages = new ConcurrentHashMap<>();
+    private Map<Message, UUID> receivedMessage = new LinkedHashMap<>();
+    private LinkedList<Map.Entry> lastRevealedMessages = new LinkedList();
 
     public User() {
     }
@@ -112,12 +114,12 @@ public class User implements Function<DomainEvent, User> {
         if (Objects.isNull(command.getFriendId())) throw new IllegalArgumentException("id may not be null."); // nack
         if (Objects.isNull(command.getMessage())) throw new IllegalArgumentException("message may not be null.");
         if (!friends.contains(command.getFriendId())) throw new IllegalArgumentException("you don't have such friend.");
-        on(new MessageSentEvent(command.getFriendId(),command.getMessage()));
+        on(new MessageSentEvent(command.getFriendId(), command.getMessage()));
     }
 
     private User on(MessageSentEvent event) {
         domainEvents.add(event);
-        sentMessages.put(event.getFriendId(),event.getMessage());
+        sentMessages.put(event.getMessage(), event.getFriendId());
         return this;
     }
 
@@ -131,8 +133,31 @@ public class User implements Function<DomainEvent, User> {
 
     private User on(MessageReceivedEvent event) {
         domainEvents.add(event);
-        receivedMessage.put(event.getFriendId(), event.getMessage());
+        receivedMessage.put(event.getMessage(), event.getFriendId());
         return this;
+    }
+
+    // Reveal messages in desc order by given limit
+    public void handle(RevealLastMessagesInDescOrderCommand command) {
+        if (Objects.isNull(command.getLimit())) throw new IllegalArgumentException("limit may not be null.");
+        if (command.getLimit() <= 0) throw new IllegalArgumentException("limit should be positive integer.");
+        if (receivedMessage.size() < command.getLimit())
+            throw new IllegalArgumentException("limit should be less then number of messages");
+        on(new LastMessagesInDescOrderRevealedEvent(command.getLimit()));
+    }
+
+    private Collection on(LastMessagesInDescOrderRevealedEvent event) {
+        domainEvents.add(event);
+        lastRevealedMessages.clear();
+        List<Map.Entry<Message, UUID>> list = receivedMessage.entrySet()
+                                                             .stream()
+                                                             .sequential()
+                                                             .collect(Collectors.toList());
+        ListIterator<Map.Entry<Message, UUID>> iterator = list.listIterator(list.size() - event.getLimit());
+        while (iterator.hasNext()) {
+            lastRevealedMessages.addFirst(iterator.next());
+        }
+        return lastRevealedMessages;
     }
 
     // in java we trust
@@ -166,11 +191,15 @@ public class User implements Function<DomainEvent, User> {
         return friends;
     }
 
-    public Map<UUID, Message> getSentMessages() {
+    public Map<Message, UUID> getSentMessages() {
         return sentMessages;
     }
 
-    public Map<UUID, Message> getReceivedMessage() {
+    public Map<Message, UUID> getReceivedMessage() {
         return receivedMessage;
+    }
+
+    public LinkedList<Map.Entry> getLastRevealedMessages() {
+        return lastRevealedMessages;
     }
 }
