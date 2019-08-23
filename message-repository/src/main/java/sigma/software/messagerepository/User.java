@@ -1,12 +1,10 @@
 package sigma.software.messagerepository;
 
 import io.vavr.API;
-import sigma.software.messagerepository.command.AcceptFriendRequestCommand;
-import sigma.software.messagerepository.command.CreateUserCommand;
-import sigma.software.messagerepository.command.DeclineFriendRequestCommand;
-import sigma.software.messagerepository.command.SendFriendRequestCommand;
+import sigma.software.messagerepository.command.*;
 import sigma.software.messagerepository.event.*;
 
+import java.awt.*;
 import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
@@ -26,6 +24,7 @@ public class User implements Function<DomainEvent, User> {
     private String username;
     private Collection<UUID> friendRequest = new CopyOnWriteArraySet<>();
     private Collection<UUID> friends = new CopyOnWriteArraySet<>();
+    private Collection<Message> sentMessages = new CopyOnWriteArraySet<>();
 
     public User() {
     }
@@ -110,6 +109,20 @@ public class User implements Function<DomainEvent, User> {
         return this;
     }
 
+    // send message
+    public void handle(SendMessageCommand command) {
+        if (Objects.isNull(command.getMessage())) throw new IllegalArgumentException("message may not be null.");// nack
+        if (!friends.contains(command.getMessage().getIdFriend()))
+            throw new IllegalArgumentException("you don't have such friend.");
+        on(new MessageSentEvent(command.getMessage()));
+    }
+
+    private User on(MessageSentEvent event) {
+        domainEvents.add(event);
+        sentMessages.add(event.getMessage());
+        return this;
+    }
+
     // in java we trust
     @Override
     public boolean equals(Object o) {
@@ -139,5 +152,9 @@ public class User implements Function<DomainEvent, User> {
 
     public Collection<UUID> getFriends() {
         return friends;
+    }
+
+    public Collection<Message> getSentMessages() {
+        return sentMessages;
     }
 }

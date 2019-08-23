@@ -12,7 +12,7 @@ mvnw clean package -f message-repository\pom.xml
 + As a user I should be able send friend request
 + As a user I should be able accept friend request
 + As a user I should be able decline friend request
-- As a user I should be able to send new message
++ As a user I should be able to send new message
 - As a user I should be able to receive new message
 - As a user I should be able to reveal last messages in descent order by limit
 - As a user I should be able to fetch all messages in descent order

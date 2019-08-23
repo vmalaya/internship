@@ -3,10 +3,7 @@ package sigma.software.messagerepository;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.Test;
-import sigma.software.messagerepository.command.AcceptFriendRequestCommand;
-import sigma.software.messagerepository.command.CreateUserCommand;
-import sigma.software.messagerepository.command.DeclineFriendRequestCommand;
-import sigma.software.messagerepository.command.SendFriendRequestCommand;
+import sigma.software.messagerepository.command.*;
 
 import java.util.UUID;
 
@@ -90,5 +87,30 @@ class UserTest {
 
         // then:
         assertThat(friend.getFriends()).hasSize(0);
+    }
+
+    @Test
+    public void should_send_message() {
+
+        // given:
+        User user = new User();
+        user.handle(new CreateUserCommand(UUID.randomUUID(), "valentyna.mala"));
+        // and
+        User friend = new User();
+        friend.handle(new CreateUserCommand(UUID.randomUUID(), "friend"));
+        // and
+        user.handle(new SendFriendRequestCommand(friend.getId()));
+        // and
+        friend.handle(new AcceptFriendRequestCommand(user.getId()));
+        user.handle(new AcceptFriendRequestCommand(friend.getId()));
+
+        // when:
+        Message message = new Message();
+        message.handle(new CreateMessageCommand(UUID.randomUUID(), friend.getId(), "Hi"));
+        // and
+        user.handle(new SendMessageCommand(message));
+
+        // then:
+        assertThat(user.getSentMessages()).hasSize(1).contains(message);
     }
 }
