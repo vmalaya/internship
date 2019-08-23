@@ -4,17 +4,22 @@ import io.vavr.API;
 import sigma.software.messagerepository.command.*;
 import sigma.software.messagerepository.event.*;
 
-import java.util.*;
-import java.util.concurrent.ConcurrentHashMap;
+import java.time.ZonedDateTime;
+import java.util.Collection;
+import java.util.List;
+import java.util.Objects;
+import java.util.UUID;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.function.Function;
-import java.util.stream.Collectors;
 
 import static io.vavr.API.$;
 import static io.vavr.API.Case;
 import static io.vavr.Predicates.instanceOf;
 
+/**
+ * Aggregate.
+ */
 public class User implements Function<DomainEvent, User> {
 
     // state:
@@ -22,9 +27,7 @@ public class User implements Function<DomainEvent, User> {
     private String username;
     private Collection<UUID> friendRequest = new CopyOnWriteArraySet<>();
     private Collection<UUID> friends = new CopyOnWriteArraySet<>();
-    private Map<Message, UUID> sentMessages = new ConcurrentHashMap<>();
-    private Map<Message, UUID> receivedMessage = new LinkedHashMap<>();
-    private LinkedList<Map.Entry> lastRevealedMessages = new LinkedList();
+    private Collection<Message> messages = new CopyOnWriteArrayList<>();
 
     public User() {
     }
@@ -42,6 +45,8 @@ public class User implements Function<DomainEvent, User> {
                 Case($(instanceOf(FriendRequestSentEvent.class)), this::on),
                 Case($(instanceOf(FriendRequestAcceptedEvent.class)), this::on),
                 Case($(instanceOf(FriendRequestDeclinedEvent.class)), this::on),
+                Case($(instanceOf(MessageSentEvent.class)), this::on),
+                Case($(instanceOf(MessageReceivedEvent.class)), this::on),
                 Case($(), event -> this)
         );
     }
@@ -111,70 +116,31 @@ public class User implements Function<DomainEvent, User> {
 
     // send message
     public void handle(SendMessageCommand command) {
-        if (Objects.isNull(command.getFriendId())) throw new IllegalArgumentException("id may not be null."); // nack
         if (Objects.isNull(command.getMessage())) throw new IllegalArgumentException("message may not be null.");
-        if (!friends.contains(command.getFriendId())) throw new IllegalArgumentException("you don't have such friend.");
-        on(new MessageSentEvent(command.getFriendId(), command.getMessage()));
+        if (Objects.isNull(command.getRecipient())) throw new IllegalArgumentException("recipient may not be null."); // nack
+        if (!friends.contains(command.getRecipient())) throw new IllegalArgumentException("recipient must be your friend.");
+        on(new MessageSentEvent(id, command.getRecipient(), command.getMessage(), ZonedDateTime.now()));
     }
 
     private User on(MessageSentEvent event) {
         domainEvents.add(event);
-        sentMessages.put(event.getMessage(), event.getFriendId());
+        messages.add(new Message(event.getSender(), event.getRecipient(), event.getMessage(), event.getAt()));
         return this;
     }
 
     // receive message
     public void handle(ReceiveMessageCommand command) {
-        if (Objects.isNull(command.getFriendId())) throw new IllegalArgumentException("id may not be null.");
-        if (!friends.contains(command.getFriendId())) throw new IllegalArgumentException("you don't have such friend.");
-        if (Objects.isNull(command.getMessage())) throw new IllegalArgumentException("message should not be null.");
-        on(new MessageReceivedEvent(command.getFriendId(), command.getMessage()));
+        if (Objects.isNull(command.getMessage())) throw new IllegalArgumentException("message may not be null.");// nack
+        if (Objects.isNull(command.getSender())) throw new IllegalArgumentException("sender may not be null.");
+        if (Objects.isNull(command.getRecipient())) throw new IllegalArgumentException("recipient may not be null.");
+        if (!command.getRecipient().equals(id)) throw new IllegalArgumentException("incorrect recipient.");
+        on(new MessageReceivedEvent(command.getSender(), command.getRecipient(), command.getMessage(), ZonedDateTime.now()));
     }
 
     private User on(MessageReceivedEvent event) {
         domainEvents.add(event);
-        receivedMessage.put(event.getMessage(), event.getFriendId());
+        messages.add(new Message(event.getSender(), event.getRecipient(), event.getMessage(), event.getAt()));
         return this;
-    }
-
-    // Reveal messages in desc order by given limit
-    public void handle(RevealLastMessagesInDescOrderCommand command) {
-        if (Objects.isNull(command.getLimit())) throw new IllegalArgumentException("limit may not be null.");
-        if (command.getLimit() <= 0) throw new IllegalArgumentException("limit should be positive integer.");
-        if (receivedMessage.isEmpty()) throw new IllegalArgumentException("you have no messages.");
-        if (receivedMessage.size() < command.getLimit())
-            throw new IllegalArgumentException("limit should be less then number of messages");
-        on(new LastMessagesInDescOrderRevealedEvent(command.getLimit()));
-    }
-
-    private Collection on(LastMessagesInDescOrderRevealedEvent event) {
-        domainEvents.add(event);
-        lastRevealedMessages.clear();
-        List<Map.Entry<Message, UUID>> list = receivedMessage.entrySet()
-                                                             .stream()
-                                                             .sequential()
-                                                             .collect(Collectors.toList());
-        ListIterator<Map.Entry<Message, UUID>> iterator = list.listIterator(list.size() - event.getLimit());
-        while (iterator.hasNext()) {
-            lastRevealedMessages.addFirst(iterator.next());
-        }
-        return lastRevealedMessages;
-    }
-
-    // reveal all messages in desc order
-    public void handle(RevealAllMessagesInDescOrderCommand command) {
-        if (receivedMessage.isEmpty()) throw new IllegalArgumentException("you have no messages.");
-        on(new AllMessagesRevealedEvent());
-    }
-
-    private Collection on(AllMessagesRevealedEvent event) {
-        domainEvents.add(event);
-        lastRevealedMessages.clear();
-        Iterator<Map.Entry<Message, UUID>> iterator = receivedMessage.entrySet().iterator();
-        while (iterator.hasNext()) {
-            lastRevealedMessages.addFirst(iterator.next());
-        }
-        return lastRevealedMessages;
     }
 
     // in java we trust
@@ -208,16 +174,7 @@ public class User implements Function<DomainEvent, User> {
         return friends;
     }
 
-    public Map<Message, UUID> getSentMessages() {
-        return sentMessages;
+    public Collection<Message> getMessages() {
+        return messages;
     }
-
-    public Map<Message, UUID> getReceivedMessage() {
-        return receivedMessage;
-    }
-
-    public LinkedList<Map.Entry> getLastRevealedMessages() {
-        return lastRevealedMessages;
-    }
-
 }
