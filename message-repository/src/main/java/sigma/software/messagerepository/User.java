@@ -141,6 +141,7 @@ public class User implements Function<DomainEvent, User> {
     public void handle(RevealLastMessagesInDescOrderCommand command) {
         if (Objects.isNull(command.getLimit())) throw new IllegalArgumentException("limit may not be null.");
         if (command.getLimit() <= 0) throw new IllegalArgumentException("limit should be positive integer.");
+        if (receivedMessage.isEmpty()) throw new IllegalArgumentException("you have no messages.");
         if (receivedMessage.size() < command.getLimit())
             throw new IllegalArgumentException("limit should be less then number of messages");
         on(new LastMessagesInDescOrderRevealedEvent(command.getLimit()));
@@ -154,6 +155,22 @@ public class User implements Function<DomainEvent, User> {
                                                              .sequential()
                                                              .collect(Collectors.toList());
         ListIterator<Map.Entry<Message, UUID>> iterator = list.listIterator(list.size() - event.getLimit());
+        while (iterator.hasNext()) {
+            lastRevealedMessages.addFirst(iterator.next());
+        }
+        return lastRevealedMessages;
+    }
+
+    // reveal all messages in desc order
+    public void handle(RevealAllMessagesInDescOrderCommand command) {
+        if (receivedMessage.isEmpty()) throw new IllegalArgumentException("you have no messages.");
+        on(new AllMessagesRevealedEvent());
+    }
+
+    private Collection on(AllMessagesRevealedEvent event) {
+        domainEvents.add(event);
+        lastRevealedMessages.clear();
+        Iterator<Map.Entry<Message, UUID>> iterator = receivedMessage.entrySet().iterator();
         while (iterator.hasNext()) {
             lastRevealedMessages.addFirst(iterator.next());
         }
@@ -202,4 +219,5 @@ public class User implements Function<DomainEvent, User> {
     public LinkedList<Map.Entry> getLastRevealedMessages() {
         return lastRevealedMessages;
     }
+
 }
