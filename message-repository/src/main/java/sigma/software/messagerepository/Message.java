@@ -1,6 +1,7 @@
 package sigma.software.messagerepository;
 
 import java.time.ZonedDateTime;
+import java.util.Objects;
 import java.util.UUID;
 
 public class Message {
@@ -31,5 +32,21 @@ public class Message {
 
     public ZonedDateTime getAt() {
         return at;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Message)) return false;
+        Message message = (Message) o;
+        return sender.equals(message.sender) &&
+                recipient.equals(message.recipient) &&
+                body.equals(message.body) &&
+                at.equals(message.at);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(sender, recipient, body, at);
     }
 }
