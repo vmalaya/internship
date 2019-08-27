@@ -24,8 +24,8 @@ class UserTest {
         user.handle(new CreateUserCommand(id, "valentyna.mala"));
 
         // then:
-        assertThat(user.getId()).isNotNull()
-                                .isEqualTo(id);
+        assertThat(user.getAggregateId()).isNotNull()
+                                         .isEqualTo(id);
         // and:
         assertThat(user.getUsername()).isEqualTo("valentyna.mala");
     }
@@ -99,13 +99,13 @@ class UserTest {
         User friend = new User();
         friend.handle(new CreateUserCommand(UUID.randomUUID(), "friend"));
         // and
-        user.handle(new SendFriendRequestCommand(friend.getId()));
+        user.handle(new SendFriendRequestCommand(friend.getAggregateId()));
         // and
-        friend.handle(new AcceptFriendRequestCommand(user.getId()));
-        user.handle(new AcceptFriendRequestCommand(friend.getId()));
+        friend.handle(new AcceptFriendRequestCommand(user.getAggregateId()));
+        user.handle(new AcceptFriendRequestCommand(friend.getAggregateId()));
 
         // when:
-        user.handle(new SendMessageCommand(friend.getId(), "Hi"));
+        user.handle(new SendMessageCommand(friend.getAggregateId(), "Hi"));
 
         // then:
         assertThat(user.getMessages()).hasSize(1);
@@ -121,48 +121,15 @@ class UserTest {
         User friend = new User();
         friend.handle(new CreateUserCommand(UUID.randomUUID(), "friend"));
         // and
-        user.handle(new SendFriendRequestCommand(friend.getId()));
+        user.handle(new SendFriendRequestCommand(friend.getAggregateId()));
         // and
-        friend.handle(new AcceptFriendRequestCommand(user.getId()));
-        user.handle(new AcceptFriendRequestCommand(friend.getId()));
+        friend.handle(new AcceptFriendRequestCommand(user.getAggregateId()));
+        user.handle(new AcceptFriendRequestCommand(friend.getAggregateId()));
 
         // when:
-        user.handle(new ReceiveMessageCommand(friend.getId(), user.getId(), "Hi"));
+        user.handle(new ReceiveMessageCommand(friend.getAggregateId(), "Hi"));
 
         // then:
         assertThat(user.getMessages()).hasSize(1);
     }
-
-    // @Test
-    // public void should_get_all_messages_in_desc_order() {
-    //
-    //     // given:
-    //     User user = new User();
-    //     user.handle(new CreateUserCommand(UUID.randomUUID(), "valentyna.mala"));
-    //     // and
-    //     User friend = new User();
-    //     friend.handle(new CreateUserCommand(UUID.randomUUID(), "friend"));
-    //     // and
-    //     user.handle(new SendFriendRequestCommand(friend.getId()));
-    //     // and
-    //     friend.handle(new AcceptFriendRequestCommand(user.getId()));
-    //     user.handle(new AcceptFriendRequestCommand(friend.getId()));
-    //     // and
-    //     Message firstMessage = new Message(sender, recipient, body, at);
-    //     Message secondMessage = new Message(sender, recipient, body, at);
-    //     Message thirdMessage = new Message(sender, recipient, body, at);
-    //     firstMessage.handle(new CreateMessageCommand(UUID.randomUUID(), "Hi"));
-    //     secondMessage.handle(new CreateMessageCommand(UUID.randomUUID(), "What's"));
-    //     thirdMessage.handle(new CreateMessageCommand(UUID.randomUUID(), "up"));
-    //     // and
-    //     user.handle(new ReceiveMessageCommand(friend.getId(), firstMessage));
-    //     user.handle(new ReceiveMessageCommand(friend.getId(), secondMessage));
-    //     user.handle(new ReceiveMessageCommand(friend.getId(), thirdMessage));
-    //
-    //     // when:
-    //     user.handle(new RevealAllMessagesInDescOrderCommand());
-    //
-    //     // then:
-    //     assertThat(user.getLastRevealedMessages()).hasSize(user.getReceivedMessage().size());
-    // }
 }

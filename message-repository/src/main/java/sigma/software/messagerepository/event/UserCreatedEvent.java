@@ -4,16 +4,16 @@ import java.util.UUID;
 
 public class UserCreatedEvent implements DomainEvent {
 
-    private final UUID id;
+    private final UUID aggregateId;
     private final String username;
 
-    public UserCreatedEvent(UUID id, String username) {
-        this.id = id;
+    public UserCreatedEvent(UUID aggregateId, String username) {
+        this.aggregateId = aggregateId;
         this.username = username;
     }
 
-    public UUID getId() {
-        return id;
+    public UUID getAggregateId() {
+        return aggregateId;
     }
 
     public String getUsername() {
