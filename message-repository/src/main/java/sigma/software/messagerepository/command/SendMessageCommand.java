@@ -1,8 +1,5 @@
 package sigma.software.messagerepository.command;
 
-import sigma.software.messagerepository.Message;
-
-import java.time.ZonedDateTime;
 import java.util.UUID;
 
 /**

@@ -32,4 +32,29 @@ public class UserRepository {
                 ? User.recreate(snapshot, eventStore.get(id))
                 : snapshot;
     }
+
+    public Collection<Message> getAllMessages(UUID userId) {
+        User user = load(userId);
+        return user.getMessages();
+    }
+
+    public Collection<Message> getAllMessagesInDescOrder(UUID userId) {
+        User user = load(userId);
+        Collection<Message> messages = user.getMessages();
+        List<Message> list = new CopyOnWriteArrayList<>(messages);
+        Collections.sort(list, new DescendingComparator());
+        return list;
+    }
+
+    public Collection<Message> getLastNumberOfMessagesInDescOrder(UUID userId, int limit) {
+        User user = load(userId);
+        List<Message> list = new CopyOnWriteArrayList<>(user.getMessages());
+        ListIterator<Message> iterator = list.listIterator(list.size() - limit);
+        List<Message> sorted = new CopyOnWriteArrayList<>();
+        while (iterator.hasNext()) {
+            sorted.add(iterator.next());
+        }
+        Collections.sort(sorted, new DescendingComparator());
+        return sorted;
+    }
 }
