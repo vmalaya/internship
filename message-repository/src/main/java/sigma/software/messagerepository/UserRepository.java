@@ -13,7 +13,7 @@ public class UserRepository {
     private final Map<UUID, Collection<DomainEvent>> eventStore = new ConcurrentHashMap<>();
 
     public void save(User user) {
-        UUID aggregateId = user.getId();
+        UUID aggregateId = user.getAggregateId();
         Collection<DomainEvent> past = eventStore.getOrDefault(aggregateId, new CopyOnWriteArrayList<>());
         Collection<DomainEvent> present = new CopyOnWriteArrayList<>(user.getDomainEvents());
         user.flushEvents();

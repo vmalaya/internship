@@ -3,8 +3,7 @@ package sigma.software.messagerepository;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.Test;
-import sigma.software.messagerepository.command.CreateUserCommand;
-import sigma.software.messagerepository.command.SendFriendRequestCommand;
+import sigma.software.messagerepository.command.*;
 
 import java.util.UUID;
 
@@ -20,9 +19,9 @@ class UserRepositoryTest {
 
         // given:
         User user = new User();
-        // and:
+        // and
         UUID id = UUID.randomUUID();
-        // and:
+        // and
         user.handle(new CreateUserCommand(id, "valentyna.mala"));
 
         // when:
@@ -39,9 +38,9 @@ class UserRepositoryTest {
 
         // given:
         User user = new User();
-        // and:
+        // and
         UUID id = UUID.randomUUID();
-        // and:
+        // and
         user.handle(new CreateUserCommand(id, "valentyna.mala"));
 
         // when:
@@ -61,7 +60,7 @@ class UserRepositoryTest {
         user.handle(new CreateUserCommand(UUID.randomUUID(), "valentyna.mala"));
         userRepository.save(user);
         // and:
-        User snapshot = userRepository.load(user.getId());
+        User snapshot = userRepository.load(user.getAggregateId());
         assertThat(snapshot).isEqualTo(user);
 
         // when:
@@ -72,7 +71,7 @@ class UserRepositoryTest {
         assertThat(user.getFriendRequest()).hasSize(1);
 
         // then:
-        User latest = userRepository.load(snapshot, user.getId());
+        User latest = userRepository.load(snapshot, user.getAggregateId());
         // and:
         assertThat(latest == snapshot).isTrue();
         // and:

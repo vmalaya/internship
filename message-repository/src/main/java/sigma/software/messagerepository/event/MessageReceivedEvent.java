@@ -1,30 +1,28 @@
 package sigma.software.messagerepository.event;
 
-import sigma.software.messagerepository.Message;
-
 import java.time.ZonedDateTime;
 import java.util.UUID;
 
 public class MessageReceivedEvent implements DomainEvent {
 
+    private final UUID aggregateId;
     private final UUID sender;
-    private final UUID recipient;
     private final String message;
     private final ZonedDateTime at;
 
-    public MessageReceivedEvent(UUID sender, UUID recipient, String message, ZonedDateTime at) {
+    public MessageReceivedEvent(UUID aggregateId, UUID sender, String message, ZonedDateTime at) {
+        this.aggregateId = aggregateId;
         this.sender = sender;
-        this.recipient = recipient;
         this.message = message;
         this.at = at;
     }
 
-    public UUID getSender() {
-        return sender;
+    public UUID getAggregateId() {
+        return aggregateId;
     }
 
-    public UUID getRecipient() {
-        return recipient;
+    public UUID getSender() {
+        return sender;
     }
 
     public String getMessage() {
