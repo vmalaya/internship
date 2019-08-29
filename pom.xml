@@ -29,6 +29,8 @@
         <maven-compiler-plugin.version>3.8.1</maven-compiler-plugin.version>
         <maven-surefire-plugin.version>3.0.0-M3</maven-surefire-plugin.version>
         <!--<maven-surefire-plugin.version>2.22.2</maven-surefire-plugin.version>-->
+        <mapdb.version>3.0.5</mapdb.version>
+        <jackson-databind.version>2.10.0.pr1</jackson-databind.version>
     </properties>
 
     <modules>
