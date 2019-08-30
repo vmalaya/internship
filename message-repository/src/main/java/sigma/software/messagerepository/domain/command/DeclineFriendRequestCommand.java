@@ -2,7 +2,7 @@ package sigma.software.messagerepository.domain.command;
 
 import java.util.UUID;
 
-public class DeclineFriendRequestCommand {
+public class DeclineFriendRequestCommand implements Command {
 
     private final UUID userId;
 

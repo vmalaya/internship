@@ -2,7 +2,7 @@ package sigma.software.messagerepository.domain.command;
 
 import java.util.UUID;
 
-public class ReceiveMessageCommand {
+public class ReceiveMessageCommand implements Command {
 
     private final UUID sender;
     private final String message;

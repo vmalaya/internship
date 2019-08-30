@@ -4,7 +4,6 @@ import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.Test;
 import sigma.software.messagerepository.domain.command.*;
-import sigma.software.messagerepository.domain.User;
 
 import java.util.UUID;
 
@@ -42,7 +41,7 @@ class UserTest {
         // when:
         user.handle(new CreateUserCommand(id, "valentyna.mala"));
         // and
-        user.handle(new SendFriendRequestCommand(UUID.fromString("00000000-0000-0000-0000-000000000000")));
+        user.handle(new SendFriendRequestCommand(id, UUID.fromString("00000000-0000-0000-0000-000000000000")));
 
         // then:
         assertThat(user.getFriendRequest()).hasSize(1);
@@ -61,9 +60,9 @@ class UserTest {
         friend.handle(new CreateUserCommand(friendId, "valentyna.mala"));
 
         // when:
-        user.handle(new SendFriendRequestCommand(friendId));
+        user.handle(new SendFriendRequestCommand(userId, friendId));
         // and
-        friend.handle(new AcceptFriendRequestCommand(userId));
+        friend.handle(new AcceptFriendRequestCommand(friendId, userId));
 
         // then:
         assertThat(friend.getFriends()).hasSize(1);
@@ -82,7 +81,7 @@ class UserTest {
         friend.handle(new CreateUserCommand(friendId, "valentyna.mala"));
 
         // when:
-        user.handle(new SendFriendRequestCommand(friendId));
+        user.handle(new SendFriendRequestCommand(userId, friendId));
         // and
         friend.handle(new DeclineFriendRequestCommand(userId));
 
@@ -100,10 +99,10 @@ class UserTest {
         User friend = new User();
         friend.handle(new CreateUserCommand(UUID.randomUUID(), "friend"));
         // and
-        user.handle(new SendFriendRequestCommand(friend.getAggregateId()));
+        user.handle(new SendFriendRequestCommand(user.getAggregateId(), friend.getAggregateId()));
         // and
-        friend.handle(new AcceptFriendRequestCommand(user.getAggregateId()));
-        user.handle(new AcceptFriendRequestCommand(friend.getAggregateId()));
+        friend.handle(new AcceptFriendRequestCommand(friend.getAggregateId(), user.getAggregateId()));
+        user.handle(new AcceptFriendRequestCommand(user.getAggregateId(), friend.getAggregateId()));
 
         // when:
         user.handle(new SendMessageCommand(friend.getAggregateId(), "Hi"));
@@ -122,10 +121,10 @@ class UserTest {
         User friend = new User();
         friend.handle(new CreateUserCommand(UUID.randomUUID(), "friend"));
         // and
-        user.handle(new SendFriendRequestCommand(friend.getAggregateId()));
+        user.handle(new SendFriendRequestCommand(user.getAggregateId(), friend.getAggregateId()));
         // and
-        friend.handle(new AcceptFriendRequestCommand(user.getAggregateId()));
-        user.handle(new AcceptFriendRequestCommand(friend.getAggregateId()));
+        friend.handle(new AcceptFriendRequestCommand(friend.getAggregateId(), user.getAggregateId()));
+        user.handle(new AcceptFriendRequestCommand(user.getAggregateId(), friend.getAggregateId()));
 
         // when:
         user.handle(new ReceiveMessageCommand(friend.getAggregateId(), "Hi"));
