@@ -1,4 +1,6 @@
-package sigma.software.messagerepository;
+package sigma.software.messagerepository.domain.query;
+
+import sigma.software.messagerepository.domain.Message;
 
 import java.util.Comparator;
 

@@ -1,9 +1,10 @@
-package sigma.software.messagerepository;
+package sigma.software.messagerepository.domain;
 
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.Test;
-import sigma.software.messagerepository.command.*;
+import sigma.software.messagerepository.domain.command.*;
+import sigma.software.messagerepository.domain.User;
 
 import java.util.UUID;
 
