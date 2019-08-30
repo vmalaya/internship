@@ -48,7 +48,7 @@ public class CommandHandler implements Consumer<Command> {
     }
 
     public Void handle(SendMessageCommand command) {
-        return update(command.getAggregateId(), user -> user.handle(command));return update(); // TODO
+        return update(command.getAggregateId(), user -> user.handle(command));
     }
 
     public Void handle(ReceiveMessageCommand command) {
