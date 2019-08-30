@@ -19,6 +19,7 @@ references
 [data-structures]: data-structures
 [message-repository]: message-repository
 
+<!--
 # Iterable
 ## 1
 ### 1.1
@@ -31,3 +32,5 @@ references
 ## 3
 ### 3.1
 ### 3.2
+
+-->
