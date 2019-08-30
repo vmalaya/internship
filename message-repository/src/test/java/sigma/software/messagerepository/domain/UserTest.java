@@ -83,7 +83,7 @@ class UserTest {
         // when:
         user.handle(new SendFriendRequestCommand(userId, friendId));
         // and
-        friend.handle(new DeclineFriendRequestCommand(userId));
+        friend.handle(new DeclineFriendRequestCommand(friendId, userId));
 
         // then:
         assertThat(friend.getFriends()).hasSize(0);
@@ -105,7 +105,7 @@ class UserTest {
         user.handle(new AcceptFriendRequestCommand(user.getAggregateId(), friend.getAggregateId()));
 
         // when:
-        user.handle(new SendMessageCommand(friend.getAggregateId(), "Hi"));
+        user.handle(new SendMessageCommand(user.getAggregateId(), friend.getAggregateId(), "Hi"));
 
         // then:
         assertThat(user.getMessages()).hasSize(1);
@@ -127,7 +127,7 @@ class UserTest {
         user.handle(new AcceptFriendRequestCommand(user.getAggregateId(), friend.getAggregateId()));
 
         // when:
-        user.handle(new ReceiveMessageCommand(friend.getAggregateId(), "Hi"));
+        user.handle(new ReceiveMessageCommand(user.getAggregateId(), friend.getAggregateId(), "Hi"));
 
         // then:
         assertThat(user.getMessages()).hasSize(1);
