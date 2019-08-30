@@ -10,9 +10,10 @@ public class Main {
 
     enum ExitCode {
 
-        USAGE(400, "See command usage help..."),
-        BARD_REQUEST(400, "Bad request"),
-        OK(200, "OK");
+        OK(0, "OK"),
+        USAGE(1, "See command usage help..."),
+        BARD_REQUEST(2, "Bad request"),
+        ;
 
         public final int codeNumber;
         public final String codeName;
@@ -42,7 +43,7 @@ public class Main {
 
         if (args.length == 2 && "register".equalsIgnoreCase(args[0])) {
             System.out.println("registering a new user with username: " + args[1]);
-            System.err.println(ExitCode.OK.codeNumber);
+            System.out.println(ExitCode.OK.codeNumber);
             System.exit(ExitCode.OK.codeNumber);
         }
 
