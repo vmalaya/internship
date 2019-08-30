@@ -1,4 +1,4 @@
-package sigma.software.messagerepository.command;
+package sigma.software.messagerepository.domain.command;
 
 import java.util.UUID;
 

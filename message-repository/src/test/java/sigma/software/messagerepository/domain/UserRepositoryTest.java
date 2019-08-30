@@ -1,9 +1,12 @@
-package sigma.software.messagerepository;
+package sigma.software.messagerepository.domain;
 
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.Test;
-import sigma.software.messagerepository.command.*;
+import sigma.software.messagerepository.domain.command.*;
+import sigma.software.messagerepository.domain.Message;
+import sigma.software.messagerepository.domain.User;
+import sigma.software.messagerepository.domain.UserRepository;
 
 import java.util.Collection;
 import java.util.Iterator;

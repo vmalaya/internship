@@ -1,4 +1,4 @@
-package sigma.software.messagerepository.event;
+package sigma.software.messagerepository.domain.event;
 
 import java.time.ZonedDateTime;
 import java.util.UUID;

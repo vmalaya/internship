@@ -1,4 +1,4 @@
-package sigma.software.messagerepository;
+package sigma.software.messagerepository.domain;
 
 import java.time.ZonedDateTime;
 import java.util.Objects;

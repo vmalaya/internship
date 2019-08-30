@@ -1,6 +1,7 @@
-package sigma.software.messagerepository;
+package sigma.software.messagerepository.domain;
 
-import sigma.software.messagerepository.event.DomainEvent;
+import sigma.software.messagerepository.domain.event.DomainEvent;
+import sigma.software.messagerepository.domain.query.DescendingComparator;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;

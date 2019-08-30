@@ -1,8 +1,8 @@
-package sigma.software.messagerepository;
+package sigma.software.messagerepository.domain;
 
 import io.vavr.API;
-import sigma.software.messagerepository.command.*;
-import sigma.software.messagerepository.event.*;
+import sigma.software.messagerepository.domain.command.*;
+import sigma.software.messagerepository.domain.event.*;
 
 import java.time.ZonedDateTime;
 import java.util.Collection;
