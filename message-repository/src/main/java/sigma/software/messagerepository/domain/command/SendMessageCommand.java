@@ -7,12 +7,18 @@ import java.util.UUID;
  */
 public class SendMessageCommand implements Command {
 
+    private final UUID aggregateId;
     private final UUID recipient;
     private final String message;
 
-    public SendMessageCommand(UUID recipient, String message) {
+    public SendMessageCommand(UUID aggregateId, UUID recipient, String message) {
+        this.aggregateId = aggregateId;
         this.recipient = recipient;
         this.message = message;
+    }
+
+    public UUID getAggregateId() {
+        return aggregateId;
     }
 
     public UUID getRecipient() {

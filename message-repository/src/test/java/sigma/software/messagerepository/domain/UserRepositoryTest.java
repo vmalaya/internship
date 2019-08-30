@@ -94,10 +94,10 @@ class UserRepositoryTest {
         // and
         user.handle(new AcceptFriendRequestCommand(user.getAggregateId(), friendId));
         // and
-        user.handle(new ReceiveMessageCommand(friendId, "Hi! It's first."));
-        user.handle(new SendMessageCommand(friendId, "Hello, it's second."));
+        user.handle(new ReceiveMessageCommand(user.getAggregateId(), friendId, "Hi! It's first."));
+        user.handle(new SendMessageCommand(user.getAggregateId(), friendId, "Hello, it's second."));
         Thread.sleep(100);
-        user.handle(new ReceiveMessageCommand(friendId, "From friend, third one."));
+        user.handle(new ReceiveMessageCommand(user.getAggregateId(), friendId, "From friend, third one."));
         userRepository.save(user);
 
         // when:
@@ -122,12 +122,12 @@ class UserRepositoryTest {
         // and
         user.handle(new AcceptFriendRequestCommand(user.getAggregateId(), friendId));
         // and
-        user.handle(new ReceiveMessageCommand(friendId, "first."));
-        user.handle(new SendMessageCommand(friendId, "second."));
+        user.handle(new ReceiveMessageCommand(user.getAggregateId(), friendId, "first."));
+        user.handle(new SendMessageCommand(user.getAggregateId(), friendId, "second."));
         Thread.sleep(100);
-        user.handle(new ReceiveMessageCommand(friendId, "third."));
+        user.handle(new ReceiveMessageCommand(user.getAggregateId(), friendId, "third."));
         Thread.sleep(100);
-        user.handle(new ReceiveMessageCommand(friendId, "fourth."));
+        user.handle(new ReceiveMessageCommand(user.getAggregateId(), friendId, "fourth."));
         userRepository.save(user);
 
         // when:
