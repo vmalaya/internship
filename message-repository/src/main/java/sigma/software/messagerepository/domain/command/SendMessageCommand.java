@@ -5,7 +5,7 @@ import java.util.UUID;
 /**
  * Example of ValueObject (DDD term)
  */
-public class SendMessageCommand {
+public class SendMessageCommand implements Command {
 
     private final UUID recipient;
     private final String message;

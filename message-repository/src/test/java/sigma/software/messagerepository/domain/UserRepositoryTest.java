@@ -4,9 +4,6 @@ import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.Test;
 import sigma.software.messagerepository.domain.command.*;
-import sigma.software.messagerepository.domain.Message;
-import sigma.software.messagerepository.domain.User;
-import sigma.software.messagerepository.domain.UserRepository;
 
 import java.util.Collection;
 import java.util.Iterator;
@@ -70,7 +67,7 @@ class UserRepositoryTest {
 
         // when:
         UUID friendId = UUID.randomUUID();
-        SendFriendRequestCommand intention = new SendFriendRequestCommand(friendId);
+        SendFriendRequestCommand intention = new SendFriendRequestCommand(user.getAggregateId(), friendId);
         user.handle(intention);
         userRepository.save(user);
         assertThat(user.getFriendRequest()).hasSize(1);
@@ -92,10 +89,10 @@ class UserRepositoryTest {
         user.handle(new CreateUserCommand(UUID.randomUUID(), "valentyna.mala"));
         // and
         UUID friendId = UUID.randomUUID();
-        SendFriendRequestCommand intention = new SendFriendRequestCommand(friendId);
+        SendFriendRequestCommand intention = new SendFriendRequestCommand(user.getAggregateId(), friendId);
         user.handle(intention);
         // and
-        user.handle(new AcceptFriendRequestCommand(friendId));
+        user.handle(new AcceptFriendRequestCommand(user.getAggregateId(), friendId));
         // and
         user.handle(new ReceiveMessageCommand(friendId, "Hi! It's first."));
         user.handle(new SendMessageCommand(friendId, "Hello, it's second."));
@@ -120,10 +117,10 @@ class UserRepositoryTest {
         user.handle(new CreateUserCommand(UUID.randomUUID(), "valentyna.mala"));
         // and
         UUID friendId = UUID.randomUUID();
-        SendFriendRequestCommand intention = new SendFriendRequestCommand(friendId);
+        SendFriendRequestCommand intention = new SendFriendRequestCommand(user.getAggregateId(), friendId);
         user.handle(intention);
         // and
-        user.handle(new AcceptFriendRequestCommand(friendId));
+        user.handle(new AcceptFriendRequestCommand(user.getAggregateId(), friendId));
         // and
         user.handle(new ReceiveMessageCommand(friendId, "first."));
         user.handle(new SendMessageCommand(friendId, "second."));

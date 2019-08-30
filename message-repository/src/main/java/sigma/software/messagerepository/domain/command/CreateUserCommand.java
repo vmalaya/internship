@@ -2,7 +2,7 @@ package sigma.software.messagerepository.domain.command;
 
 import java.util.UUID;
 
-public class CreateUserCommand {
+public class CreateUserCommand implements Command {
     private final UUID id;
     private final String username;
 
