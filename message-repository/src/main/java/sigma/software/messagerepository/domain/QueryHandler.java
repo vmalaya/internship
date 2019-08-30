@@ -1,15 +1,21 @@
 package sigma.software.messagerepository.domain;
 
-import sigma.software.messagerepository.domain.query.DescendingComparator;
-import sigma.software.messagerepository.domain.query.UserFriendsConversationsQuery;
-import sigma.software.messagerepository.domain.query.UserMessagesQuery;
+import io.vavr.API;
+import sigma.software.messagerepository.domain.query.*;
 
 import java.util.Collection;
+import java.util.UUID;
 import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.function.Function;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-public class QueryHandler {
+import static io.vavr.API.$;
+import static io.vavr.API.Case;
+import static io.vavr.Predicates.instanceOf;
+
+public class QueryHandler implements Function<UserQueryRequest, QueryResponse> {
 
     private final UserRepository repository;
 
@@ -17,27 +23,42 @@ public class QueryHandler {
         this.repository = repository;
     }
 
-    public Collection<Message> handle(UserFriendsConversationsQuery query) {
-        User user = repository.load(query.getAggregateId());
-        // TODO: read about Stream API + Java 8 Default methods.
-        Stream<Message> allMessages = user.getMessages().stream();
-        Stream<Message> messageStream = allMessages.filter(
-                message -> (message.getRecipient().equals(query.getAggregateId())
-                                && message.getSender().equals(query.getFriendId()))
-                        || (message.getSender().equals(query.getAggregateId())
-                                && message.getRecipient().equals(query.getFriendId())));
-        return collectInDescendOrder(messageStream);
+    @Override
+    public QueryResponse apply(UserQueryRequest userQueryRequest) {
+        return API.Match(userQueryRequest).of(
+                Case($(instanceOf(UserFriendsConversationsRequestUser.class)), this::handle),
+                Case($(instanceOf(UserMessagesRequestUser.class)), this::handle)
+        );
     }
 
-    public Collection<Message> handle(UserMessagesQuery query) {
-        User user = repository.load(query.getAggregateId());
+    private UserFriendsConversationsResponse handle(UserFriendsConversationsRequestUser request) {
+        Predicate<Message> conversationPredicate = message ->
+                (message.getRecipient().equals(request.getAggregateId())
+                        && message.getSender().equals(request.getFriendId()))
+             || (message.getSender().equals(request.getAggregateId())
+                        && message.getRecipient().equals(request.getFriendId()));
+        Stream<Message> allMessageStream = getAllMessageStream(request.getAggregateId());
+        Stream<Message> friendMessageStream = allMessageStream.filter(conversationPredicate);
+        Collection<Message> result = collectInDescendOrder(friendMessageStream);
+        return new UserFriendsConversationsResponse(result);
+    }
+
+    private UserMessagesResponse handle(UserMessagesRequestUser request) {
+        Stream<Message> allMessageStream = getAllMessageStream(request.getAggregateId());
+        Collection<Message> result = collectInDescendOrder(allMessageStream);
+        return new UserMessagesResponse(result);
+    }
+
+    private Stream<Message> getAllMessageStream(UUID aggregateId) {
+        User user = repository.load(aggregateId);
         // TODO: read about Stream API + Java 8 Default methods.
-        Stream<Message> messageStream = user.getMessages().stream();
-        return collectInDescendOrder(messageStream);
+        return user.getMessages().stream();
     }
 
     private Collection<Message> collectInDescendOrder(Stream<Message> messageStream) {
-        return messageStream.sorted(new DescendingComparator()) // TODO: Java 8 Comparator replacement.
-                            .collect(Collectors.toCollection(CopyOnWriteArrayList::new)); // TODO: Read about Java 8 Collectors (Stream API)
+        // TODO: Java 8 Comparator replacement.
+        return messageStream.sorted(new DescendingComparator())
+                            // TODO: Read about Java 8 Collectors (Stream API)
+                            .collect(Collectors.toCollection(CopyOnWriteArrayList::new));
     }
 }
