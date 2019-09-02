@@ -3,11 +3,11 @@ package sigma.software.messagerepository.domain.service.gateway;
 import io.vavr.API;
 import sigma.software.messagerepository.domain.Message;
 import sigma.software.messagerepository.domain.User;
-import sigma.software.messagerepository.domain.service.gateway.repository.UserRepository;
 import sigma.software.messagerepository.domain.query.*;
 import sigma.software.messagerepository.domain.query.api.DescendingComparator;
 import sigma.software.messagerepository.domain.query.api.QueryResponse;
 import sigma.software.messagerepository.domain.query.api.UserQueryRequest;
+import sigma.software.messagerepository.domain.service.gateway.repository.UserRepository;
 
 import java.util.Collection;
 import java.util.UUID;

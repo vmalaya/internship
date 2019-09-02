@@ -1,12 +1,15 @@
 package sigma.software.messagerepository.domain.service.gateway.repository;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.Test;
 import sigma.software.messagerepository.domain.User;
 import sigma.software.messagerepository.domain.command.CreateUserCommand;
 import sigma.software.messagerepository.domain.command.SendFriendRequestCommand;
-import sigma.software.messagerepository.domain.service.gateway.repository.UserRepository;
+import sigma.software.messagerepository.domain.service.gateway.repository.eventstore.EventStore;
+import sigma.software.messagerepository.domain.service.gateway.repository.eventstore.config.EventStoreConfig;
+import sigma.software.messagerepository.domain.service.gateway.repository.eventstore.config.JacksonConfig;
 
 import java.util.UUID;
 
@@ -15,7 +18,13 @@ import static org.assertj.core.api.Assertions.assertThat;
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
 class UserRepositoryTest {
 
-    UserRepository userRepository = new UserRepository();
+    EventStore eventStore = new EventStore(new JacksonConfig(), new EventStoreConfig());
+    UserRepository userRepository = new UserRepository(eventStore);
+
+    @BeforeEach
+    void setUp() {
+        eventStore.cleanup();
+    }
 
     @Test
     void should_save_user() {

@@ -1,13 +1,16 @@
 package sigma.software.messagerepository.domain.service.gateway;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import sigma.software.messagerepository.domain.User;
 import sigma.software.messagerepository.domain.command.CreateUserCommand;
 import sigma.software.messagerepository.domain.query.UserRequest;
 import sigma.software.messagerepository.domain.query.UserResponse;
 import sigma.software.messagerepository.domain.query.api.QueryResponse;
-import sigma.software.messagerepository.domain.service.gateway.QueryGateway;
 import sigma.software.messagerepository.domain.service.gateway.repository.UserRepository;
+import sigma.software.messagerepository.domain.service.gateway.repository.eventstore.EventStore;
+import sigma.software.messagerepository.domain.service.gateway.repository.eventstore.config.EventStoreConfig;
+import sigma.software.messagerepository.domain.service.gateway.repository.eventstore.config.JacksonConfig;
 
 import java.util.UUID;
 
@@ -15,8 +18,14 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 class QueryGatewayTest {
 
-    private final UserRepository repository = new UserRepository();
-    private final QueryGateway queryGateway = new QueryGateway(repository);
+    EventStore eventStore = new EventStore(new JacksonConfig(), new EventStoreConfig());
+    UserRepository repository = new UserRepository(eventStore);
+    QueryGateway queryGateway = new QueryGateway(repository);
+
+    @BeforeEach
+    void setUp() {
+        eventStore.cleanup();
+    }
 
     @Test
     void should_query_user() {
