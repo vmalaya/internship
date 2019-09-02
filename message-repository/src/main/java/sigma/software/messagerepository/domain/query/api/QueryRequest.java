@@ -1,4 +1,4 @@
-package sigma.software.messagerepository.domain.query;
+package sigma.software.messagerepository.domain.query.api;
 
 public interface QueryRequest {
     // User Specific Queries must implement UserQueryRequest interface instead.

@@ -1,8 +1,9 @@
 package sigma.software.messagerepository;
 
-import sigma.software.messagerepository.domain.CommandHandler;
-import sigma.software.messagerepository.domain.QueryHandler;
-import sigma.software.messagerepository.domain.UserRepository;
+import sigma.software.messagerepository.domain.service.gateway.CommandGateway;
+import sigma.software.messagerepository.domain.service.gateway.QueryGateway;
+import sigma.software.messagerepository.domain.service.gateway.repository.UserRepository;
+import sigma.software.messagerepository.domain.service.UserService;
 
 import java.util.Objects;
 
@@ -12,7 +13,7 @@ public class Main {
 
         OK(0, "OK"),
         USAGE(1, "See command usage help..."),
-        BARD_REQUEST(2, "Bad request"),
+        BAD_REQUEST(2, "Bad request"),
         ;
 
         public final int codeNumber;
@@ -27,13 +28,14 @@ public class Main {
     public static void main(String[] args) {
 
         UserRepository repository = new UserRepository();
-        CommandHandler commandGateway = new CommandHandler(repository);
-        QueryHandler queryGateway = new QueryHandler(repository);
+        QueryGateway queryGateway = new QueryGateway(repository);
+        CommandGateway commandGateway = new CommandGateway(repository);
+        UserService userService = new UserService(queryGateway, commandGateway);
 
         boolean hasNoArguments = Objects.isNull(args);
         if (hasNoArguments) {
-            System.err.println(ExitCode.BARD_REQUEST.codeName);
-            System.exit(ExitCode.BARD_REQUEST.codeNumber);
+            System.err.println(ExitCode.BAD_REQUEST.codeName);
+            System.exit(ExitCode.BAD_REQUEST.codeNumber);
         }
 
         if (args.length == 0) {

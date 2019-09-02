@@ -1,6 +1,7 @@
 package sigma.software.messagerepository.domain.query;
 
 import sigma.software.messagerepository.domain.Message;
+import sigma.software.messagerepository.domain.query.api.QueryResponse;
 
 import java.util.Collection;
 

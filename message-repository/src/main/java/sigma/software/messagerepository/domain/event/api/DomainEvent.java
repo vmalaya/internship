@@ -1,4 +1,4 @@
-package sigma.software.messagerepository.domain.event;
+package sigma.software.messagerepository.domain.event.api;
 
 import java.util.UUID;
 

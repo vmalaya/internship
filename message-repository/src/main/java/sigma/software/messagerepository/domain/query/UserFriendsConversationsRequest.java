@@ -1,13 +1,15 @@
 package sigma.software.messagerepository.domain.query;
 
+import sigma.software.messagerepository.domain.query.api.UserQueryRequest;
+
 import java.util.UUID;
 
-public class UserFriendsConversationsRequestUser implements UserQueryRequest {
+public class UserFriendsConversationsRequest implements UserQueryRequest {
 
     private final UUID aggregateId;
     private final UUID friendId;
 
-    public UserFriendsConversationsRequestUser(UUID aggregateId, UUID friendId) {
+    public UserFriendsConversationsRequest(UUID aggregateId, UUID friendId) {
         this.aggregateId = aggregateId;
         this.friendId = friendId;
     }

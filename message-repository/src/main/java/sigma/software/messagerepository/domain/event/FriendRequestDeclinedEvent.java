@@ -1,5 +1,7 @@
 package sigma.software.messagerepository.domain.event;
 
+import sigma.software.messagerepository.domain.event.api.DomainEvent;
+
 import java.util.UUID;
 
 public class FriendRequestDeclinedEvent implements DomainEvent {

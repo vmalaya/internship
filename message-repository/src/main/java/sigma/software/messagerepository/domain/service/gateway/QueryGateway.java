@@ -1,7 +1,13 @@
-package sigma.software.messagerepository.domain;
+package sigma.software.messagerepository.domain.service.gateway;
 
 import io.vavr.API;
+import sigma.software.messagerepository.domain.Message;
+import sigma.software.messagerepository.domain.User;
+import sigma.software.messagerepository.domain.service.gateway.repository.UserRepository;
 import sigma.software.messagerepository.domain.query.*;
+import sigma.software.messagerepository.domain.query.api.DescendingComparator;
+import sigma.software.messagerepository.domain.query.api.QueryResponse;
+import sigma.software.messagerepository.domain.query.api.UserQueryRequest;
 
 import java.util.Collection;
 import java.util.UUID;
@@ -15,24 +21,30 @@ import static io.vavr.API.$;
 import static io.vavr.API.Case;
 import static io.vavr.Predicates.instanceOf;
 
-public class QueryHandler implements Function<UserQueryRequest, QueryResponse> {
+public class QueryGateway implements Function<UserQueryRequest, QueryResponse> {
 
     private final UserRepository repository;
 
-    public QueryHandler(UserRepository repository) {
+    public QueryGateway(UserRepository repository) {
         this.repository = repository;
     }
 
     @Override
     public QueryResponse apply(UserQueryRequest userQueryRequest) {
         return API.Match(userQueryRequest).of(
-                Case($(instanceOf(UserFriendsConversationsRequestUser.class)), this::handle),
+                Case($(instanceOf(UserRequest.class)), this::handle),
+                Case($(instanceOf(UserFriendsConversationsRequest.class)), this::handle),
                 Case($(instanceOf(UserMessagesRequestUser.class)), this::handle),
-                Case($(instanceOf(UserLimitedMessagesRequestUser.class)), this::handle)
+                Case($(instanceOf(UserLimitedMessagesRequest.class)), this::handle)
         );
     }
 
-    private UserFriendsConversationsResponse handle(UserFriendsConversationsRequestUser request) {
+    private UserResponse handle(UserRequest request) {
+        User user = repository.load(request.getAggregateId());
+        return new UserResponse(user.getAggregateId(), user.getUsername(), user.getFriendRequest(), user.getFriends(), user.getMessages());
+    }
+
+    private UserFriendsConversationsResponse handle(UserFriendsConversationsRequest request) {
         Predicate<Message> conversationPredicate = message ->
                 (message.getRecipient().equals(request.getAggregateId())
                         && message.getSender().equals(request.getFriendId()))
@@ -50,7 +62,7 @@ public class QueryHandler implements Function<UserQueryRequest, QueryResponse> {
         return new UserMessagesResponse(result);
     }
 
-    private UserMessagesResponse handle(UserLimitedMessagesRequestUser request) {
+    private UserMessagesResponse handle(UserLimitedMessagesRequest request) {
         Stream<Message> allMessageStream = getAllMessageStream(request.getAggregateId());
         Collection<Message> result = collectInDescendOrder(allMessageStream.skip(allMessageStream.count() - request.getLimit()));
         return new UserMessagesResponse(result);

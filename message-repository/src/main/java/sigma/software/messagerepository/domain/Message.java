@@ -5,7 +5,7 @@ import java.util.Objects;
 import java.util.UUID;
 
 public class Message {
-    enum Type {
+    public enum Type {
         INCOMING, OUTGOING
     }
 
