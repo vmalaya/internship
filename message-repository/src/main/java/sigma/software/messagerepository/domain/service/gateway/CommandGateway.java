@@ -2,9 +2,9 @@ package sigma.software.messagerepository.domain.service.gateway;
 
 import io.vavr.API;
 import sigma.software.messagerepository.domain.User;
-import sigma.software.messagerepository.domain.service.gateway.repository.UserRepository;
 import sigma.software.messagerepository.domain.command.*;
 import sigma.software.messagerepository.domain.command.api.Command;
+import sigma.software.messagerepository.domain.service.gateway.repository.UserRepository;
 
 import java.util.UUID;
 import java.util.function.Consumer;

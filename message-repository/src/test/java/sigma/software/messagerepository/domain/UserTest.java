@@ -132,4 +132,10 @@ class UserTest {
         // then:
         assertThat(user.getMessages()).hasSize(1);
     }
+
+    @Test
+    public void test() {
+        // given:
+        User user = new User();
+    }
 }

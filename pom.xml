@@ -20,14 +20,15 @@
 
         <vavr.version>0.10.2</vavr.version>
         <junit.version>4.12</junit.version>
+        <log4j.version>2.12.1</log4j.version>
         <assertj.version>3.13.2</assertj.version>
+        <jackson.version>2.10.0.pr2</jackson.version>
         <groovy-all.version>2.5.7</groovy-all.version>
         <junit-jupiter.version>5.5.1</junit-jupiter.version>
         <spock-core.version>1.3-groovy-2.5</spock-core.version>
         <gmavenplus-plugin.version>1.6</gmavenplus-plugin.version>
         <maven-deploy-plugin.version>2.8.2</maven-deploy-plugin.version>
         <maven-compiler-plugin.version>3.8.1</maven-compiler-plugin.version>
-        <maven-surefire-plugin.version>3.0.0-M3</maven-surefire-plugin.version>
         <spotbugs-maven-plugin.version>3.1.12.2</spotbugs-maven-plugin.version>
     </properties>
 
@@ -49,7 +50,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
-                <version>${maven-surefire-plugin.version}</version>
+                <version>3.0.0-M3</version>
             </plugin>
 
             <!-- In safe with SptBugs... -->
@@ -75,5 +76,24 @@
             </plugin>
         </plugins>
     </build>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>org.apache.logging.log4j</groupId>
+                <artifactId>log4j-bom</artifactId>
+                <version>${log4j.version}</version>
+                <scope>import</scope>
+                <type>pom</type>
+            </dependency>
+            <dependency>
+                <groupId>com.fasterxml.jackson</groupId>
+                <artifactId>jackson-bom</artifactId>
+                <version>${jackson.version}</version>
+                <scope>import</scope>
+                <type>pom</type>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
 
 </project>
