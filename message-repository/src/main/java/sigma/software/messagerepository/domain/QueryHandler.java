@@ -27,7 +27,8 @@ public class QueryHandler implements Function<UserQueryRequest, QueryResponse> {
     public QueryResponse apply(UserQueryRequest userQueryRequest) {
         return API.Match(userQueryRequest).of(
                 Case($(instanceOf(UserFriendsConversationsRequestUser.class)), this::handle),
-                Case($(instanceOf(UserMessagesRequestUser.class)), this::handle)
+                Case($(instanceOf(UserMessagesRequestUser.class)), this::handle),
+                Case($(instanceOf(UserLimitedMessagesRequestUser.class)), this::handle)
         );
     }
 
@@ -35,7 +36,7 @@ public class QueryHandler implements Function<UserQueryRequest, QueryResponse> {
         Predicate<Message> conversationPredicate = message ->
                 (message.getRecipient().equals(request.getAggregateId())
                         && message.getSender().equals(request.getFriendId()))
-             || (message.getSender().equals(request.getAggregateId())
+                        || (message.getSender().equals(request.getAggregateId())
                         && message.getRecipient().equals(request.getFriendId()));
         Stream<Message> allMessageStream = getAllMessageStream(request.getAggregateId());
         Stream<Message> friendMessageStream = allMessageStream.filter(conversationPredicate);
@@ -46,6 +47,12 @@ public class QueryHandler implements Function<UserQueryRequest, QueryResponse> {
     private UserMessagesResponse handle(UserMessagesRequestUser request) {
         Stream<Message> allMessageStream = getAllMessageStream(request.getAggregateId());
         Collection<Message> result = collectInDescendOrder(allMessageStream);
+        return new UserMessagesResponse(result);
+    }
+
+    private UserMessagesResponse handle(UserLimitedMessagesRequestUser request) {
+        Stream<Message> allMessageStream = getAllMessageStream(request.getAggregateId());
+        Collection<Message> result = collectInDescendOrder(allMessageStream.skip(allMessageStream.count() - request.getLimit()));
         return new UserMessagesResponse(result);
     }
 

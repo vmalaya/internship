@@ -1,9 +1,11 @@
 package sigma.software.messagerepository.domain;
 
 import sigma.software.messagerepository.domain.event.DomainEvent;
-import sigma.software.messagerepository.domain.query.DescendingComparator;
 
-import java.util.*;
+import java.util.Collection;
+import java.util.Map;
+import java.util.Objects;
+import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.stream.Collectors;
@@ -18,7 +20,7 @@ public class UserRepository {
         Collection<DomainEvent> past = eventStore.getOrDefault(aggregateId, new CopyOnWriteArrayList<>());
         Collection<DomainEvent> present = new CopyOnWriteArrayList<>(user.getDomainEvents());
         user.flushEvents();
-        List<DomainEvent> history = Stream.concat(past.stream(), present.stream())
+        Collection<DomainEvent> history = Stream.concat(past.stream(), present.stream())
                                           .collect(Collectors.toList());
         eventStore.put(aggregateId, new CopyOnWriteArrayList<>(history));
     }
@@ -32,27 +34,5 @@ public class UserRepository {
         return eventStore.containsKey(id)
                 ? User.recreate(snapshot, eventStore.get(id))
                 : snapshot;
-    }
-
-    // TODO: Move it into QueryHandler
-    public Collection<Message> getAllMessagesInDescOrder(UUID userId) {
-        User user = load(userId);
-        Collection<Message> messages = user.getMessages();
-        List<Message> list = new CopyOnWriteArrayList<>(messages);
-        Collections.sort(list, new DescendingComparator());
-        return list;
-    }
-
-    // TODO: Move it into QueryHandler
-    public Collection<Message> getLastNumberOfMessagesInDescOrder(UUID userId, int limit) {
-        User user = load(userId);
-        List<Message> list = new CopyOnWriteArrayList<>(user.getMessages());
-        ListIterator<Message> iterator = list.listIterator(list.size() - limit);
-        List<Message> sorted = new CopyOnWriteArrayList<>();
-        while (iterator.hasNext()) {
-            sorted.add(iterator.next());
-        }
-        Collections.sort(sorted, new DescendingComparator());
-        return sorted;
     }
 }

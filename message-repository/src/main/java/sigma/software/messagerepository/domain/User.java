@@ -187,7 +187,8 @@ public class User implements Function<DomainEvent, User> {
 
     private User on(MessageSentEvent event) {
         domainEvents.add(event);
-        messages.add(new Message(event.getAggregateId(), event.getRecipient(), event.getMessage(), event.getAt()));
+        messages.add(new Message(event.getAggregateId(), event.getRecipient(), event.getMessage(),
+                                 Message.Type.OUTGOING, event.getAt()));
         return this;
     }
 
@@ -202,7 +203,8 @@ public class User implements Function<DomainEvent, User> {
 
     private User on(MessageReceivedEvent event) {
         domainEvents.add(event);
-        messages.add(new Message(event.getSender(), event.getAggregateId(), event.getMessage(), event.getAt()));
+        messages.add(new Message(event.getSender(), event.getAggregateId(), event.getMessage(),
+                                 Message.Type.INCOMING, event.getAt()));
         return this;
     }
 
