@@ -1,4 +1,4 @@
-package sigma.software.messagerepository.domain.query;
+package sigma.software.messagerepository.domain.query.api;
 
 import sigma.software.messagerepository.domain.Message;
 

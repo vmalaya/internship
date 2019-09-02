@@ -3,8 +3,8 @@ package sigma.software.messagerepository.domain;
 import io.vavr.API;
 import sigma.software.messagerepository.domain.command.*;
 import sigma.software.messagerepository.domain.event.*;
+import sigma.software.messagerepository.domain.event.api.DomainEvent;
 
-import java.time.ZonedDateTime;
 import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
@@ -16,6 +16,9 @@ import java.util.function.Function;
 import static io.vavr.API.$;
 import static io.vavr.API.Case;
 import static io.vavr.Predicates.instanceOf;
+import static java.time.ZonedDateTime.now;
+import static sigma.software.messagerepository.domain.Message.Type.INCOMING;
+import static sigma.software.messagerepository.domain.Message.Type.OUTGOING;
 
 /**
  * Aggregate.
@@ -47,14 +50,12 @@ public class User implements Function<DomainEvent, User> {
 
     // 2.1: helper to avoid list -> array conversion
     public User(UUID aggregateId, Collection<DomainEvent> domainEvents) {
-        this(
-                aggregateId,
-                null,
-                new CopyOnWriteArrayList<>(),
-                new CopyOnWriteArrayList<>(),
-                new CopyOnWriteArrayList<>(),
-                domainEvents.toArray(new DomainEvent[0])
-        );
+        this(aggregateId,
+             null,
+             new CopyOnWriteArrayList<>(),
+             new CopyOnWriteArrayList<>(),
+             new CopyOnWriteArrayList<>(),
+             domainEvents.toArray(new DomainEvent[0]));
     }
 
     public User(UUID aggregateId,
@@ -134,9 +135,12 @@ public class User implements Function<DomainEvent, User> {
 
     // send friend request
     public void handle(SendFriendRequestCommand command) {
-        if (Objects.isNull(command.getAggregateId())) throw new IllegalArgumentException("aggregate id may not be null."); // nack
-        if (!command.getAggregateId().equals(aggregateId)) throw new IllegalArgumentException("sender id must be same as aggregate id."); // nack
-        if (Objects.isNull(command.getFriendId())) throw new IllegalArgumentException("friend id may not be null."); // nack
+        if (Objects.isNull(command.getAggregateId()))
+            throw new IllegalArgumentException("aggregate id may not be null."); // nack
+        if (!command.getAggregateId().equals(aggregateId))
+            throw new IllegalArgumentException("sender id must be same as aggregate id."); // nack
+        if (Objects.isNull(command.getFriendId()))
+            throw new IllegalArgumentException("friend id may not be null."); // nack
         on(new FriendRequestSentEvent(aggregateId, command.getFriendId()));
     }
 
@@ -148,8 +152,10 @@ public class User implements Function<DomainEvent, User> {
 
     // accept friend request
     public void handle(AcceptFriendRequestCommand command) {
-        if (Objects.isNull(command.getAggregateId())) throw new IllegalArgumentException("aggregate id may not be null."); // nack
-        if (!command.getAggregateId().equals(aggregateId)) throw new IllegalArgumentException("sender id must be same as aggregate id.");
+        if (Objects.isNull(command.getAggregateId()))
+            throw new IllegalArgumentException("aggregate id may not be null."); // nack
+        if (!command.getAggregateId().equals(aggregateId))
+            throw new IllegalArgumentException("sender id must be same as aggregate id.");
         if (Objects.isNull(command.getId())) throw new IllegalArgumentException("id may not be null.");
         on(new FriendRequestAcceptedEvent(aggregateId, command.getId()));
     }
@@ -162,8 +168,10 @@ public class User implements Function<DomainEvent, User> {
 
     // decline friend request
     public void handle(DeclineFriendRequestCommand command) {
-        if (Objects.isNull(command.getAggregateId())) throw new IllegalArgumentException("aggregate id may not be null."); // nack
-        if (!command.getAggregateId().equals(aggregateId)) throw new IllegalArgumentException("decliner id must be same as aggregate id.");
+        if (Objects.isNull(command.getAggregateId()))
+            throw new IllegalArgumentException("aggregate id may not be null."); // nack
+        if (!command.getAggregateId().equals(aggregateId))
+            throw new IllegalArgumentException("decliner id must be same as aggregate id.");
         if (Objects.isNull(command.getUserId())) throw new IllegalArgumentException("id may not be null.");
         on(new FriendRequestDeclinedEvent(aggregateId, command.getUserId()));
     }
@@ -175,52 +183,47 @@ public class User implements Function<DomainEvent, User> {
 
     // send message
     public void handle(SendMessageCommand command) {
-        if (Objects.isNull(command.getAggregateId())) throw new IllegalArgumentException("aggregate id may not be null."); // nack
-        if (!command.getAggregateId().equals(aggregateId)) throw new IllegalArgumentException("sender id must be same as aggregate id.");
+        if (Objects.isNull(command.getAggregateId()))
+            throw new IllegalArgumentException("aggregate id may not be null."); // nack
+        if (!command.getAggregateId().equals(aggregateId))
+            throw new IllegalArgumentException("sender id must be same as aggregate id.");
         if (Objects.isNull(command.getMessage())) throw new IllegalArgumentException("message may not be null.");
         if (Objects.isNull(command.getRecipient()))
             throw new IllegalArgumentException("recipient may not be null.");
         if (!friends.contains(command.getRecipient()))
             throw new IllegalArgumentException("recipient must be your friend.");
-        on(new MessageSentEvent(aggregateId, command.getRecipient(), command.getMessage(), ZonedDateTime.now()));
+        on(new MessageSentEvent(aggregateId, command.getRecipient(), command.getMessage(), OUTGOING, now()));
     }
 
     private User on(MessageSentEvent event) {
         domainEvents.add(event);
-        messages.add(new Message(event.getAggregateId(), event.getRecipient(), event.getMessage(),
-                                 Message.Type.OUTGOING, event.getAt()));
+        messages.add(new Message(event.getAggregateId(),
+                                 event.getRecipient(),
+                                 event.getBody(),
+                                 event.getType(),
+                                 event.getAt()));
         return this;
     }
 
     // receive message
     public void handle(ReceiveMessageCommand command) {
-        if (Objects.isNull(command.getAggregateId())) throw new IllegalArgumentException("aggregate id may not be null."); // nack
-        if (!command.getAggregateId().equals(aggregateId)) throw new IllegalArgumentException("recipient id must be same as aggregate id.");
+        if (Objects.isNull(command.getAggregateId()))
+            throw new IllegalArgumentException("aggregate id may not be null."); // nack
+        if (!command.getAggregateId().equals(aggregateId))
+            throw new IllegalArgumentException("recipient id must be same as aggregate id.");
         if (Objects.isNull(command.getMessage())) throw new IllegalArgumentException("message may not be null.");
         if (Objects.isNull(command.getSender())) throw new IllegalArgumentException("sender may not be null.");
-        on(new MessageReceivedEvent(aggregateId, command.getSender(), command.getMessage(), ZonedDateTime.now()));
+        on(new MessageReceivedEvent(aggregateId, command.getSender(), command.getMessage(), INCOMING, now()));
     }
 
     private User on(MessageReceivedEvent event) {
         domainEvents.add(event);
-        messages.add(new Message(event.getSender(), event.getAggregateId(), event.getMessage(),
-                                 Message.Type.INCOMING, event.getAt()));
+        messages.add(new Message(event.getSender(),
+                                 event.getAggregateId(),
+                                 event.getMessage(),
+                                 event.getType(),
+                                 event.getAt()));
         return this;
-    }
-
-    // in java we trust
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof User)) return false;
-        User user = (User) o;
-        return Objects.equals(aggregateId, user.aggregateId) &&
-                Objects.equals(username, user.username);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(aggregateId, username);
     }
 
     public UUID getAggregateId() {
@@ -241,5 +244,22 @@ public class User implements Function<DomainEvent, User> {
 
     public Collection<Message> getMessages() {
         return messages;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof User)) return false;
+        User user = (User) o;
+        return Objects.equals(aggregateId, user.aggregateId) &&
+                Objects.equals(username, user.username) &&
+                Objects.equals(friendRequest, user.friendRequest) &&
+                Objects.equals(friends, user.friends) &&
+                Objects.equals(messages, user.messages);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(aggregateId, username, friendRequest, friends, messages);
     }
 }

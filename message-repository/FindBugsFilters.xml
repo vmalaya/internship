@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<FindBugsFilter>
+  <Class name="sigma.software.messagerepository.domain.query.api.DescendingComparator"/>
+  <Class name="sigma.software.messagerepository.Main"/>
+</FindBugsFilter>

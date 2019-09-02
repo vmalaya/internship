@@ -1,7 +1,10 @@
-package sigma.software.messagerepository.domain;
+package sigma.software.messagerepository.domain.service.gateway;
 
 import io.vavr.API;
+import sigma.software.messagerepository.domain.User;
+import sigma.software.messagerepository.domain.service.gateway.repository.UserRepository;
 import sigma.software.messagerepository.domain.command.*;
+import sigma.software.messagerepository.domain.command.api.Command;
 
 import java.util.UUID;
 import java.util.function.Consumer;
@@ -10,11 +13,11 @@ import static io.vavr.API.$;
 import static io.vavr.API.Case;
 import static io.vavr.Predicates.instanceOf;
 
-public class CommandHandler implements Consumer<Command> {
+public class CommandGateway implements Consumer<Command> {
 
     private final UserRepository repository;
 
-    public CommandHandler(UserRepository repository) {
+    public CommandGateway(UserRepository repository) {
         this.repository = repository;
     }
 

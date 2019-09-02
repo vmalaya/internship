@@ -23,19 +23,14 @@ public class DelayGeneric<T> implements Delayed {
 
     @Override
     public int compareTo(Delayed o) {
-        if (this.startTime < ((DelayGeneric)o).startTime) {
-            return -1;
-        }
-        if (this.startTime > ((DelayGeneric)o).startTime) {
-            return 1;
-        }
-        return 0;
+        if (this.startTime < ((DelayGeneric)o).startTime) return -1;
+        return this.startTime == ((DelayGeneric) o).startTime ? 0 : 1;
     }
 
     @Override
     public String toString() {
         return "DelayObject{" +
-                "data='" + null == data ? "" : data.toString() + '\'' +
+                "data='" + data + '\'' +
                 ", startTime=" + startTime +
                 '}';
     }

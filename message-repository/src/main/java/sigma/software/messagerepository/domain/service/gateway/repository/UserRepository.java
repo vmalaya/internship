@@ -1,6 +1,7 @@
-package sigma.software.messagerepository.domain;
+package sigma.software.messagerepository.domain.service.gateway.repository;
 
-import sigma.software.messagerepository.domain.event.DomainEvent;
+import sigma.software.messagerepository.domain.User;
+import sigma.software.messagerepository.domain.event.api.DomainEvent;
 
 import java.util.Collection;
 import java.util.Map;
