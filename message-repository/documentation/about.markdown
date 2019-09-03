@@ -3,7 +3,19 @@ layout: page
 title: About
 permalink: /about/
 ---
-# Message repository
+# Message repository developer guide
+
+## quick start
+
+```shell script
+mvnw
+mvnw -P versions -f message-repository\pom.xml
+
+pwd
+set PATH=%PATH%;C:\dev\internship\bin
+
+mr signup me.awesome
+```
 
 <!--
 

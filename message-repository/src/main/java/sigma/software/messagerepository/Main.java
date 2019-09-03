@@ -1,16 +1,18 @@
 package sigma.software.messagerepository;
 
+import io.vavr.control.Try;
 import sigma.software.messagerepository.domain.service.UserService;
 
 import java.io.IOException;
 import java.util.Objects;
+import java.util.UUID;
 
 public class Main {
 
     enum ExitCode {
 
         OK(0, "OK"),
-        USAGE(1, "See command usage help..."),
+        USAGE(1, "TODO: See command usage help (Implement me please...)"),
         BAD_REQUEST(2, "Bad request"),
         ;
 
@@ -106,43 +108,72 @@ public class Main {
 
     public static void main(String[] args) throws IOException {
 
-        boolean hasNoArguments = Objects.isNull(args);
-        if (hasNoArguments) {
-            System.err.println(ExitCode.BAD_REQUEST.codeName);
-            System.exit(ExitCode.BAD_REQUEST.codeNumber);
-        }
-
         if (args.length == 0) {
             System.err.println(ExitCode.USAGE.codeName);
             System.exit(ExitCode.USAGE.codeNumber);
         }
 
-        if (args.length == 2 && "signup".equalsIgnoreCase(args[0])) {
-            System.out.println("registering a new user with username: " + args[1]);
-            userService.signup(args[1]);
-            System.out.println(ExitCode.OK.codeNumber);
+        String signUpCommand = args[0];
+        if (args.length >= 2 && "signup".equalsIgnoreCase(signUpCommand)) {
+
+            String username = args[1];
+            Try<UUID> aTry = args.length > 2 ? Try.of(() -> UUID.fromString(args[2])) : Try.of(UUID::randomUUID);
+            if (aTry.isFailure()) {
+                System.err.println("Can not parse id.");
+                System.exit(ExitCode.BAD_REQUEST.codeNumber);
+            }
+
+            UUID id = userService.signup(username, aTry.get());
+            System.out.printf("%s user created. user this id to signin: %s\n", username, id);
+            // System.out.println(ExitCode.OK.codeNumber);
             System.exit(ExitCode.OK.codeNumber);
         }
 
-        if (args.length == 2 && "signin".equalsIgnoreCase(args[0])) {
-            String username = userService.signin(args[1]);
-            if (Objects.nonNull(username)) {
-                System.out.println(username);
-            } else {
+        String signInCommand = args[0];
+        if (args.length == 2 && "signin".equalsIgnoreCase(signInCommand)) {
+
+            Try<UUID> aTry = Try.of(() -> UUID.fromString(args[1]));
+            if (aTry.isFailure()) {
+                System.err.println("Can not parse id.");
+                System.exit(ExitCode.BAD_REQUEST.codeNumber);
+            }
+
+            String username = userService.signin(aTry.get());
+            if (Objects.isNull(username)) {
                 System.out.println("User not found. Please use command signup.");
+                System.exit(ExitCode.BAD_REQUEST.codeNumber);
             }
+
+            System.out.println(username);
+            System.exit(ExitCode.OK.codeNumber);
         }
 
-        if (args.length == 2 && "invite".equalsIgnoreCase(args[0])) {
-            String invited = userService.invite(args[1]);
-            if (Objects.nonNull(invited)) {
-                System.out.println(invited);
-            } else {
-                System.err.println("User not found.");
+        String inviteCommand = args[0];
+        if (args.length == 2 && "invite".equalsIgnoreCase(inviteCommand)) {
+            String desiredFriendId = args[1];
+            Try<UUID> aTry = Try.of(() -> UUID.fromString(desiredFriendId));
+            if (aTry.isFailure()) {
+                System.err.println("Can not parse id.");
+                System.exit(ExitCode.BAD_REQUEST.codeNumber);
             }
+
+            UUID friendId = aTry.get();
+            UUID desiredFriend = userService.invite(friendId);
+            if (Objects.isNull(desiredFriend)) {
+                System.err.println("Desired friend hasn't been found.");
+                System.exit(ExitCode.BAD_REQUEST.codeNumber);
+            }
+
+            System.out.println("Friend invited.");
+            System.exit(ExitCode.OK.codeNumber);
         }
 
-
+        String invitesQuery = args[0];
+        if (args.length == 1 && "invites".equalsIgnoreCase(invitesQuery)) {
+            String friendRequests = userService.invites();
+            System.out.printf("Friends requests: %s\n", friendRequests);
+            System.exit(ExitCode.OK.codeNumber);
+        }
 
         // if (args.length == 2 && "invite".equalsIgnoreCase(args[0])) {
         //     if (Objects.nonNull(repository.load(UUID.fromString(args[1])).getAggregateId())) {
