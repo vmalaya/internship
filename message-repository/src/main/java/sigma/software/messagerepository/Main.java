@@ -1,5 +1,6 @@
 package sigma.software.messagerepository;
 
+import io.vavr.control.Try;
 import sigma.software.messagerepository.domain.command.CreateUserCommand;
 import sigma.software.messagerepository.domain.service.UserService;
 import sigma.software.messagerepository.domain.service.gateway.CommandGateway;
@@ -9,8 +10,18 @@ import sigma.software.messagerepository.domain.service.gateway.repository.events
 import sigma.software.messagerepository.domain.service.gateway.repository.eventstore.config.EventStoreConfig;
 import sigma.software.messagerepository.domain.service.gateway.repository.eventstore.config.JacksonConfig;
 
+import java.io.File;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Objects;
 import java.util.UUID;
+
+import static java.nio.charset.StandardCharsets.UTF_8;
+import static java.nio.file.StandardOpenOption.APPEND;
+import static java.nio.file.StandardOpenOption.TRUNCATE_EXISTING;
+import static java.util.Arrays.asList;
+import static java.util.Collections.singletonList;
 
 public class Main {
 
@@ -31,13 +42,16 @@ public class Main {
     }
 
     /*
+     * signup(username):
      * mr signup valentina.malaya
      *  -> 00000000-0000-0000-0000-000000000000
      *
+     * invite(friendId):
      * mr invite 11111111-1111-1111-1111-111111111111
      *  1) check if friend exists ...
      *     otherwise ...
      *
+     * getInvites():
      * mr invites
      *  -> 00000000-0000-0000-0000-000000000000
      *     ...
@@ -67,6 +81,16 @@ public class Main {
         CommandGateway commandGateway = new CommandGateway(repository);
         UserService userService = new UserService(queryGateway, commandGateway);
         UUID currentUserId;
+
+        String homePath = System.getProperty("user.home");
+        Path path = Paths.get(homePath, ".mr", "jello.txt");
+        System.out.println(path);
+        Try.run(() -> {
+            Files.deleteIfExists(path);
+            Files.createDirectories(path.getParent());
+            Files.createFile(path);
+            Files.write(path, asList("hello!", "how r u?"), UTF_8, TRUNCATE_EXISTING);
+        });
 
         boolean hasNoArguments = Objects.isNull(args);
         if (hasNoArguments) {
