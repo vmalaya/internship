@@ -14,6 +14,10 @@
     <artifactId>message-repository</artifactId>
     <packaging>jar</packaging><!-- important to have it for JUnit Jupiter 5 tests execution! -->
 
+    <properties>
+        <mainClass>sigma.software.messagerepository.Main</mainClass>
+    </properties>
+
     <dependencies>
         <dependency>
             <groupId>org.apache.logging.log4j</groupId>
@@ -45,5 +49,63 @@
             <version>${junit-jupiter.version}</version>
         </dependency>
     </dependencies>
+
+    <build>
+        <defaultGoal>clean resources:resources package</defaultGoal>
+
+        <plugins>
+            <!-- fat jar -->
+            <plugin>
+                <groupId>com.github.chrisdchristo</groupId>
+                <artifactId>capsule-maven-plugin</artifactId>
+                <version>${capsule-maven-plugin.version}</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>build</goal>
+                        </goals>
+                        <configuration>
+                            <fileDesc>-all</fileDesc>
+                            <appClass>${mainClass}</appClass>
+                            <type>fat</type>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+
+    <profiles>
+        <profile>
+            <id>versions</id>
+
+            <build>
+                <defaultGoal>resources:resources</defaultGoal>
+
+                <resources>
+                    <resource>
+                        <directory>./src/main/templates</directory>
+                        <filtering>true</filtering>
+                    </resource>
+                </resources>
+
+                <plugins>
+                    <!-- templates substitutions -->
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-resources-plugin</artifactId>
+                        <version>${maven-resources-plugin.version}</version>
+                        <configuration>
+                            <delimiters>
+                                <delimiter>{{ * }}</delimiter>
+                            </delimiters>
+                            <outputDirectory>..</outputDirectory>
+                            <overwrite>true</overwrite>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
 
 </project>

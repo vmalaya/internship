@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import io.vavr.control.Try;
 import sigma.software.messagerepository.domain.User;
 import sigma.software.messagerepository.domain.command.CreateUserCommand;
+import sigma.software.messagerepository.domain.command.ReceiveFriendRequestCommand;
 import sigma.software.messagerepository.domain.command.SendFriendRequestCommand;
 import sigma.software.messagerepository.domain.service.gateway.CommandGateway;
 import sigma.software.messagerepository.domain.service.gateway.repository.UserRepository;
@@ -17,67 +18,86 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
 import static java.nio.file.StandardOpenOption.TRUNCATE_EXISTING;
 import static java.util.Collections.singletonList;
+import static java.util.stream.Collectors.joining;
 
 public class UserService {
 
     // private static final Logger log = LogManager.getLogger();
 
-    JacksonConfig jacksonConfig = new JacksonConfig();
-    EventStoreConfig evenStoreConfig = new EventStoreConfig();
-    EventStore eventStore = new EventStore(jacksonConfig, evenStoreConfig);
-    UserRepository repository = new UserRepository(eventStore);
+    private JacksonConfig jacksonConfig = new JacksonConfig();
+    private EventStoreConfig evenStoreConfig = new EventStoreConfig();
+    private EventStore eventStore = new EventStore(jacksonConfig, evenStoreConfig);
+    private UserRepository repository = new UserRepository(eventStore);
     // TODO: FIXME: // QueryGateway queryGateway = new QueryGateway(repository);
-    CommandGateway commandGateway = new CommandGateway(repository);
-    ObjectMapper objectMapper = jacksonConfig.createObjectMapper();
+    private CommandGateway commandGateway = new CommandGateway(repository);
+    private ObjectMapper objectMapper = jacksonConfig.createObjectMapper();
 
-    public UUID signup(String username) {
-        UUID id = UUID.randomUUID();
-        commandGateway.handle(new CreateUserCommand(id, username));
-        createConfigFile(id);
-        return id;
+    private String homePath = System.getProperty("user.home", "/tmp");
+    private String userConfigJson = "user-config.json";
+    private Path path = Paths.get(homePath, ".mr", userConfigJson);
+
+    public UUID signup(String username, UUID uuid) {
+        commandGateway.handle(new CreateUserCommand(uuid, username));
+        createConfigFile(uuid);
+        return uuid;
     }
 
-    public String signin(String id) throws IOException {
-        User loaded = repository.load(UUID.fromString(id));
+    public String signin(UUID id) {
+        User loaded = repository.load(id);
+        createConfigFile(id);
         return loaded.getUsername();
     }
 
-    public String invite(String id) throws IOException {
-        User friend = repository.load(UUID.fromString(id));
-        if (Objects.nonNull(friend)) {
-            commandGateway.handle(new SendFriendRequestCommand(getCurrentUserId(), friend.getAggregateId()));
+    public UUID invite(UUID id) {
+        User friend = repository.load(id);
+        Optional<UUID> maybeCurrentId = getCurrentUserId();
+        if (Objects.nonNull(friend) && maybeCurrentId.isPresent()) {
+            commandGateway.handle(new SendFriendRequestCommand(maybeCurrentId.get(), friend.getAggregateId()));
+            // TODO: FIXME: // commandGateway.handle(new ReceiveFriendRequestCommand(maybeCurrentId.get(), friend.getAggregateId()));
         }
         return id;
     }
 
+    public String invites() {
+        Optional<UUID> maybeCurrentId = getCurrentUserId();
+        if (!maybeCurrentId.isPresent()) return "";
+        User me = repository.load(maybeCurrentId.get());
+        return me.getFriendRequest()
+                 .stream()
+                 .map(UUID::toString)
+                 .collect(Collectors.joining(", "));
+    }
+
     private void createConfigFile(UUID id) {
         User user = repository.load(id);
-        String homePath = System.getProperty("user.home", "/tmp");
-        Path path = Paths.get(homePath, ".mr", "user-config.txt");
         Try.of(() -> Files.deleteIfExists(path))
            .map(aBoolean -> path.getParent())
            .filter(Objects::nonNull)
            .andThenTry(p -> Files.createDirectories(p))
            .andThenTry(() -> Files.createFile(path))
            .andFinallyTry(() -> {
-                String json = objectMapper.writeValueAsString(user);
-                Files.write(path, singletonList(json), UTF_8, TRUNCATE_EXISTING);
+               String json = objectMapper.writeValueAsString(user);
+               Files.write(path, singletonList(json), UTF_8, TRUNCATE_EXISTING);
            });
     }
 
     private File findConfigFile() {
-        String homePath = System.getProperty("user.home");
-        Path path = Paths.get(homePath, ".mr", "user-config.txt");
         return Files.exists(path) ? path.toFile() : null;
     }
 
-    private UUID getCurrentUserId() throws IOException {
-        File file = findConfigFile();
-        return Objects.nonNull(file) ? objectMapper.readValue(file, User.class).getAggregateId() : null;
+    private Optional<UUID> getCurrentUserId() {
+        Optional<File> maybeFile = Optional.ofNullable(findConfigFile());
+        if (!maybeFile.isPresent()) return Optional.empty();
+        File file = maybeFile.get();
+        return Try.of(() -> objectMapper.readValue(file, User.class).getAggregateId())
+                  .map(Optional::of)
+                  .getOrElseGet(throwable -> Optional.empty());
     }
 }
