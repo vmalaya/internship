@@ -33,7 +33,7 @@
     </properties>
 
     <modules>
-        <module>data-structures</module>
+        <!--<module>data-structures</module>-->
         <module>message-repository</module>
     </modules>
 

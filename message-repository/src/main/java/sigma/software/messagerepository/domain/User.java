@@ -1,5 +1,7 @@
 package sigma.software.messagerepository.domain;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import io.vavr.API;
 import sigma.software.messagerepository.domain.command.*;
 import sigma.software.messagerepository.domain.event.*;
@@ -44,8 +46,16 @@ public class User implements Function<DomainEvent, User> {
     private Collection<Message> messages = new CopyOnWriteArrayList<>();
 
     // creation
+
     public User() { // 1: main internal
         // TODO
+    }
+
+    @JsonCreator
+    public User(@JsonProperty("aggregateId") UUID aggregateId,
+                @JsonProperty("username") String username) {
+        this.aggregateId = aggregateId;
+        this.username = username;
     }
 
     // 2.1: helper to avoid list -> array conversion
@@ -99,8 +109,10 @@ public class User implements Function<DomainEvent, User> {
 
     // event sourcing
     public static User recreate(User snapshot, Collection<DomainEvent> history) {
-        return io.vavr.collection.List.ofAll(history)
-                                      .foldLeft(snapshot, User::apply);
+        User user = io.vavr.collection.List.ofAll(history)
+                                           .foldLeft(snapshot, User::apply);
+        user.domainEvents.clear();
+        return user;
     }
 
     @Override
@@ -146,9 +158,12 @@ public class User implements Function<DomainEvent, User> {
 
     private User on(FriendRequestSentEvent event) {
         domainEvents.add(event);
-        friendRequest.add(event.getFriendId());
+        // friendRequest.add(event.getFriendId());
         return this;
     }
+
+    // receive friend request
+    public void handle(ReceiveFriendRequestCommand command) {}
 
     // accept friend request
     public void handle(AcceptFriendRequestCommand command) {
