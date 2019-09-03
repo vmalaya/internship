@@ -1,5 +1,7 @@
 package sigma.software.messagerepository.domain.event;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import sigma.software.messagerepository.domain.event.api.DomainEvent;
 
 import java.util.Objects;
@@ -11,7 +13,9 @@ public class FriendRequestAcceptedEvent implements DomainEvent {
     private final UUID aggregateId;
     private final UUID friendId;
 
-    public FriendRequestAcceptedEvent(UUID aggregateId, UUID friendId) {
+    @JsonCreator
+    public FriendRequestAcceptedEvent(@JsonProperty("aggregateId") UUID aggregateId,
+                                      @JsonProperty("friendId") UUID friendId) {
         this.aggregateId = aggregateId;
         this.friendId = friendId;
     }

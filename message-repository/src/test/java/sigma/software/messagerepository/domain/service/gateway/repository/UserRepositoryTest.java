@@ -80,14 +80,13 @@ class UserRepositoryTest {
         SendFriendRequestCommand intention = new SendFriendRequestCommand(user.getAggregateId(), friendId);
         user.handle(intention);
         userRepository.save(user);
-        assertThat(user.getFriendRequest()).hasSize(1);
+        assertThat(user.getFriendRequest()).hasSize(0);
 
         // then:
         User latest = userRepository.load(snapshot, user.getAggregateId());
         // and:
         assertThat(latest == snapshot).isTrue();
         // and:
-        assertThat(snapshot.getFriendRequest()).hasSize(1)
-                                               .containsExactly(friendId);
+        assertThat(snapshot.getFriendRequest()).isEmpty();
     }
 }

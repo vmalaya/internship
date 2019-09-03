@@ -31,7 +31,7 @@ class UserTest {
     }
 
     @Test
-    void should_send_friend_request() {
+    void should_not_store_outgoing_friend_requests() {
 
         // given:
         User user = new User();
@@ -44,7 +44,7 @@ class UserTest {
         user.handle(new SendFriendRequestCommand(id, UUID.fromString("00000000-0000-0000-0000-000000000000")));
 
         // then:
-        assertThat(user.getFriendRequest()).hasSize(1);
+        assertThat(user.getFriendRequest()).hasSize(0);
     }
 
     @Test

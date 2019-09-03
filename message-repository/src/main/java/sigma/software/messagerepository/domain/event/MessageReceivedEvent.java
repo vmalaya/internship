@@ -1,6 +1,8 @@
 package sigma.software.messagerepository.domain.event;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import sigma.software.messagerepository.domain.Message;
 import sigma.software.messagerepository.domain.event.api.DomainEvent;
 
@@ -18,7 +20,12 @@ public class MessageReceivedEvent implements DomainEvent {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSSZ")
     private final ZonedDateTime at;
 
-    public MessageReceivedEvent(UUID aggregateId, UUID sender, String message, Message.Type type, ZonedDateTime at) {
+    @JsonCreator
+    public MessageReceivedEvent(@JsonProperty("aggregateId") UUID aggregateId,
+                                @JsonProperty("sender") UUID sender,
+                                @JsonProperty("message") String message,
+                                @JsonProperty("type") Message.Type type,
+                                @JsonProperty("at") ZonedDateTime at) {
         this.aggregateId = aggregateId;
         this.sender = sender;
         this.message = message;
