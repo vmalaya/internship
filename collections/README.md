@@ -3,11 +3,11 @@
 The Java Collections playground project
 
 ```bash
-./mvnw -pl :data-structures clean test
+./mvnw -pl :collections clean test
 ```
 
 _or_
 
 ```cmd
-mvnw -f .\data-structures\pom.xml clean test
+mvnw -f .\collections\pom.xml clean test
 ```

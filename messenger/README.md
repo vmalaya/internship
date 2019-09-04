@@ -1,7 +1,7 @@
 # message-repository
 
 ```shell script
-mvnw clean package -f message-repository\pom.xml
+mvnw clean package -f messenger\pom.xml
 ```
 
 # Software Requirements Specification (SRS)

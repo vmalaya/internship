@@ -1,4 +1,4 @@
-package sigma.software.messagerepository.domain.service.gateway.repository.eventstore.config;
+package sigma.software.messagerepository.config;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -12,10 +12,13 @@ import java.util.concurrent.ConcurrentHashMap;
 
 public class EventStoreConfig {
 
-    private static Logger log = LogManager.getLogger();
+    public static final Path dbBasePath = new EventStoreConfig().dbBasePath();
+
+    private static final Logger log = LogManager.getLogger();
+
     private Map<String, String> config = new ConcurrentHashMap<>();
 
-    public EventStoreConfig() {
+    private EventStoreConfig() {
         readDefaultEventStoreProperties();
     }
 
@@ -24,7 +27,7 @@ public class EventStoreConfig {
         try (InputStream resourceAsStream = EventStoreConfig.class.getResourceAsStream(configPath)) {
             Properties properties = new Properties();
             properties.load(resourceAsStream);
-            // new HashMap<>(properties);
+            // TODO: new HashMap<>(properties);
             properties.stringPropertyNames()
                       .forEach(key -> config.put(key, properties.getProperty(key)));
 
@@ -34,7 +37,7 @@ public class EventStoreConfig {
         }
     }
 
-    public Path dbBasePath() {
+    private Path dbBasePath() {
         return config.containsKey("eventStore.dbBasePath")
                 ? Paths.get(config.get("eventStore.dbBasePath"))
                 : Paths.get("target", "db");

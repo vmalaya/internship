@@ -2,14 +2,11 @@ package sigma.software.messagerepository.domain.query;
 
 import sigma.software.messagerepository.domain.query.api.QueryResponse;
 
-import java.util.Collection;
-import java.util.UUID;
-
-public class UserFriendRequestsResponce implements QueryResponse {
+public class UserFriendRequestsResponse implements QueryResponse {
 
     private final String allRequests;
 
-    public UserFriendRequestsResponce(String allRequests) {
+    public UserFriendRequestsResponse(String allRequests) {
         this.allRequests = allRequests;
     }
 

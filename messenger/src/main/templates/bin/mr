@@ -1,0 +1,2 @@
+#!/usr/bin/env bash
+java -jar messenger/target/messenger-{{ project.version }}-all.jar $*

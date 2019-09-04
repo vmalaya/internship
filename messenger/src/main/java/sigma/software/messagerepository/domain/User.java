@@ -196,6 +196,7 @@ public class User implements Function<DomainEvent, User> {
     private User on(FriendRequestAcceptedEvent event) {
         domainEvents.add(event);
         friends.add(event.getFriendId());
+        friendRequest.removeIf(friendId -> friendId.equals(event.getFriendId()));
         return this;
     }
 
@@ -211,6 +212,7 @@ public class User implements Function<DomainEvent, User> {
 
     private User on(FriendRequestDeclinedEvent event) {
         domainEvents.add(event);
+        friendRequest.removeIf(notFriendId -> notFriendId.equals(event.getUserId()));
         return this;
     }
 

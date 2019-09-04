@@ -1,0 +1,21 @@
+#!/usr/bin/env bash
+
+##requires:
+#export "PATH=$PATH:$(pwd)/bin"
+
+mr help
+
+mr signup maksim.kostormin 00000000-0000-0000-0000-000000000001
+
+mr signup valentina.malaya 00000000-0000-0000-0000-000000000002
+mr signin 00000000-0000-0000-0000-000000000002
+mr invite 00000000-0000-0000-0000-000000000001
+
+mr signin 00000000-0000-0000-0000-000000000001
+mr invites
+mr accept 00000000-0000-0000-0000-000000000002
+mr friends
+mr message 00000000-0000-0000-0000-000000000002 body="Hello, How are u?"
+
+mr signin 00000000-0000-0000-0000-000000000002
+mr messages

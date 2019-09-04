@@ -1,7 +1,6 @@
 package sigma.software.messagerepository.domain.service.gateway.repository;
 
 import sigma.software.messagerepository.domain.User;
-import sigma.software.messagerepository.domain.event.api.DomainEvent;
 import sigma.software.messagerepository.domain.service.gateway.repository.eventstore.EventStore;
 
 import java.util.Objects;
@@ -16,8 +15,7 @@ public class UserRepository {
     }
 
     public void save(User user) {
-        eventStore.append(user.getDomainEvents().toArray(new DomainEvent[0]));
-        user.getDomainEvents().clear();
+        eventStore.snapshot(user);
     }
 
     public User load(UUID id) {

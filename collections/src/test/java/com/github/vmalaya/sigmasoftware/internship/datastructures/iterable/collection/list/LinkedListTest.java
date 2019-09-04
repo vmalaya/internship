@@ -2,12 +2,9 @@ package com.github.vmalaya.sigmasoftware.internship.datastructures.iterable.coll
 
 import org.junit.Assert;
 import org.junit.Test;
-import sun.java2d.pipe.AAShapePipe;
 
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.LinkedList;
-import java.util.List;
 
 /**
  * {@link java.util.LinkedList} allows sequential access of elements.
