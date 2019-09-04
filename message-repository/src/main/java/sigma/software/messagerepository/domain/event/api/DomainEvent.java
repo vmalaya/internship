@@ -16,6 +16,7 @@ import java.util.UUID;
         @JsonSubTypes.Type(name = "FriendRequestAcceptedEvent", value = FriendRequestAcceptedEvent.class),
         @JsonSubTypes.Type(name = "FriendRequestDeclinedEvent", value = FriendRequestDeclinedEvent.class),
         @JsonSubTypes.Type(name = "FriendRequestSentEvent", value = FriendRequestSentEvent.class),
+        @JsonSubTypes.Type(name = "FriendRequestReceivedEvent", value = FriendRequestReceivedEvent.class),
         @JsonSubTypes.Type(name = "MessageReceivedEvent", value = MessageReceivedEvent.class),
         @JsonSubTypes.Type(name = "MessageSentEvent", value = MessageSentEvent.class),
         @JsonSubTypes.Type(name = "UserCreatedEvent", value = UserCreatedEvent.class),

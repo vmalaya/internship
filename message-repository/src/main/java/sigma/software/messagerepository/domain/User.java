@@ -3,6 +3,8 @@ package sigma.software.messagerepository.domain;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.vavr.API;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import sigma.software.messagerepository.domain.command.*;
 import sigma.software.messagerepository.domain.event.*;
 import sigma.software.messagerepository.domain.event.api.DomainEvent;
@@ -26,6 +28,8 @@ import static sigma.software.messagerepository.domain.Message.Type.OUTGOING;
  * Aggregate.
  */
 public class User implements Function<DomainEvent, User> {
+
+    private static final Logger log = LogManager.getLogger();
 
     // event stream:
     private List<DomainEvent> domainEvents = new CopyOnWriteArrayList<>();
@@ -120,11 +124,12 @@ public class User implements Function<DomainEvent, User> {
         return API.Match(domainEvent).of(
                 Case($(instanceOf(UserCreatedEvent.class)), this::on),
                 Case($(instanceOf(FriendRequestSentEvent.class)), this::on),
+                Case($(instanceOf(FriendRequestReceivedEvent.class)), this::on),
                 Case($(instanceOf(FriendRequestAcceptedEvent.class)), this::on),
                 Case($(instanceOf(FriendRequestDeclinedEvent.class)), this::on),
                 Case($(instanceOf(MessageSentEvent.class)), this::on),
                 Case($(instanceOf(MessageReceivedEvent.class)), this::on),
-                Case($(), event -> this)
+                Case($(), this::onUnexpected)
         );
     }
 
@@ -158,12 +163,25 @@ public class User implements Function<DomainEvent, User> {
 
     private User on(FriendRequestSentEvent event) {
         domainEvents.add(event);
-        // friendRequest.add(event.getFriendId());
         return this;
     }
 
     // receive friend request
-    public void handle(ReceiveFriendRequestCommand command) {}
+    public void handle(ReceiveFriendRequestCommand command) {
+        if (Objects.isNull(command.getAggregateId()))
+            throw new IllegalArgumentException("aggregate id may not be null."); // nack
+        if (!command.getAggregateId().equals(aggregateId))
+            throw new IllegalArgumentException("request recipient id must be same as aggregate id."); // nack
+        if (Objects.isNull(command.getSenderId()))
+            throw new IllegalArgumentException("sender id may not be null."); // nack
+        on(new FriendRequestReceivedEvent(command.getAggregateId(), command.getSenderId()));
+    }
+
+    private User on(FriendRequestReceivedEvent event) {
+        domainEvents.add(event);
+        friendRequest.add(event.getSenderId());
+        return this;
+    }
 
     // accept friend request
     public void handle(AcceptFriendRequestCommand command) {
@@ -238,6 +256,11 @@ public class User implements Function<DomainEvent, User> {
                                  event.getMessage(),
                                  event.getType(),
                                  event.getAt()));
+        return this;
+    }
+
+    private User onUnexpected(DomainEvent domainEvent) {
+        log.warn("handler unexpected event {}", domainEvent);
         return this;
     }
 

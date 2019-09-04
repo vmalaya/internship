@@ -1,9 +1,9 @@
 package sigma.software.messagerepository.domain.service;
 
 import org.junit.jupiter.api.Test;
+import sigma.software.messagerepository.domain.User;
 
 import java.io.IOException;
-import java.nio.file.Path;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -20,7 +20,7 @@ class UserServiceTest {
         UUID userId = userService.signup(username, UUID.randomUUID());
 
         // then:
-        // TODO: FIXME: // assertThat(userService.repository.load(userId)).isNotNull();
+        assertThat(userId).isNotNull();
     }
 
     @Test
@@ -36,15 +36,20 @@ class UserServiceTest {
     }
 
     @Test
-    void should_invite_friend() throws IOException {
+    void should_invite_friend() {
         // given:
         UUID friendId = userService.signup("friend", UUID.randomUUID());
-        UUID userId = userService.signup("valentina.mala", UUID.randomUUID());
+        userService.signup("valentina.mala", UUID.randomUUID());
 
         // when:
         UUID invitedFriendId = userService.invite(friendId);
+        // and
+        userService.signin(friendId);
 
-        //
+        // then:
         assertThat(invitedFriendId).isEqualTo(friendId);
+        // and:
+        User currentUser = userService.getCurrentUser().get();
+        assertThat(currentUser.getFriendRequest()).hasSize(1);
     }
 }

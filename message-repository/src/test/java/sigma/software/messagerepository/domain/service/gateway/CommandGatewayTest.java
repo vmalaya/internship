@@ -30,7 +30,7 @@ class CommandGatewayTest {
         CreateUserCommand createUserCommand = new CreateUserCommand(UUID.randomUUID(), "maksim.kostromin");
 
         // when:
-        commandGateway.handle(createUserCommand);
+        commandGateway.apply(createUserCommand);
 
         // then:
         User user = repository.load(createUserCommand.getId());
