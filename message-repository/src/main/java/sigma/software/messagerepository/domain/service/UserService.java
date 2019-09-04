@@ -6,6 +6,7 @@ import sigma.software.messagerepository.domain.User;
 import sigma.software.messagerepository.domain.command.CreateUserCommand;
 import sigma.software.messagerepository.domain.command.ReceiveFriendRequestCommand;
 import sigma.software.messagerepository.domain.command.SendFriendRequestCommand;
+import sigma.software.messagerepository.domain.event.api.DomainEvent;
 import sigma.software.messagerepository.domain.service.gateway.CommandGateway;
 import sigma.software.messagerepository.domain.service.gateway.repository.UserRepository;
 import sigma.software.messagerepository.domain.service.gateway.repository.eventstore.EventStore;
@@ -13,10 +14,10 @@ import sigma.software.messagerepository.domain.service.gateway.repository.events
 import sigma.software.messagerepository.domain.service.gateway.repository.eventstore.config.JacksonConfig;
 
 import java.io.File;
-import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Collection;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
@@ -25,7 +26,6 @@ import java.util.stream.Collectors;
 import static java.nio.charset.StandardCharsets.UTF_8;
 import static java.nio.file.StandardOpenOption.TRUNCATE_EXISTING;
 import static java.util.Collections.singletonList;
-import static java.util.stream.Collectors.joining;
 
 public class UserService {
 
@@ -35,7 +35,7 @@ public class UserService {
     private EventStoreConfig evenStoreConfig = new EventStoreConfig();
     private EventStore eventStore = new EventStore(jacksonConfig, evenStoreConfig);
     private UserRepository repository = new UserRepository(eventStore);
-    // TODO: FIXME: // QueryGateway queryGateway = new QueryGateway(repository);
+    // QueryGateway queryGateway = new QueryGateway(repository);
     private CommandGateway commandGateway = new CommandGateway(repository);
     private ObjectMapper objectMapper = jacksonConfig.createObjectMapper();
 
@@ -44,7 +44,7 @@ public class UserService {
     private Path path = Paths.get(homePath, ".mr", userConfigJson);
 
     public UUID signup(String username, UUID uuid) {
-        commandGateway.handle(new CreateUserCommand(uuid, username));
+        commandGateway.apply(new CreateUserCommand(uuid, username));
         createConfigFile(uuid);
         return uuid;
     }
@@ -59,8 +59,9 @@ public class UserService {
         User friend = repository.load(id);
         Optional<UUID> maybeCurrentId = getCurrentUserId();
         if (Objects.nonNull(friend) && maybeCurrentId.isPresent()) {
-            commandGateway.handle(new SendFriendRequestCommand(maybeCurrentId.get(), friend.getAggregateId()));
-            // TODO: FIXME: // commandGateway.handle(new ReceiveFriendRequestCommand(maybeCurrentId.get(), friend.getAggregateId()));
+            commandGateway.apply(new SendFriendRequestCommand(maybeCurrentId.get(), friend.getAggregateId()));
+            // TODO: FIXME: //
+            commandGateway.apply(new ReceiveFriendRequestCommand(friend.getAggregateId(), maybeCurrentId.get()));
         }
         return id;
     }
@@ -97,6 +98,17 @@ public class UserService {
         if (!maybeFile.isPresent()) return Optional.empty();
         File file = maybeFile.get();
         return Try.of(() -> objectMapper.readValue(file, User.class).getAggregateId())
+                  .map(Optional::of)
+                  .getOrElseGet(throwable -> Optional.empty());
+    }
+
+    public Optional<User> getCurrentUser() {
+        Optional<UUID> maybeCurrentUserId = getCurrentUserId();
+        if (!maybeCurrentUserId.isPresent()) {
+            return Optional.empty();
+        }
+        Collection<DomainEvent> readed = eventStore.read(maybeCurrentUserId.get());
+        return Try.of(() -> new User(maybeCurrentUserId.get(), readed))
                   .map(Optional::of)
                   .getOrElseGet(throwable -> Optional.empty());
     }
