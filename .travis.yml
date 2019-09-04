@@ -26,9 +26,9 @@ jobs:
     jdk: openjdk8
     name: build documentation
     script:
-      - cd $TRAVIS_BUILD_DIR/message-repository/documentation && bundle
-      - cd $TRAVIS_BUILD_DIR/message-repository/documentation && bundle exec just-the-docs rake search:init
-      - cd $TRAVIS_BUILD_DIR/message-repository/documentation && bundle exec jekyll build
+      - cd $TRAVIS_BUILD_DIR/messenger/documentation && bundle
+      - cd $TRAVIS_BUILD_DIR/messenger/documentation && bundle exec just-the-docs rake search:init
+      - cd $TRAVIS_BUILD_DIR/messenger/documentation && bundle exec jekyll build
 
 #  - stage: deploy
 #    jdk: openjdk11
@@ -39,9 +39,9 @@ jobs:
 #    before_deploy:
 #      - if [ "$TRAVIS_PULL_REQUEST" != "false" ] || [ ".$TRAVIS_BRANCH" != ".master" ] ; then exit 0 ; fi
 #      - set -e
-#      - cd $TRAVIS_BUILD_DIR/message-repository/documentation && bundle
-#      - cd $TRAVIS_BUILD_DIR/message-repository/documentation && bundle exec just-the-docs rake search:init
-#      - cd $TRAVIS_BUILD_DIR/message-repository/documentation && bundle exec jekyll build
+#      - cd $TRAVIS_BUILD_DIR/messenger/documentation && bundle
+#      - cd $TRAVIS_BUILD_DIR/messenger/documentation && bundle exec just-the-docs rake search:init
+#      - cd $TRAVIS_BUILD_DIR/messenger/documentation && bundle exec jekyll build
 #      - ./mvnw exec:exec
 #      - ./mvnw -Pjekyll-search
 #      - ./mvnw -Pjekyll-build
@@ -55,10 +55,12 @@ jobs:
 #      on:
 #        branch: master
 #        condition: "$TRAVIS_PULL_REQUEST = false"
+#
 #env:
 #  global:
 #  - TERM=dumb
 #  - secure: MX59l79yxU/cOmLxKRxpFp6bwLmsaHWLDnPP0wZqy3SvSLwg7ugeJkaI/+BC6+WQD0mfexNeSC3ayGt7JSZ99uL2BDmCekEIt/3OxLHB5ojtiSA1Fb38JIfHIke9B2u/dEe3tmi4/Ycs8ey1+IPGKBE/JyoTEyyaPRTsbV23cgXV3ZwbO3++8+1fZCf1GqBk8zUn7IAHWSJSR1J4mz8S+2CiIfBV4B4QESuNtXpxEhfFdBTzkcAv0JsYHo4gFheoy2BFkPu+y/45hotwVdT1+flYKtPbIaJyr3g3XWyokNzGi2Jud8GVfMRzLX5NplojjhRLul+RH/gvB894lfLnWPafhjlT94KLim8nfR7qcxak8n05UCjKz2O54veBaOcT8AsTPBWsw/Jp+MnEhEV0kERzYf86hSWjV0Jvk+9GcfxF8HGgFZNJFP8H05q6mYVMKYcJRLvLHAnmztahD+Q0MPXnJlDwG6cbXcsncWFOa4ha56tI/l2YdpcEVlmsnrxUmIDSV7HrrIESoR+HtF94fzVq1+maVCynae1LS4YF5waXxY8Eqzqsz7QN9ejBqht8/r6zi9Hq4T6+Et3a7pPntiHSt01U1NVYYWWiqxTnyJ98HrazqccrwSyz2eThSwLvJ1lTsi6kQSFMjoSDLw4V1yBwWJcAB4zAGpZUhd85iYA=
+
 cache:
   bundler: true
   packages: true
