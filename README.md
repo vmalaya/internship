@@ -18,5 +18,3 @@ references
 
 [data-structures]: data-structures
 [message-repository]: message-repository
-
--->
