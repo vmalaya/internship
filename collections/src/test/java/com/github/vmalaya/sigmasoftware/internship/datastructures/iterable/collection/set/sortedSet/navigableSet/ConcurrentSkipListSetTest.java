@@ -8,9 +8,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.NavigableSet;
 import java.util.concurrent.ConcurrentSkipListSet;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.TimeUnit;
 
 /**
  * {@link java.util.concurrent.ConcurrentSkipListSet} is useful when you need

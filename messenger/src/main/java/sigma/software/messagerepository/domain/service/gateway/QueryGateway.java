@@ -50,12 +50,12 @@ public class QueryGateway implements Function<UserQueryRequest, QueryResponse> {
                                 user.getMessages());
     }
 
-    private UserFriendRequestsResponce handle(UserFriendRequestsRequest request) {
+    private UserFriendRequestsResponse handle(UserFriendRequestsRequest request) {
         String friendRequests = repository.load(request.getAggregateId()).getFriendRequest()
                                           .stream()
                                           .map(UUID::toString)
                                           .collect(Collectors.joining(", "));
-        return new UserFriendRequestsResponce(friendRequests);
+        return new UserFriendRequestsResponse(friendRequests);
     }
 
     private UserFriendsConversationsResponse handle(UserFriendsConversationsRequest request) {
@@ -72,10 +72,7 @@ public class QueryGateway implements Function<UserQueryRequest, QueryResponse> {
 
     private UserFriendsResponse handle(UserFriendsRequest request) {
         User user = repository.load(request.getAggregateId());
-        String string = user.getFriends().stream()
-                            .map(UUID::toString)
-                            .collect(Collectors.joining(", "));
-        return new UserFriendsResponse(string);
+        return new UserFriendsResponse(user.getFriends());
     }
 
     private UserMessagesResponse handle(UserMessagesUserRequest request) {

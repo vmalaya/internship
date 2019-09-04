@@ -1,4 +1,4 @@
-package sigma.software.messagerepository.domain.service.gateway.repository.eventstore.config;
+package sigma.software.messagerepository.config;
 
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -8,7 +8,9 @@ import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 
 public class JacksonConfig {
 
-    public ObjectMapper createObjectMapper() {
+    public static final ObjectMapper objectMapper = new JacksonConfig().createObjectMapper();
+
+    private ObjectMapper createObjectMapper() {
         return JsonMapper.builder()
                          .addModules(new JavaTimeModule())
                          .disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS)
@@ -18,4 +20,6 @@ public class JacksonConfig {
                          .disable(SerializationFeature.FAIL_ON_EMPTY_BEANS)
                          .build();
     }
+
+    private JacksonConfig() {}
 }

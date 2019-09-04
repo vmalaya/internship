@@ -3,7 +3,10 @@ package com.github.vmalaya.sigmasoftware.internship.datastructures.map.hashMap;
 import org.junit.Assert;
 import org.junit.Test;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * If you want unsynchronized or single threaded application

@@ -2,11 +2,11 @@ package sigma.software.messagerepository.domain.service.gateway.repository.event
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import sigma.software.messagerepository.config.EventStoreConfig;
+import sigma.software.messagerepository.config.JacksonConfig;
 import sigma.software.messagerepository.domain.event.FriendRequestSentEvent;
 import sigma.software.messagerepository.domain.event.UserCreatedEvent;
 import sigma.software.messagerepository.domain.event.api.DomainEvent;
-import sigma.software.messagerepository.domain.service.gateway.repository.eventstore.config.EventStoreConfig;
-import sigma.software.messagerepository.domain.service.gateway.repository.eventstore.config.JacksonConfig;
 
 import java.util.Arrays;
 import java.util.Collection;
@@ -16,11 +16,11 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 class EventStoreTest {
 
-    EventStore eventStore = new EventStore(new JacksonConfig(), new EventStoreConfig());
+    private EventStore eventStore = new EventStore(JacksonConfig.objectMapper, EventStoreConfig.dbBasePath);
 
     @BeforeEach
     void tearDown() {
-        eventStore.cleanup();
+        eventStore.cleanupAll();
     }
 
     @Test
@@ -33,11 +33,12 @@ class EventStoreTest {
                                            UUID.fromString("11111111-1111-1111-1111-111111111111")))
                                            .toArray(new DomainEvent[0]);
         // when
-        eventStore.append(domainEvents);
+        eventStore.appendAll(domainEvents);
 
         // then:
         Collection<DomainEvent> events = eventStore.read(UUID.fromString("00000000-0000-0000-0000-000000000000"));
-        assertThat(events).contains(new UserCreatedEvent(UUID.fromString("00000000-0000-0000-0000-000000000000"), "maksim"),
+        assertThat(events).contains(new UserCreatedEvent(UUID.fromString("00000000-0000-0000-0000-000000000000"),
+                                                         "maksim"),
                                     new FriendRequestSentEvent(UUID.fromString("00000000-0000-0000-0000-000000000000"),
                                                                UUID.fromString("11111111-1111-1111-1111-111111111111")));
     }
