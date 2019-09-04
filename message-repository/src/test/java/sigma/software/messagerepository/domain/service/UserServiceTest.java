@@ -2,8 +2,9 @@ package sigma.software.messagerepository.domain.service;
 
 import org.junit.jupiter.api.Test;
 import sigma.software.messagerepository.domain.User;
+import sigma.software.messagerepository.domain.service.insftastructure.Result;
 
-import java.io.IOException;
+import java.util.Optional;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -13,43 +14,120 @@ class UserServiceTest {
 
     @Test
     void should_sign_up() {
-        // given:
-        String username = "valentina.mala";
-
         // when:
-        UUID userId = userService.signup(username, UUID.randomUUID());
+        Result signup = userService.signup("signup", "valentina.mala");
 
         // then:
-        assertThat(userId).isNotNull();
+        assertThat(signup).isEqualTo(Result.OK);
     }
 
     @Test
-    void should_sign_in() throws IOException {
+    void should_sign_in() {
         // given:
-        UUID userId = userService.signup("valentina.mala", UUID.randomUUID());
+        userService.signup("signup", "valentina.mala");
+        Optional<User> currentUser = userService.getCurrentUser();
 
         // when:
-        String username = userService.signin(UUID.fromString(userId.toString()));
+        Result signin = userService.signin("signin", currentUser.get().getAggregateId().toString());
 
         // then:
-        assertThat(username).isEqualTo("valentina.mala");
+        assertThat(signin).isEqualTo(Result.OK);
     }
 
     @Test
     void should_invite_friend() {
         // given:
-        UUID friendId = userService.signup("friend", UUID.randomUUID());
-        userService.signup("valentina.mala", UUID.randomUUID());
+        userService.signup("signup", "friend");
+        UUID friendId = userService.getCurrentUser().get().getAggregateId();
+        userService.signup("signup", "valentina.mala");
 
         // when:
-        UUID invitedFriendId = userService.invite(friendId);
-        // and
-        userService.signin(friendId);
+        Result invited = userService.invite("invite", friendId.toString());
 
         // then:
-        assertThat(invitedFriendId).isEqualTo(friendId);
-        // and:
-        User currentUser = userService.getCurrentUser().get();
-        assertThat(currentUser.getFriendRequest()).hasSize(1);
+        assertThat(invited).isEqualTo(Result.OK);
+        // and
+        userService.signin("signin", friendId.toString());
+        Optional<User> currentUser = userService.getCurrentUser();
+        assertThat(currentUser.get().getFriendRequest()).hasSize(1);
+    }
+
+    @Test
+    void should_get_invites() {
+        // given
+        userService.signup("signup", "user");
+        String userId = userService.getCurrentUser().get().getAggregateId().toString();
+        // and
+        userService.signup("signup", "friend1");
+        userService.invite("invite", userId);
+        // and
+        userService.signup("signup", "friend2");
+        userService.invite("invite", userId);
+        // and
+        userService.signin("signin", userId);
+
+        // when:
+        Result invites = userService.invites("invites");
+
+        // then:
+        assertThat(invites).isEqualTo(Result.OK);
+    }
+
+    @Test
+    void should_accept_friend_request() {
+        // given:
+        userService.signup("signup", "friend");
+        UUID friendId = userService.getCurrentUser().get().getAggregateId();
+        userService.signup("signup", "valentina.mala");
+        // and
+        userService.invite("invite", friendId.toString());
+
+        // when:
+        userService.signin("signin", friendId.toString());
+        UUID me = userService.getCurrentUser().get().getAggregateId();
+        Result accept = userService.accept("accept", me.toString());
+
+        // then:
+        assertThat(accept).isEqualTo(Result.OK);
+    }
+
+    @Test
+    void should_decline_request() {
+        // given:
+        userService.signup("signup", "friend");
+        UUID friendId = userService.getCurrentUser().get().getAggregateId();
+        userService.signup("signup", "valentina.mala");
+        // and
+        userService.invite("invite", friendId.toString());
+
+        // when:
+        userService.signin("signin", friendId.toString());
+        UUID me = userService.getCurrentUser().get().getAggregateId();
+        Result accept = userService.accept("decline", me.toString());
+
+        // then:
+        assertThat(accept).isEqualTo(Result.OK);
+    }
+
+    @Test
+    void should_get_friends() {
+        // given:
+        userService.signup("signup", "friend");
+        UUID friendId = userService.getCurrentUser()
+                                   .orElseThrow(RuntimeException::new)
+                                   .getAggregateId();
+        userService.signup("signup", "valentina.mala");
+        // and
+        userService.invite("invite", friendId.toString());
+        // and
+        userService.signin("signin", friendId.toString());
+        UUID me = userService.getCurrentUser().get().getAggregateId();
+        Result accept = userService.accept("accept", me.toString());
+
+        // when:
+        userService.friends("friends");
+
+        // then:
+        assertThat(accept).isEqualTo(Result.OK);
     }
 }
