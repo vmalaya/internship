@@ -4,14 +4,15 @@ import sigma.software.messagerepository.domain.query.api.UserQueryRequest;
 
 import java.util.UUID;
 
-public class UserMessagesRequestUser implements UserQueryRequest {
+public class UserFriendsRequest implements UserQueryRequest {
 
     private final UUID aggregateId;
 
-    public UserMessagesRequestUser(UUID aggregateId) {
+    public UserFriendsRequest(UUID aggregateId) {
         this.aggregateId = aggregateId;
     }
 
+    @Override
     public UUID getAggregateId() {
         return aggregateId;
     }
