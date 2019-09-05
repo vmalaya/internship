@@ -1,4 +1,4 @@
-# message-repository
+# message-repository [![Build Status](https://travis-ci.org/vmalaya/internship.svg?branch=master)](https://travis-ci.org/vmalaya/internship)
 
 ```shell script
 mvnw clean package -f messenger\pom.xml
