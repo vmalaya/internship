@@ -5,16 +5,16 @@ This sets of projects are using during my internship in Sigmas Software
 [toc]
 -->
 
-The [data-structures] project demonstrates the Java Collections
+The [collections] project demonstrates the Java Collections
 functionality covered by unit test for quick guide or future
 refinements
 
-The [message-repository] project contains Sigma Software Message
+The [messenger] project contains Sigma Software Message
 Repository implementation
 
 <!--
 references
 -->
 
-[data-structures]: data-structures
-[message-repository]: message-repository
+[collections]: collections
+[messenger]: messenger
