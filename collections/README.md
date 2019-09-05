@@ -1,4 +1,4 @@
-# data-structures [![Build Status](https://travis-ci.org/vmalaya/java-core.svg?branch=master)](https://travis-ci.org/vmalaya/java-core)
+# data-structures [![Build Status](https://travis-ci.org/vmalaya/internship.svg?branch=master)](https://travis-ci.org/vmalaya/internship)
 
 The Java Collections playground project
 
