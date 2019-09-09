@@ -22,6 +22,7 @@
         <junit.version>4.12</junit.version>
         <log4j.version>2.12.1</log4j.version>
         <assertj.version>3.13.2</assertj.version>
+        <selenide.version>5.3.0</selenide.version>
         <jackson.version>2.10.0.pr2</jackson.version>
         <groovy-all.version>2.5.7</groovy-all.version>
         <ant-contrib.version>20020829</ant-contrib.version>
@@ -35,7 +36,6 @@
         <maven-resources-plugin.version>3.1.0</maven-resources-plugin.version>
         <spotbugs-maven-plugin.version>3.1.12.2</spotbugs-maven-plugin.version>
         <maven-surefire-plugin.version>3.0.0-M3</maven-surefire-plugin.version>
-        <selenide.version>5.3.0</selenide.version>
     </properties>
 
     <modules>

@@ -11,8 +11,8 @@ rvm: 2.6.4
 install: true
 
 stages:
-- test
-- deploy
+  - test
+  - deploy
 
 addons:
   apt:
@@ -31,33 +31,33 @@ before_script:
 jobs:
   include:
 
-  - stage: test
-    jdk: openjdk8
-    name: run collections tests
-    script: cd $TRAVIS_BUILD_DIR && ./mvnw clean package -pl :collections
+    - stage: test
+      jdk: openjdk8
+      name: run collections tests
+      script: cd $TRAVIS_BUILD_DIR &&./mvnw clean package -pl :collections
 
-  - stage: test
-    jdk: openjdk8
-    name: run messenger tests
-    script: cd $TRAVIS_BUILD_DIR && ./mvnw clean package -pl :messenger
+    - stage: test
+      jdk: openjdk8
+      name: run messenger tests
+      script: cd $TRAVIS_BUILD_DIR &&./mvnw clean package -pl :messenger
 
-  - stage: test
-    jdk: openjdk8
-    name: run selenide tests
-    script: cd $TRAVIS_BUILD_DIR && ./mvnw clean package -pl :selenide
+    - stage: test
+      jdk: openjdk8
+      name: run selenide tests
+      script: cd $TRAVIS_BUILD_DIR &&./mvnw clean package -pl :selenide
 
-#  - stage: test
-#    jdk: openjdk8
-#    name: run all tests
-#    script: cd $TRAVIS_BUILD_DIR &&./mvnw clean package
+    #  - stage: test
+    #    jdk: openjdk8
+    #    name: run all tests
+    #    script: cd $TRAVIS_BUILD_DIR &&./mvnw clean package
 
-  - stage: test
-    jdk: openjdk8
-    name: build documentation
-    script:
-      - cd $TRAVIS_BUILD_DIR/messenger/documentation && bundle
-      - cd $TRAVIS_BUILD_DIR/messenger/documentation && bundle exec just-the-docs rake search:init
-      - cd $TRAVIS_BUILD_DIR/messenger/documentation && bundle exec jekyll build
+    - stage: test
+      jdk: openjdk8
+      name: build documentation
+      script:
+        - cd $TRAVIS_BUILD_DIR/messenger/documentation && bundle
+        - cd $TRAVIS_BUILD_DIR/messenger/documentation && bundle exec just-the-docs rake search:init
+        - cd $TRAVIS_BUILD_DIR/messenger/documentation && bundle exec jekyll build
 
 #  - stage: deploy
 #    jdk: openjdk11
@@ -94,4 +94,4 @@ cache:
   bundler: true
   packages: true
   directories:
-  - ~/.m2
+    - ~/.m2
