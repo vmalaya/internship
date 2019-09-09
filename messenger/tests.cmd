@@ -17,7 +17,7 @@ call mr signin 00000000-0000-0000-0000-000000000001
 call mr invites
 call mr accept 00000000-0000-0000-0000-000000000002
 call mr friends
-call mr message 00000000-0000-0000-0000-000000000002 body="Hello, How are u?"
+call mr message 00000000-0000-0000-0000-000000000002 "Hello, How are u?"
 
 call mr signin 00000000-0000-0000-0000-000000000002
 call mr messages
