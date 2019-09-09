@@ -1,5 +1,0 @@
-<ivy-module>
-    <dependencies>
-        <dependency org="com.codeborne" name="selenide" rev="5.3.0"/>
-    </dependencies>
-</ivy-module>
