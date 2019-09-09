@@ -12,9 +12,13 @@ refinements
 The [messenger] project contains Sigma Software Message
 Repository implementation
 
+The [selenide] project contains end-to-end testing google 
+functionality 
+
 <!--
 references
 -->
 
 [collections]: collections
 [messenger]: messenger
+[selenide]: selenide
