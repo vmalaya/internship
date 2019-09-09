@@ -55,9 +55,11 @@ jobs:
       jdk: openjdk8
       name: build documentation
       script:
-        - cd $TRAVIS_BUILD_DIR/messenger/documentation && bundle
-        - cd $TRAVIS_BUILD_DIR/messenger/documentation && bundle exec just-the-docs rake search:init
-        - cd $TRAVIS_BUILD_DIR/messenger/documentation && bundle exec jekyll build
+        - cd $TRAVIS_BUILD_DIR/messenger/documentation
+        - bundle update --bundler
+        - bundle
+        - bundle exec just-the-docs rake search:init
+        - bundle exec jekyll build
 
 #  - stage: deploy
 #    jdk: openjdk11
