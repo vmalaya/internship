@@ -13,7 +13,10 @@ The [messenger] project contains Sigma Software Message
 Repository implementation
 
 The [selenide] project contains end-to-end testing google 
-functionality 
+functionality
+
+The [mockito] project demonstrates knowledge of mock testing
+approach through Mockito framework 
 
 <!--
 references
@@ -22,3 +25,4 @@ references
 [collections]: collections
 [messenger]: messenger
 [selenide]: selenide
+[mockito]: mockito
