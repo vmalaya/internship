@@ -15,6 +15,7 @@ public class UserRepository {
     }
 
     public void save(User user) {
+        Objects.requireNonNull(user, "user may not be null");
         eventStore.snapshot(user);
     }
 
