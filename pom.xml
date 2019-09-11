@@ -44,6 +44,7 @@
         <module>messenger</module>
         <module>selenide</module>
         <module>mockito</module>
+        <module>web-app</module>
     </modules>
 
     <build>
