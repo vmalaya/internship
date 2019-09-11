@@ -20,10 +20,10 @@ services:
 jobs:
   include:
 
-    #    - stage: test
-    #      jdk: openjdk8
-    #      name: run all tests
-    #      script: cd $TRAVIS_BUILD_DIR &&./mvnw clean package
+#    - stage: test
+#      jdk: openjdk8
+#      name: run all tests
+#      script: cd $TRAVIS_BUILD_DIR &&./mvnw clean package
 
     - stage: test
       jdk: openjdk8
@@ -49,16 +49,16 @@ jobs:
         - docker rm -f -v chrome
         - docker network rm grid
 
-    - stage: test
-      rvm: 2.6.4
-      jdk: openjdk8
-      name: build documentation
-      script:
-        - cd $TRAVIS_BUILD_DIR/messenger/documentation
-        - bundle
-        - bundle exec just-the-docs rake search:init
-        - bundle exec jekyll build
-
+#    - stage: test
+#      rvm: 2.6.4
+#      jdk: openjdk8
+#      name: build documentation
+#      script:
+#        - cd $TRAVIS_BUILD_DIR/messenger/documentation
+#        - bundle
+#        - bundle exec just-the-docs rake search:init
+#        - bundle exec jekyll build
+#
 #  - stage: deploy
 #    jdk: openjdk11
 #    rvm: 2.6.4
