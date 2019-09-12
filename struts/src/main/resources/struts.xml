@@ -9,8 +9,8 @@
     <constant name="struts.devMode" value="true"/>
 
     <package name="struts" extends="struts-default">
-        <action name="index">
-            <result>/index.jsp</result>
+        <action name="hello" class="com.action.HelloAction">
+            <result name="success">/register-success.jsp</result>
         </action>
     </package>
 
