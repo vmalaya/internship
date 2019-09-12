@@ -21,6 +21,8 @@ approach through Mockito framework
 The [webapp] project is a first simple web application with deployment 
 on JBoss EAP 6.4
 
+The [struts] project demonstrates basics knowledge of struts framework 
+
 <!--
 references
 -->
@@ -30,3 +32,4 @@ references
 [selenide]: selenide
 [mockito]: mockito
 [webapp]: webapp 
+[struts]: struts
