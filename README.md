@@ -18,6 +18,9 @@ functionality
 The [mockito] project demonstrates knowledge of mock testing
 approach through Mockito framework 
 
+The [webapp] project is a first simple web application with deployment 
+on JBoss EAP 6.4
+
 <!--
 references
 -->
@@ -26,3 +29,4 @@ references
 [messenger]: messenger
 [selenide]: selenide
 [mockito]: mockito
+[webapp]: webapp 
