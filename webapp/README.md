@@ -1,4 +1,4 @@
-# web-app
+# webapp
 ## Test project for studying basics of web application in java
 
 ### This projects contains:

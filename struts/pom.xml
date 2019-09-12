@@ -8,9 +8,20 @@
   </parent>
 
   <modelVersion>4.0.0</modelVersion>
-  <artifactId>webapp</artifactId>
+  <artifactId>struts</artifactId>
 
   <packaging>war</packaging>
 
-</project>
+  <dependencies>
+    <dependency>
+      <groupId>org.apache.struts</groupId>
+      <artifactId>struts2-core</artifactId>
+      <version>${struts2-core.version}</version>
+    </dependency>
+  </dependencies>
 
+  <build>
+    <finalName>struts</finalName>
+  </build>
+
+</project>
