@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<FindBugsFilter>
+  <Bug pattern="ST_WRITE_TO_STATIC_FROM_INSTANCE_METHOD"/>
+</FindBugsFilter>
