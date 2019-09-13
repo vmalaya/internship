@@ -11,6 +11,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 public class MockTest {
+
     @Test
     void should_define_return_value() {
         List mockList = Mockito.mock(List.class);
