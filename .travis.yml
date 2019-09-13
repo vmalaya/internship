@@ -35,20 +35,20 @@ jobs:
       name: run messenger tests
       script: cd $TRAVIS_BUILD_DIR &&./mvnw clean package -pl :messenger
 
-    - stage: test
-      jdk: openjdk8
-      name: run selenide tests
-      before_script:
-        - docker pull selenium/standalone-chrome-debug:3.141.59-uranium -q || echo 'ignore..'
-        - docker network create grid || echo 'ignore..'
-        - docker run --rm --name chrome -d -p 4444:4444 --shm-size=2g selenium/standalone-chrome-debug:3.141.59-uranium
-      script:
-        - ./mvnw -pl :selenide -DargLine="-Dselenide.browser=chrome -Dselenide.remote=http://127.0.0.1:4444/wd/hub"
-      after_script:
-        #- docker stop chrome
-        - docker rm -f -v chrome
-        - docker network rm grid
-
+#    - stage: test
+#      jdk: openjdk8
+#      name: run selenide tests
+#      before_script:
+#        - docker pull selenium/standalone-chrome-debug:3.141.59-uranium -q || echo 'ignore..'
+#        - docker network create grid || echo 'ignore..'
+#        - docker run --rm --name chrome -d -p 4444:4444 --shm-size=2g selenium/standalone-chrome-debug:3.141.59-uranium
+#      script:
+#        - ./mvnw -pl :selenide -DargLine="-Dselenide.browser=chrome -Dselenide.remote=http://127.0.0.1:4444/wd/hub"
+#      after_script:
+#        #- docker stop chrome
+#        - docker rm -f -v chrome
+#        - docker network rm grid
+#
 #    - stage: test
 #      rvm: 2.6.4
 #      jdk: openjdk8
