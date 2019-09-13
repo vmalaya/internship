@@ -12,11 +12,11 @@ stages:
   - deploy
 services:
   - docker
-addons:
-  apt:
-    packages:
-      - zip
-      - unzip
+#addons:
+#  apt:
+#    packages:
+#      - zip
+#      - unzip
 jobs:
   include:
 
@@ -48,7 +48,7 @@ jobs:
         - docker build -t vmalaya/internship-struts -f ./jboss/Dockerfile .
         - docker run --net grid --rm --name struts -d -p 8080:8080 vmalaya/internship-struts
         # start Selenium Hub using docker
-        - docker pull selenium/standalone-chrome-debug:3.141.59-uranium -q || echo 'ignore..'
+        - docker pull selenium/standalone-chrome-debug:3.141.59-uranium || echo 'ignore..'
         - docker run --net grid --rm --link struts:struts --name chrome -d -p 4444:4444 --shm-size=2g selenium/standalone-chrome-debug:3.141.59-uranium
       script: ./mvnw -f ./strutse2e/pom.xml -Pe2e -DargLine="-Dstruts.host=struts -Dselenide.browser=chrome -Dselenide.remote=http://127.0.0.1:4444/wd/hub"
       after_script:
