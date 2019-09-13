@@ -2,6 +2,8 @@ package com.controller;
 
 import com.opensymphony.xwork2.ActionSupport;
 
+import java.util.Objects;
+
 import static com.dao.GreetingDao.count;
 
 public class HelloAction extends ActionSupport {
@@ -20,10 +22,16 @@ public class HelloAction extends ActionSupport {
     }
 
     public void setUsername(String username) {
-        this.username = username;
+        String trimmed = username.trim();
+        this.username = trimmed.replace(trimmed.charAt(0),
+                                        Character.toUpperCase(trimmed.charAt(0)));
     }
 
     public int getCounter() {
         return counter;
+    }
+
+    public void validate() {
+        if (Objects.isNull(username)) addFieldError("username", "Username may not be empty");
     }
 }
