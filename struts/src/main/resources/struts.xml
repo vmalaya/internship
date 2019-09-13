@@ -11,6 +11,7 @@
     <package name="struts" extends="struts-default">
         <action name="hello" class="com.controller.HelloAction">
             <result name="success">/register-success.jsp</result>
+            <result name="input">/</result>
         </action>
     </package>
 

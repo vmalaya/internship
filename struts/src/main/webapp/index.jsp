@@ -7,7 +7,7 @@
 <body>
     <h1>Please input your username</h1>
     <s:form action="hello" method="post">
-        <s:textfield name="username" label="E-mail" />
+        <s:textfield name="username" label="username" />
         <s:submit value="Hello" />
     </s:form>
 </body>
