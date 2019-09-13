@@ -3,27 +3,22 @@ notifications:
 git:
   depth: 2
   quiet: true
-
 language: java
 jdk: openjdk8
 rvm: 2.6.4
-
 install: true
-
 stages:
   - test
   - deploy
-
 services:
   - docker
-
+addons:
+  apt:
+    packages:
+      - zip
+      - unzip
 jobs:
   include:
-
-#    - stage: test
-#      jdk: openjdk8
-#      name: run all tests
-#      script: cd $TRAVIS_BUILD_DIR &&./mvnw clean package
 
     - stage: test
       jdk: openjdk8
@@ -34,6 +29,33 @@ jobs:
       jdk: openjdk8
       name: run messenger tests
       script: cd $TRAVIS_BUILD_DIR &&./mvnw clean package -pl :messenger
+
+    - stage: test
+      jdk: openjdk8
+      name: run struts e2e tests
+      before_script:
+        ## install and start JBoss
+        #- mkdir -p ~/.jboss
+        #- export JBOSS_EAP_BASE_URL=https://github.com/daggerok/jboss/releases/download/eap
+        #- export JBOSS_ARCHIVE=jboss-eap-6.4.0.zip
+        #- if [[ ! -f "~/.jboss/${JBOSS_ARCHIVE}" ]]; then wget ${JBOSS_EAP_BASE_URL}/${JBOSS_ARCHIVE} -O ~/.jboss/${JBOSS_ARCHIVE} ; fi
+        #- unzip -d /tmp/ ~/.jboss/${JBOSS_ARCHIVE}
+        #- bash /tmp/jboss-eap-6.4/bin/standalone.sh &
+        ## build and deploy application
+        - ./mvnw -pl :struts clean package
+        - docker network create grid || echo 'ignore..'
+        #- cp -Rf ./struts/target/*.war /tmp/jboss-eap-6.4/standalone/deployments/
+        - docker build -t vmalaya/internship-struts -f ./jboss/Dockerfile .
+        - docker run --net grid --rm --name struts -d -p 8080:8080 vmalaya/internship-struts
+        # start Selenium Hub using docker
+        - docker pull selenium/standalone-chrome-debug:3.141.59-uranium -q || echo 'ignore..'
+        - docker run --net grid --rm --link struts:struts --name chrome -d -p 4444:4444 --shm-size=2g selenium/standalone-chrome-debug:3.141.59-uranium
+      script: ./mvnw -f ./strutse2e/pom.xml -Pe2e -DargLine="-Dstruts.host=struts -Dselenide.browser=chrome -Dselenide.remote=http://127.0.0.1:4444/wd/hub"
+      after_script:
+        #- bash /tmp/jboss-eap-6.4/bin/jboss-cli.bat --commands="connect","shutdown --restart=false"
+        - docker rm -f -v struts chrome
+        - docker network rm grid
+        - sudo killall -9 java || echo 'oops...' # just in case...
 
 #    - stage: test
 #      jdk: openjdk8
@@ -93,5 +115,6 @@ jobs:
 cache:
   packages: true
   directories:
+    #- ~/.jboss
     - ~/.docker
     - ~/.m2
