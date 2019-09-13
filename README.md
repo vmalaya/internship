@@ -23,6 +23,8 @@ on JBoss EAP 6.4
 
 The [struts] project demonstrates basics knowledge of struts framework 
 
+The [e2e] project contains ene-to-end testing internal projects 
+
 <!--
 references
 -->
@@ -33,3 +35,4 @@ references
 [mockito]: mockito
 [webapp]: webapp 
 [struts]: struts
+[e2e]: e2e
