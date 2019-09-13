@@ -43,7 +43,7 @@
     <modules>
         <module>collections</module>
         <module>messenger</module>
-        <module>selenide</module>
+        <!--<module>selenide</module>-->
         <module>mockito</module>
         <module>webapp</module>
         <module>struts</module>

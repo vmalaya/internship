@@ -1,17 +1,17 @@
-package com.action;
+package com.controller;
 
-import com.dao.UserDao;
 import com.opensymphony.xwork2.ActionSupport;
+
+import static com.dao.GreetingDao.count;
 
 public class HelloAction extends ActionSupport {
     private static final long serialVersionUID = 1L;
+    private static int counter;
 
     private String username;
-    private static int counter = 0;
 
     public String execute() {
-        UserDao.save(username);
-        HelloAction.counter = HelloAction.counter + 1;
+        counter = count();
         return SUCCESS;
     }
 
