@@ -47,6 +47,7 @@
         <module>mockito</module>
         <module>webapp</module>
         <module>struts</module>
+        <module>e2e</module>
     </modules>
 
     <build>
