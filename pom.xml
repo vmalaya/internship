@@ -48,6 +48,8 @@
         <module>webapp</module>
         <module>struts</module>
         <module>strutse2e</module>
+        <module>strutssql</module>
+<!--        <module>docker</module>-->
     </modules>
 
     <build>
