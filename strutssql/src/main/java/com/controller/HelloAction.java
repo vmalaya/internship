@@ -1,5 +1,6 @@
 package com.controller;
 
+import com.dao.GreetingDao;
 import com.opensymphony.xwork2.ActionSupport;
 
 import java.util.Objects;
@@ -11,9 +12,13 @@ public class HelloAction extends ActionSupport {
     private static int counter;
 
     private String username;
+    private String message;
 
     public String execute() {
         counter = count();
+        message = "Hello," + username + "!\n" +
+                "Total greetings:" + counter + "\n";
+        GreetingDao.saveGreeting(this);
         return SUCCESS;
     }
 
@@ -29,6 +34,10 @@ public class HelloAction extends ActionSupport {
 
     public int getCounter() {
         return counter;
+    }
+
+    public String getMessage() {
+        return message;
     }
 
     public void validate() {
