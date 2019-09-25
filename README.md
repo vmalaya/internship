@@ -25,6 +25,8 @@ The [struts] project demonstrates basics knowledge of struts framework
 
 The [e2e] project contains ene-to-end testing internal projects 
 
+The [strutssql] project is a copy of [struts] project with storage
+ message to mysql database
 <!--
 references
 -->
@@ -36,3 +38,4 @@ references
 [webapp]: webapp 
 [struts]: struts
 [e2e]: e2e
+[strutssql]: strutssql

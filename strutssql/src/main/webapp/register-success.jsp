@@ -5,8 +5,7 @@
     <title>Register success</title>
 </head>
 <body>
-<p>Hello, <s:property value="username"></s:property>!</p>
-<p>Total greetings: <s:property value="counter"></s:property></p>
-<a href="/struts">Go back</a>
+<p><s:property value="message"></s:property></p>
+<a href="/strutssql">Go back</a>
 </body>
 </html>
