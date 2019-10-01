@@ -79,6 +79,7 @@
                     <threshold>Low</threshold>
                     <xmlOutput>true</xmlOutput>
                     <excludeFilterFile>${project.baseUri}/FindBugsFilters.xml</excludeFilterFile>
+                    
                 </configuration>
                 <executions>
                     <execution>
