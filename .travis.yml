@@ -55,6 +55,17 @@ jobs:
         - docker rm -f -v struts chrome
         - docker network rm grid
         - sudo killall -9 java || echo 'oops...' # just in case...
+    - stage: deploy
+      jdk: openjdk8
+      name: run struts sql app
+      before_script:
+        - ./mvnw -pl :strutssql clean package
+        - docker network create grid || echo 'ignore..'
+        - docker build -t vmalaya/internship-strutssql -f ./strutssql/Dockerfile .
+      script: docker run --net grid --rm --name strutssql -d -p 8080:8080 vmalaya/internship-strutssql
+      after_script:
+        - docker network rm grid
+        - sudo killall -9 java || echo 'oops...' # just in case...
 
 #    - stage: test
 #      jdk: openjdk8
