@@ -22,12 +22,12 @@
         <junit.version>4.12</junit.version>
         <log4j.version>2.12.1</log4j.version>
         <assertj.version>3.13.2</assertj.version>
+        <struts2.version>2.5.20</struts2.version>
         <selenide.version>5.3.0</selenide.version>
         <jackson.version>2.10.0.pr2</jackson.version>
         <groovy-all.version>2.5.7</groovy-all.version>
         <mockito-core.version>3.0.0</mockito-core.version>
         <ant-contrib.version>20020829</ant-contrib.version>
-        <struts2-core.version>2.5.20</struts2-core.version>
         <junit-jupiter.version>5.5.1</junit-jupiter.version>
         <spock-core.version>1.3-groovy-2.5</spock-core.version>
         <gmavenplus-plugin.version>1.6</gmavenplus-plugin.version>
@@ -49,7 +49,7 @@
         <module>struts</module>
         <module>strutse2e</module>
         <module>strutssql</module>
-<!--        <module>docker</module>-->
+        <module>docker</module>
     </modules>
 
     <build>
@@ -79,7 +79,6 @@
                     <threshold>Low</threshold>
                     <xmlOutput>true</xmlOutput>
                     <excludeFilterFile>${project.baseUri}/FindBugsFilters.xml</excludeFilterFile>
-                    
                 </configuration>
                 <executions>
                     <execution>
@@ -147,6 +146,12 @@
                 <version>${jackson.version}</version>
                 <scope>import</scope>
                 <type>pom</type>
+            </dependency>
+            <dependency>
+                <groupId>io.vavr</groupId>
+                <artifactId>vavr</artifactId>
+                <version>${vavr.version}</version>
+                <type>jar</type>
             </dependency>
         </dependencies>
     </dependencyManagement>

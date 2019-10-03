@@ -1,5 +1,6 @@
+jboss/jboss-eap-6.4.0.zip
+jboss/jboss-eap-6.4/
 target/
-!.mvn/wrapper/maven-wrapper.jar
 
 ### STS ###
 .apt_generated

@@ -1,9 +1,11 @@
-package com.controller;
+package com.sigma.software.controller;
 
 import com.opensymphony.xwork2.ActionSupport;
+import com.sigma.software.datasource.DataSourceFactory;
+import com.sigma.software.datasource.FlywayMigration;
+import io.vavr.Lazy;
 
-import javax.naming.InitialContext;
-import javax.naming.NamingException;
+import javax.inject.Inject;
 import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -11,12 +13,15 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class ViewMessagesAction extends ActionSupport {
+
     private static final long serialVersionUID = 1L;
+    private static final Lazy<DataSource> dataSource = Lazy.of(DataSourceFactory::create);
 
     private String messages = "";
 
-    public String execute() throws NamingException, SQLException {
-        Connection connection = getConnection("java:/MySqlDS");
+    public String execute() throws SQLException {
+        DataSource datasource = dataSource.get();
+        Connection connection = datasource.getConnection();
         PreparedStatement preparedStatement = connection.prepareStatement("SELECT message FROM messages");
         ResultSet resultSet = preparedStatement.executeQuery();
         while (resultSet.next()){
@@ -26,12 +31,6 @@ public class ViewMessagesAction extends ActionSupport {
         preparedStatement.close();
         connection.close();
         return SUCCESS;
-    }
-
-    private Connection getConnection(String jndiName) throws NamingException, SQLException {
-        InitialContext initialContext = new InitialContext();
-        DataSource datasource = (DataSource) initialContext.lookup(jndiName);
-        return datasource.getConnection();
     }
 
     public String getMessages() {
