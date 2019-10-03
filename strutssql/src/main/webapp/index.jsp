@@ -1,4 +1,3 @@
-<%@ page import="java.util.List" %>
 <%@ taglib prefix="s" uri="/struts-tags" %>
 <%@ taglib prefix="action" uri="/struts-tags" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>

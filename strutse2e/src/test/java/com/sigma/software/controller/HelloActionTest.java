@@ -1,4 +1,4 @@
-package com.controller;
+package com.sigma.software.controller;
 
 import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.Selectors;

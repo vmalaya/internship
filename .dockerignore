@@ -1,0 +1,4 @@
+*
+!strutssql/target/*.war
+!jboss/jboss-eap-6.4/modules
+!jboss/jboss-eap-6.4/standalone/configuration

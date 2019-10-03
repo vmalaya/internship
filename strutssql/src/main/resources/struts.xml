@@ -1,21 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
 <!DOCTYPE struts PUBLIC
         "-//Apache Software Foundation//DTD Struts Configuration 2.5//EN"
         "http://struts.apache.org/dtds/struts-2.5.dtd">
-
 <struts>
-
     <constant name="struts.devMode" value="true"/>
+    <constant name="struts.enable.DynamicMethodInvocation" value="false"/>
+    <constant name="struts.objectFactory.cdi.jndiKey" value="java:comp/BeanManager" />
 
     <package name="strutssql" extends="struts-default">
-        <action name="viewMessages" class="com.controller.ViewMessagesAction" >
-            <result name="success">/</result>
-        </action>
-        <action name="saveMessage" class="com.controller.SaveMessageAction" method="save">
+        <action name="saveMessage" class="com.sigma.software.controller.SaveMessageAction" method="save">
             <result name="success" type="redirectAction">viewMessages</result>
             <result name="input">/</result>
         </action>
+        <action name="viewMessages" class="com.sigma.software.controller.ViewMessagesAction" >
+            <result name="success">/</result>
+        </action>
     </package>
-
 </struts>
