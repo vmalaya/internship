@@ -7,13 +7,4 @@
     <constant name="struts.enable.DynamicMethodInvocation" value="false"/>
     <constant name="struts.objectFactory.cdi.jndiKey" value="java:comp/BeanManager" />
 
-    <package name="strutssql" extends="struts-default">
-        <action name="saveMessage" class="com.sigma.software.controller.SaveMessageAction" method="save">
-            <result name="success" type="redirectAction">viewMessages</result>
-            <result name="input">/</result>
-        </action>
-        <action name="viewMessages" class="com.sigma.software.controller.ViewMessagesAction" >
-            <result name="success">/</result>
-        </action>
-    </package>
 </struts>
