@@ -16,7 +16,6 @@ public class FlywayMigration {
 
     @Inject
     DataSource dataSource;
-
     /**
      * @see: https://flywaydb.org/documentation/maven/
      */

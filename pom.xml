@@ -50,6 +50,8 @@
         <module>strutse2e</module>
         <module>strutssql</module>
         <module>docker</module>
+        <module>migration</module>
+        <module>strutssqle2e</module>
     </modules>
 
     <build>
@@ -152,6 +154,13 @@
                 <artifactId>vavr</artifactId>
                 <version>${vavr.version}</version>
                 <type>jar</type>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.struts</groupId>
+                <artifactId>struts2-bom</artifactId>
+                <version>${struts2.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
             </dependency>
         </dependencies>
     </dependencyManagement>

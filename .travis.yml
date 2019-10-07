@@ -55,17 +55,30 @@ jobs:
         - docker rm -f -v struts chrome
         - docker network rm grid
         - sudo killall -9 java || echo 'oops...' # just in case...
+
     - stage: deploy
       jdk: openjdk8
-      name: run struts sql app
+      name: deploy struts sql
       before_script:
         - ./mvnw -pl :strutssql clean package
-        - docker network create grid || echo 'ignore..'
-        - docker build -t vmalaya/internship-strutssql -f ./strutssql/Dockerfile .
-      script: docker run --net grid --rm --name strutssql -d -p 8080:8080 vmalaya/internship-strutssql
+      script: ./mvnw -pl :docker docker-compose:up
       after_script:
-        - docker network rm grid
+        - ./mvnw -pl :docker docker-compose:down
         - sudo killall -9 java || echo 'oops...' # just in case...
+#            TODO: fix running e2e tests
+#            - stage: test
+#            jdk: openjdk8
+#            name: run strutssql e2e test
+#            before_script:
+#              - ./mvnw -pl :strutssql clean package
+#              - ./mvnw -pl :docker docker-compose:up
+#              # start Selenium Hub using docker
+#              - docker run --net docker_strutssqlnet --rm --link docker_jboss_1:docker_jboss_1 --name chrome -d -p 4444:4444 --shm-size=2g selenium/standalone-chrome-debug:3.141.59-uranium
+#            script: ./mvnw -f ./strutssqle2e/pom.xml -Pe2e -DargLine="-Dstrutssql.host=docker_jboss_1 -Dselenide.browser=chrome -Dselenide.remote=http://127.0.0.1:4444/wd/hub"
+#            after_script:
+#              - docker rm -f -v docker_jboss_1 chrome
+#              - ./mvnw -pl :docker docker-compose:down
+#              - sudo killall -9 java || echo 'oops...' # just in case...
 
 #    - stage: test
 #      jdk: openjdk8

@@ -7,7 +7,7 @@
 </head>
 <body>
 <h1>Please input your message</h1>
-    <s:form action="saveMessage" method="post">
+    <s:form action="saveMessage" method="post" namespace="/">
         <s:textfield name="message" label="message"/>
         <s:submit value="Submit"/>
     </s:form>

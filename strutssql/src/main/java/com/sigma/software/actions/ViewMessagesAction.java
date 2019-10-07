@@ -1,17 +1,22 @@
-package com.sigma.software.controller;
+package com.sigma.software.actions;
 
 import com.opensymphony.xwork2.ActionSupport;
 import com.sigma.software.datasource.DataSourceFactory;
-import com.sigma.software.datasource.FlywayMigration;
 import io.vavr.Lazy;
+import org.apache.struts2.convention.annotation.*;
 
-import javax.inject.Inject;
+import javax.enterprise.context.RequestScoped;
 import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+@Results({
+        @Result(name = "success", location = "index.jsp"),
+})
+@RequestScoped
+@Namespace("/")
 public class ViewMessagesAction extends ActionSupport {
 
     private static final long serialVersionUID = 1L;
@@ -19,6 +24,7 @@ public class ViewMessagesAction extends ActionSupport {
 
     private String messages = "";
 
+    @Action("/viewMessages")
     public String execute() throws SQLException {
         DataSource datasource = dataSource.get();
         Connection connection = datasource.getConnection();
