@@ -27,6 +27,8 @@ The [e2e] project contains ene-to-end testing internal projects
 
 The [strutssql] project is a copy of [struts] project with storage
  message to mysql database
+ 
+The [struts2jpa] project is an implementation of [strutssql] project using JPA 
 <!--
 references
 -->
@@ -39,3 +41,4 @@ references
 [struts]: struts
 [e2e]: e2e
 [strutssql]: strutssql
+[struts2jpa]: struts2jpa
