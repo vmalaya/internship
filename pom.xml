@@ -50,7 +50,6 @@
         <module>strutse2e</module>
         <module>strutssql</module>
         <module>docker</module>
-        <module>migration</module>
         <module>strutssqle2e</module>
     </modules>
 
