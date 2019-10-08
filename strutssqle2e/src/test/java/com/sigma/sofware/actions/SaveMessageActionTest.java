@@ -22,5 +22,4 @@ public class SaveMessageActionTest {
         $(Selectors.withText("ole"))
                 .should(Condition.exist);
     }
-
 }

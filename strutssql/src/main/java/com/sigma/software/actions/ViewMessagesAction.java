@@ -13,7 +13,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 @Results({
-        @Result(name = "success", location = "index.jsp"),
+        @Result(name = "success", location = "index.jsp")
 })
 @RequestScoped
 @Namespace("/")

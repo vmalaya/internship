@@ -17,7 +17,6 @@ public class DataSourceFactory {
 
     public static DataSource create() {
         String jndiName = "java:jboss/datasources/ExampleDS";
-        // String jndiName = "java:jboss/datasources/MySqlDS";
         return maybeDataSource.apply(jndiName)
                               .getOrElseThrow(reThrow);
     }
