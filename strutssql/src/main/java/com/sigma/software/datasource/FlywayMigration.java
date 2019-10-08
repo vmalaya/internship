@@ -16,9 +16,7 @@ public class FlywayMigration {
 
     @Inject
     DataSource dataSource;
-    /**
-     * @see: https://flywaydb.org/documentation/maven/
-     */
+
     @PostConstruct
     public void initFlyWay() {
         log.info("\n\n\n initializing.... \n\n");

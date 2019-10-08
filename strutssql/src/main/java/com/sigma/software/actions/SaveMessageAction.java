@@ -14,7 +14,7 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
 @Results({
-        @Result(name = "success", location = "viewMessages", type = "redirect"),
+        @Result(name = "success", location = "viewMessages", type = "redirect")
 })
 @RequestScoped
 @Namespace("/")
@@ -30,14 +30,10 @@ public class SaveMessageAction extends ActionSupport {
 
     private String message;
 
-    // private DataSource datasource;
-    // private static final Lazy<DataSource> dataSource = Lazy.of(DataSourceFactory::create);
-
     @Action("/saveMessage")
     public String save() throws SQLException, NamingException {
         LogManager.getLogger().info(flywayMigration);
         Connection connection = dataSource.getConnection();
-        // Connection connection = dataSource.getConnection();
         PreparedStatement preparedStatement = connection.prepareStatement("INSERT into messages(message) values(?)");
         preparedStatement.setString(1, message);
         preparedStatement.execute();
