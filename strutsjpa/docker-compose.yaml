@@ -1,0 +1,35 @@
+version: '2.1'
+networks:
+  strutsjpanet:
+    driver: bridge
+volumes:
+  mysql-etc: {}
+  mysql-data: {}
+services:
+  mysql:
+    image: healthcheck/mysql:latest
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_PASSWORD: strutsjpa
+      MYSQL_USER: strutsjpa
+      MYSQL_DATABASE: strutsjpa
+    volumes:
+      - mysql-data:/var/lib/mysql:rw
+      - mysql-etc:/etc/mysql:rw
+    ports: ['3306']
+    networks: [strutsjpanet]
+  jboss:
+    depends_on:
+      mysql:
+        condition: service_healthy
+    build:
+      context: ../
+      dockerfile: ./strutsjpa/Dockerfile
+
+    ports: ['8080:8080']
+    environment:
+      MYSQL_USER: strutsjpa
+      MYSQL_PASSWORD: strutsjpa
+      MYSQL_DATABASE: strutsjpa
+      MYSQL_HOST: mysql
+    networks: [strutsjpanet]

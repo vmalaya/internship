@@ -51,7 +51,7 @@
         <module>strutssql</module>
         <module>docker</module>
         <module>strutssqle2e</module>
-        <module>struts2jpa</module>
+        <module>strutsjpa</module>
     </modules>
 
     <build>
