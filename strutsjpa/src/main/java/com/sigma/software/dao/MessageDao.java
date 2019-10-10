@@ -19,24 +19,16 @@ public class MessageDao {
     private EntityManager entityManager;
 
     public void save(Message message) throws NamingException {
-        UserTransaction transaction = (UserTransaction)new InitialContext().lookup("java:comp/UserTransaction");
+        UserTransaction transaction = (UserTransaction) new InitialContext().lookup("java:comp/UserTransaction");
         try {
             transaction.begin();
-        } catch (NotSupportedException e) {
-            e.printStackTrace();
-        } catch (SystemException e) {
+        } catch (NotSupportedException | SystemException e) {
             e.printStackTrace();
         }
         entityManager.persist(message);
         try {
             transaction.commit();
-        } catch (RollbackException e) {
-            e.printStackTrace();
-        } catch (HeuristicMixedException e) {
-            e.printStackTrace();
-        } catch (HeuristicRollbackException e) {
-            e.printStackTrace();
-        } catch (SystemException e) {
+        } catch (RollbackException | HeuristicRollbackException | SystemException | HeuristicMixedException e) {
             e.printStackTrace();
         }
     }

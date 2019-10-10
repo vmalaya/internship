@@ -1,12 +1,12 @@
-package com.sigma.software.datasource;
+package com.sigma.software.migration;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.flywaydb.core.Flyway;
 
 import javax.annotation.PostConstruct;
+import javax.annotation.Resource;
 import javax.enterprise.context.ApplicationScoped;
-import javax.inject.Inject;
 import javax.sql.DataSource;
 
 @ApplicationScoped
@@ -14,7 +14,7 @@ public class FlywayMigration {
 
     private static final Logger log = LogManager.getLogger();
 
-    @Inject
+    @Resource
     DataSource dataSource;
 
     @PostConstruct
