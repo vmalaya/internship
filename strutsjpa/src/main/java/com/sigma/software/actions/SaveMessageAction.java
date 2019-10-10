@@ -2,7 +2,6 @@ package com.sigma.software.actions;
 
 import com.opensymphony.xwork2.ActionSupport;
 import com.sigma.software.dao.MessageDao;
-import com.sigma.software.datasource.FlywayMigration;
 import com.sigma.software.model.Message;
 import org.apache.logging.log4j.LogManager;
 import org.apache.struts2.convention.annotation.Action;
@@ -24,16 +23,12 @@ public class SaveMessageAction extends ActionSupport {
     private static final long serialVersionUID = 1L;
 
     @Inject
-    MessageDao messageDao;
-
-    @Inject
-    private FlywayMigration flywayMigration;
-
+    private MessageDao messageDao;
     private String message;
 
     @Action("/saveMessage")
     public String save() throws NamingException {
-        LogManager.getLogger().info(flywayMigration);
+        LogManager.getLogger().info("\n\n\n ...saving message...\n\n\n");
         messageDao.save(new Message(message));
         return SUCCESS;
     }
