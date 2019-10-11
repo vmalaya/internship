@@ -40,15 +40,15 @@ jobs:
         - docker network rm grid
         - sudo killall -9 java || echo 'oops...' # just in case...
 
-    - stage: test
-      jdk: openjdk8
-      name: deploy struts sql
-      before_script:
-        - ./mvnw -pl :strutssql clean package
-      script: ./mvnw -pl :docker docker-compose:up
-      after_script:
-        - ./mvnw -pl :docker docker-compose:down
-        - sudo killall -9 java || echo 'oops...' # just in case...
+#    - stage: deploy
+#      jdk: openjdk8
+#      name: deploy struts sql
+#      before_script:
+#        - ./mvnw -pl :strutssql clean package
+#      script: ./mvnw -pl :docker docker-compose:up
+#      after_script:
+#        - ./mvnw -pl :docker docker-compose:down
+#        - sudo killall -9 java || echo 'oops...' # just in case...
 
     - stage: test
       jdk: openjdk8
@@ -56,7 +56,7 @@ jobs:
       before_script:
         - ./mvnw -pl :strutssql clean package
         - ./mvnw -pl :docker docker-compose:up
-      script: ./mvnw -f ./strutssqle2e/pom.xml -Pe2e -DargLine="-Dstrutssql.host=jboss -Dselenide.browser=chrome -Dselenide.remote=http://selenium-hub:4444/wd/hub"
+      script: ./mvnw -f ./strutssqle2e/pom.xml -Pe2e -DargLine="-Dstrutssql.host=jboss -Dselenide.browser=chrome -Dselenide.remote=http://127.0.0.1:4444/wd/hub"
       after_script:
         - ./mvnw -pl :docker docker-compose:down
 
