@@ -12,11 +12,6 @@ stages:
   - deploy
 services:
   - docker
-#addons:
-#  apt:
-#    packages:
-#      - zip
-#      - unzip
 jobs:
   include:
 
@@ -34,29 +29,18 @@ jobs:
       jdk: openjdk8
       name: run struts e2e tests
       before_script:
-        ## install and start JBoss
-        #- mkdir -p ~/.jboss
-        #- export JBOSS_EAP_BASE_URL=https://github.com/daggerok/jboss/releases/download/eap
-        #- export JBOSS_ARCHIVE=jboss-eap-6.4.0.zip
-        #- if [[ ! -f "~/.jboss/${JBOSS_ARCHIVE}" ]]; then wget ${JBOSS_EAP_BASE_URL}/${JBOSS_ARCHIVE} -O ~/.jboss/${JBOSS_ARCHIVE} ; fi
-        #- unzip -d /tmp/ ~/.jboss/${JBOSS_ARCHIVE}
-        #- bash /tmp/jboss-eap-6.4/bin/standalone.sh &
-        ## build and deploy application
         - ./mvnw -pl :struts clean package
         - docker network create grid || echo 'ignore..'
-        #- cp -Rf ./struts/target/*.war /tmp/jboss-eap-6.4/standalone/deployments/
         - docker build -t vmalaya/internship-struts -f ./jboss/Dockerfile .
         - docker run --net grid --rm --name struts -d -p 8080:8080 vmalaya/internship-struts
-        # start Selenium Hub using docker
         - docker run --net grid --rm --link struts:struts --name chrome -d -p 4444:4444 --shm-size=2g selenium/standalone-chrome-debug:3.141.59-uranium
       script: ./mvnw -f ./strutse2e/pom.xml -Pe2e -DargLine="-Dstruts.host=struts -Dselenide.browser=chrome -Dselenide.remote=http://127.0.0.1:4444/wd/hub"
       after_script:
-        #- bash /tmp/jboss-eap-6.4/bin/jboss-cli.bat --commands="connect","shutdown --restart=false"
         - docker rm -f -v struts chrome
         - docker network rm grid
         - sudo killall -9 java || echo 'oops...' # just in case...
 
-    - stage: deploy
+    - stage: test
       jdk: openjdk8
       name: deploy struts sql
       before_script:
@@ -65,79 +49,19 @@ jobs:
       after_script:
         - ./mvnw -pl :docker docker-compose:down
         - sudo killall -9 java || echo 'oops...' # just in case...
-#            TODO: fix running e2e tests
-#            - stage: test
-#            jdk: openjdk8
-#            name: run strutssql e2e test
-#            before_script:
-#              - ./mvnw -pl :strutssql clean package
-#              - ./mvnw -pl :docker docker-compose:up
-#              # start Selenium Hub using docker
-#              - docker run --net docker_strutssqlnet --rm --link docker_jboss_1:docker_jboss_1 --name chrome -d -p 4444:4444 --shm-size=2g selenium/standalone-chrome-debug:3.141.59-uranium
-#            script: ./mvnw -f ./strutssqle2e/pom.xml -Pe2e -DargLine="-Dstrutssql.host=docker_jboss_1 -Dselenide.browser=chrome -Dselenide.remote=http://127.0.0.1:4444/wd/hub"
-#            after_script:
-#              - docker rm -f -v docker_jboss_1 chrome
-#              - ./mvnw -pl :docker docker-compose:down
-#              - sudo killall -9 java || echo 'oops...' # just in case...
 
-#    - stage: test
-#      jdk: openjdk8
-#      name: run selenide tests
-#      before_script:
-#        - docker pull selenium/standalone-chrome-debug:3.141.59-uranium -q || echo 'ignore..'
-#        - docker network create grid || echo 'ignore..'
-#        - docker run --rm --name chrome -d -p 4444:4444 --shm-size=2g selenium/standalone-chrome-debug:3.141.59-uranium
-#      script:
-#        - ./mvnw -pl :selenide -DargLine="-Dselenide.browser=chrome -Dselenide.remote=http://127.0.0.1:4444/wd/hub"
-#      after_script:
-#        #- docker stop chrome
-#        - docker rm -f -v chrome
-#        - docker network rm grid
-#
-#    - stage: test
-#      rvm: 2.6.4
-#      jdk: openjdk8
-#      name: build documentation
-#      script:
-#        - cd $TRAVIS_BUILD_DIR/messenger/documentation
-#        - bundle
-#        - bundle exec just-the-docs rake search:init
-#        - bundle exec jekyll build
-#
-#  - stage: deploy
-#    jdk: openjdk11
-#    rvm: 2.6.4
-#    name: GitHub release and GitHub pages deployment
-#    script: skip
-#    if: branch = "master" AND type NOT IN (pull_request)
-#    before_deploy:
-#      - if [ "$TRAVIS_PULL_REQUEST" != "false" ] || [ ".$TRAVIS_BRANCH" != ".master" ] ; then exit 0 ; fi
-#      - set -e
-#      - cd $TRAVIS_BUILD_DIR/messenger/documentation && bundle
-#      - cd $TRAVIS_BUILD_DIR/messenger/documentation && bundle exec just-the-docs rake search:init
-#      - cd $TRAVIS_BUILD_DIR/messenger/documentation && bundle exec jekyll build
-#      - ./mvnw exec:exec
-#      - ./mvnw -Pjekyll-search
-#      - ./mvnw -Pjekyll-build
-#    deploy:
-#      provider: pages
-#      skip-cleanup: true
-#      github-token: "$GITHUB_TOKEN"
-#      keep-history: true
-#      local-dir: docs/_site
-#      target_branch: gh-pages
-#      on:
-#        branch: master
-#        condition: "$TRAVIS_PULL_REQUEST = false"
-#
-#env:
-#  global:
-#  - TERM=dumb
-#  - secure: MX59l79yxU/cOmLxKRxpFp6bwLmsaHWLDnPP0wZqy3SvSLwg7ugeJkaI/+BC6+WQD0mfexNeSC3ayGt7JSZ99uL2BDmCekEIt/3OxLHB5ojtiSA1Fb38JIfHIke9B2u/dEe3tmi4/Ycs8ey1+IPGKBE/JyoTEyyaPRTsbV23cgXV3ZwbO3++8+1fZCf1GqBk8zUn7IAHWSJSR1J4mz8S+2CiIfBV4B4QESuNtXpxEhfFdBTzkcAv0JsYHo4gFheoy2BFkPu+y/45hotwVdT1+flYKtPbIaJyr3g3XWyokNzGi2Jud8GVfMRzLX5NplojjhRLul+RH/gvB894lfLnWPafhjlT94KLim8nfR7qcxak8n05UCjKz2O54veBaOcT8AsTPBWsw/Jp+MnEhEV0kERzYf86hSWjV0Jvk+9GcfxF8HGgFZNJFP8H05q6mYVMKYcJRLvLHAnmztahD+Q0MPXnJlDwG6cbXcsncWFOa4ha56tI/l2YdpcEVlmsnrxUmIDSV7HrrIESoR+HtF94fzVq1+maVCynae1LS4YF5waXxY8Eqzqsz7QN9ejBqht8/r6zi9Hq4T6+Et3a7pPntiHSt01U1NVYYWWiqxTnyJ98HrazqccrwSyz2eThSwLvJ1lTsi6kQSFMjoSDLw4V1yBwWJcAB4zAGpZUhd85iYA=
+    - stage: test
+      jdk: openjdk8
+      name: run strutssql e2e test
+      before_script:
+        - ./mvnw -pl :strutssql clean package
+        - ./mvnw -pl :docker docker-compose:up
+      script: ./mvnw -f ./strutssqle2e/pom.xml -Pe2e -DargLine="-Dstrutssql.host=jboss -Dselenide.browser=chrome -Dselenide.remote=http://selenium-hub:4444/wd/hub"
+      after_script:
+        - ./mvnw -pl :docker docker-compose:down
 
 cache:
   packages: true
   directories:
-    #- ~/.jboss
     - ~/.docker
     - ~/.m2
