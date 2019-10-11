@@ -6,7 +6,7 @@ volumes:
   mysql-etc: {}
   mysql-data: {}
 services:
-  selenium-hub:
+  selenide-hub:
     image: selenium/hub:3.141.59-vanadium
     ports:
       - "4444:4444"
@@ -16,9 +16,9 @@ services:
     volumes:
       - /dev/shm:/dev/shm
     depends_on:
-      - selenium-hub
+      - selenide-hub
     environment:
-      HUB_HOST: selenium-hub
+      HUB_HOST: selenide-hub
     networks: [strutssqlnet]
   mysql:
     image: healthcheck/mysql:latest
@@ -46,4 +46,8 @@ services:
       MYSQL_DATABASE: strutssql
       MYSQL_HOST: mysql
     networks: [strutssqlnet]
-
+  healthcheck:
+    image: alpine
+    depends_on:
+      jboss:
+        condition: service_healthy

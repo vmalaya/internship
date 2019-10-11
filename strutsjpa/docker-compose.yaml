@@ -24,7 +24,7 @@ services:
         condition: service_healthy
     build:
       context: ../
-      dockerfile: ./strutsjpa/Dockerfile
+      dockerfile: ./docker/strutsjpa/Dockerfile
 
     ports: ['8080:8080']
     environment:

@@ -10,8 +10,6 @@
             <property name="javax.persistence.jdbc.url" value="jdbc:mysql://127.0.0.1:3306/strutsjpa"/>
             <property name="javax.persistence.jdbc.user" value="strutsjpa"/>
             <property name="javax.persistence.jdbc.password" value="strutsjpa"/>
-            <property name="eclipselink.ddl-generation" value="none"/>
-            <property name="eclipselink.ddl-generation.output-mode" value="both"/>
         </properties>
     </persistence-unit>
 </persistence>
