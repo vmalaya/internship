@@ -49,7 +49,6 @@
         <module>struts</module>
         <module>strutse2e</module>
         <module>strutssql</module>
-        <module>docker</module>
         <module>strutssqle2e</module>
         <module>strutsjpa</module>
     </modules>
