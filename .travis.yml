@@ -54,11 +54,11 @@ jobs:
       jdk: openjdk8
       name: run strutssql e2e test
       before_script:
-        - ./mvnw -pl :strutssql clean package
-        - ./mvnw -pl :docker docker-compose:up
+        - ./mvnw -f strutssql/app/pom.xml clean package
+        - ./mvnw -f strutssql/docker/pom.xml docker-compose:up
       script: ./mvnw -f ./strutssqle2e/pom.xml -Pe2e -DargLine="-Dstrutssql.host=jboss -Dselenide.browser=chrome -Dselenide.remote=http://127.0.0.1:4444/wd/hub"
       after_script:
-        - ./mvnw -pl :docker docker-compose:down
+        - ./mvnw -f strutssql/docker/pom.xml docker-compose:down
 
 cache:
   packages: true
