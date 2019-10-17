@@ -14,5 +14,6 @@
     <modules>
         <module>docker</module>
         <module>app</module>
+        <module>e2e</module>
     </modules>
 </project>
