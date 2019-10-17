@@ -9,23 +9,11 @@
 
   <modelVersion>4.0.0</modelVersion>
   <artifactId>struts</artifactId>
+  <packaging>pom</packaging>
 
-  <packaging>war</packaging>
-
-  <dependencies>
-    <dependency>
-      <groupId>org.apache.struts</groupId>
-      <artifactId>struts2-core</artifactId>
-      <version>${struts2.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>org.apache.logging.log4j</groupId>
-      <artifactId>log4j-core</artifactId>
-    </dependency>
-  </dependencies>
-
-  <build>
-    <finalName>struts</finalName>
-  </build>
-
+  <modules>
+    <module>sapp</module>
+    <module>sdocker</module>
+    <module>se2e</module>
+  </modules>
 </project>

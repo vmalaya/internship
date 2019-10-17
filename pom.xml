@@ -47,7 +47,6 @@
         <module>mockito</module>
         <module>webapp</module>
         <module>struts</module>
-        <module>strutse2e</module>
         <module>strutssql</module>
         <module>strutsjpa</module>
     </modules>

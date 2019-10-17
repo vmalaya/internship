@@ -29,26 +29,11 @@ jobs:
       jdk: openjdk8
       name: run struts e2e tests
       before_script:
-        - ./mvnw -pl :struts clean package
-        - docker network create grid || echo 'ignore..'
-        - docker build -t vmalaya/internship-struts -f ./jboss/Dockerfile .
-        - docker run --net grid --rm --name struts -d -p 8080:8080 vmalaya/internship-struts
-        - docker run --net grid --rm --link struts:struts --name chrome -d -p 4444:4444 --shm-size=2g selenium/standalone-chrome-debug:3.141.59-uranium
-      script: ./mvnw -f ./strutse2e/pom.xml -Pe2e -DargLine="-Dstruts.host=struts -Dselenide.browser=chrome -Dselenide.remote=http://127.0.0.1:4444/wd/hub"
+        - ./mvnw -f struts/sapp/pom.xml clean package
+        - ./mvnw -f struts/sdocker/pom.xml docker-compose:up
+      script: ./mvnw -f ./struts/se2e/pom.xml -Pe2e -DargLine="-Dstruts.host=jboss -Dselenide.browser=chrome -Dselenide.remote=http://127.0.0.1:4444/wd/hub"
       after_script:
-        - docker rm -f -v struts chrome
-        - docker network rm grid
-        - sudo killall -9 java || echo 'oops...' # just in case...
-
-    #    - stage: deploy
-    #      jdk: openjdk8
-    #      name: deploy struts sql
-    #      before_script:
-    #        - ./mvnw -pl :strutssql clean package
-    #      script: ./mvnw -pl :docker docker-compose:up
-    #      after_script:
-    #        - ./mvnw -pl :docker docker-compose:down
-    #        - sudo killall -9 java || echo 'oops...' # just in case...
+        - ./mvnw -f struts/sdocker/pom.xml docker-compose:down
 
     - stage: test
       jdk: openjdk8
