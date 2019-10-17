@@ -6,6 +6,20 @@ volumes:
   mysql-etc: {}
   mysql-data: {}
 services:
+  selenium-hub:
+    image: selenium/hub:3.141.59-vanadium
+    ports:
+      - "4444:4444"
+    networks: [strutsjpanet]
+  chrome:
+    image: selenium/node-chrome:3.141.59-vanadium
+    volumes:
+      - /dev/shm:/dev/shm
+    depends_on:
+      - selenium-hub
+    environment:
+      HUB_HOST: selenium-hub
+    networks: [strutsjpanet]
   mysql:
     image: healthcheck/mysql:latest
     environment:
@@ -23,8 +37,8 @@ services:
       mysql:
         condition: service_healthy
     build:
-      context: ../
-      dockerfile: ./docker/strutsjpa/Dockerfile
+      context: ../../
+      dockerfile: strutsjpa/sjdocker/Dockerfile
 
     ports: ['8080:8080']
     environment:
@@ -33,3 +47,8 @@ services:
       MYSQL_DATABASE: strutsjpa
       MYSQL_HOST: mysql
     networks: [strutsjpanet]
+  healthcheck:
+    image: alpine
+    depends_on:
+      jboss:
+        condition: service_healthy

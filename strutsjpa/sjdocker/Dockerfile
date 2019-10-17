@@ -5,4 +5,4 @@ HEALTHCHECK --timeout=1s --retries=99 \
 ENTRYPOINT standalone.sh -b 0.0.0.0
 ADD ./jboss/jboss-eap-6.4/modules/com/mysql ${JBOSS_HOME}/modules/com/mysql
 ADD ./jboss/jboss-eap-6.4/standalone/configuration/standalone.xml ${JBOSS_HOME}/standalone/configuration/standalone.xml
-ADD ./strutsjpa/target/*.war ${JBOSS_HOME}/standalone/deployments/
+ADD ./strutsjpa/sjapp/target/*.war ${JBOSS_HOME}/standalone/deployments/
