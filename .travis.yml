@@ -29,32 +29,31 @@ jobs:
       jdk: openjdk8
       name: run struts e2e tests
       before_script:
-        - ./mvnw -f struts/sapp/pom.xml clean package
-        - ./mvnw -f struts/sdocker/pom.xml docker-compose:up
+        - ./mvnw -f ./struts/sapp/pom.xml clean package
+        - ./mvnw -f ./struts/sdocker/pom.xml docker-compose:up
       script: ./mvnw -f ./struts/se2e/pom.xml -Pe2e -DargLine="-Dstruts.host=jboss -Dselenide.browser=chrome -Dselenide.remote=http://127.0.0.1:4444/wd/hub"
       after_script:
-        - ./mvnw -f struts/sdocker/pom.xml docker-compose:down
+        - ./mvnw -f ./struts/sdocker/pom.xml docker-compose:down
 
     - stage: test
       jdk: openjdk8
       name: run strutssql e2e test
       before_script:
-        - ./mvnw -f strutssql/app/pom.xml clean package
-        - ./mvnw -f strutssql/docker/pom.xml docker-compose:up
+        - ./mvnw -f ./strutssql/app/pom.xml clean package
+        - ./mvnw -f ./strutssql/docker/pom.xml docker-compose:up
       script: ./mvnw -f ./strutssql/e2e/pom.xml -Pe2e -DargLine="-Dstrutssql.host=jboss -Dselenide.browser=chrome -Dselenide.remote=http://127.0.0.1:4444/wd/hub"
       after_script:
-        - ./mvnw -f strutssql/docker/pom.xml docker-compose:down
-
+        - ./mvnw -f ./strutssql/docker/pom.xml docker-compose:down
 
     - stage: test
       jdk: openjdk8
       name: run strutsjpa e2e test
       before_script:
-        - ./mvnw -f strutsjpa/sjapp/pom.xml clean package
-        - ./mvnw -f strutsjpa/sjdocker/pom.xml docker-compose:up
+        - ./mvnw -f ./strutsjpa/sjapp/pom.xml clean package
+        - ./mvnw -f ./strutsjpa/sjdocker/pom.xml docker-compose:up
       script: ./mvnw -f ./strutsjpa/sje2e/pom.xml -Pe2e -DargLine="-Dstrutsjpa.host=jboss -Dselenide.browser=chrome -Dselenide.remote=http://127.0.0.1:4444/wd/hub"
       after_script:
-        - ./mvnw -f strutsjpa/sjdocker/pom.xml docker-compose:down
+        - ./mvnw -f ./strutsjpa/sjdocker/pom.xml docker-compose:down
 
 
 cache:

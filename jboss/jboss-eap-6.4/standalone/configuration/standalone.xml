@@ -134,9 +134,6 @@
                 <datasource jndi-name="java:jboss/datasources/ExampleDS" pool-name="MySqlPool" enabled="true" use-java-context="true" jta="true" use-ccm="true">
                     <connection-url>jdbc:mysql://${mysqlHost, env.MYSQL_HOST:127.0.0.1}:${mysqlPort, env.MYSQL_PORT:3306}/${mysqlDb, env.MYSQL_DATABASE:strutssql}</connection-url>
                     <driver>mysql</driver>
-                    <pool>
-                        <max-pool-size>30</max-pool-size>
-                    </pool>
                     <security>
                         <user-name>${mysqlUser, env.MYSQL_USER:root}</user-name>
                         <password>${mysqlPassword, env.MYSQL_PASSWORD:root}</password>
