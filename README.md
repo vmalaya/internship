@@ -25,10 +25,11 @@ The [struts] project demonstrates basics knowledge of struts framework
 
 The [e2e] project contains ene-to-end testing internal projects 
 
-The [strutssql] project is a copy of [struts] project with storage
- message to mysql database
+The [strutssql] web application with storage message to mysql database.
+Was used flyway database migration.  
  
-The [struts2jpa] project is an implementation of [strutssql] project using JPA 
+The [strutsjpa] project is an implementation of [strutssql] project using JPA 
+Was used liquibase database migration.
 <!--
 references
 -->
@@ -41,4 +42,4 @@ references
 [struts]: struts
 [e2e]: e2e
 [strutssql]: strutssql
-[struts2jpa]: struts2jpa
+[strutsjpa]: strutsjpa
