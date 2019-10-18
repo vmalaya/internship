@@ -10,7 +10,15 @@ import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.open;
 
 public class SaveMessageActionTest {
-    private static final String url = String.format("http://%s:8080/strutsjpa", System.getProperty("strutsjpa.host", "127.0.0.1"));
+    private static final String url = String.format("http://%s:8080/strutsjpa",
+                                                    System.getProperty("strutsjpa.host", "127.0.0.1"));
+
+    @Test
+    void should_open_content_page() {
+        open(url);
+
+        $(By.name("saveMessage")).should(Condition.exist);
+    }
 
     @Test
     void should_display_saved_messages() {

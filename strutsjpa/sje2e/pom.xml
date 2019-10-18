@@ -10,7 +10,6 @@
 
     <modelVersion>4.0.0</modelVersion>
     <artifactId>sje2e</artifactId>
-    <packaging>pom</packaging>
 
     <dependencies>
         <dependency>

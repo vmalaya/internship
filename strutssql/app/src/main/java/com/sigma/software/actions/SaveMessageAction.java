@@ -31,7 +31,7 @@ public class SaveMessageAction extends ActionSupport {
     private String message;
 
     @Action("/saveMessage")
-    public String save() throws SQLException, NamingException {
+    public String save() throws SQLException {
         LogManager.getLogger().info(flywayMigration);
         Connection connection = dataSource.getConnection();
         PreparedStatement preparedStatement = connection.prepareStatement("INSERT into messages(message) values(?)");
