@@ -7,3 +7,4 @@
 !jboss/jboss-eap-7.2/modules
 !jboss/jboss-eap-7.2/standalone/configuration
 !strutsjpa/sjapp/target/*.war
+!eemessenger/eemessengerapp/target/*.war
