@@ -146,15 +146,15 @@
         <subsystem xmlns="urn:jboss:domain:datasources:5.0">
             <datasources>
                 <datasource jndi-name="java:jboss/datasources/ExampleDS" pool-name="ExampleDS" enabled="true" use-java-context="true">
-                    <connection-url>jdbc:postgresql://${env.POSTGRES_HOST:127.0.0.1}:${env.POSTGRES_PORT:5432}/${env.POSTGRES_DB:db}</connection-url>
+                    <connection-url>jdbc:postgresql://${env.POSTGRES_HOST:127.0.0.1}:${env.POSTGRES_PORT:5432}/${env.POSTGRES_DB:postgres}</connection-url>
                     <driver>postgresql</driver>
                     <security>
-                        <user-name>${env.POSTGRES_USER:sa}</user-name>
-                        <password>${env.POSTGRES_PASSWORD:sa}</password>
+                        <user-name>${env.POSTGRES_USER:postgres}</user-name>
+                        <password>${env.POSTGRES_PASSWORD:postgres}</password>
                     </security>
                 </datasource>
                 <drivers>
-                    <driver name="postgresql" module="com.postgresql">
+                    <driver name="postgresql" module="org.postgresql">
                         <xa-datasource-class>org.postgresql.xa.PGXADataSource</xa-datasource-class>
                     </driver>
                 </drivers>

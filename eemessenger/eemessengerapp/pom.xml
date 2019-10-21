@@ -11,5 +11,12 @@
 
     <artifactId>eemessengerapp</artifactId>
 
+    <dependencies>
+        <dependency>
+            <groupId>org.postgresql</groupId>
+            <artifactId>postgresql</artifactId>
+            <version>${postgresql-driver.version}</version>
+        </dependency>
+    </dependencies>
 
 </project>

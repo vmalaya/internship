@@ -4,4 +4,6 @@
 !struts/target/*.war
 !jboss/jboss-eap-6.4/modules
 !jboss/jboss-eap-6.4/standalone/configuration
+!jboss/jboss-eap-7.2/modules
+!jboss/jboss-eap-7.2/standalone/configuration
 !strutsjpa/sjapp/target/*.war
