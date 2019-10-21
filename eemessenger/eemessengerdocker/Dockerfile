@@ -5,3 +5,4 @@ HEALTHCHECK --timeout=1s --retries=99 \
 ENTRYPOINT standalone.sh -b 0.0.0.0
 ADD ./eemessengerdocker/jboss-eap-7.2/modules/org/postgresql ${JBOSS_HOME}/modules/org/postgresql
 ADD ./eemessengerdocker/jboss-eap-7.2/standalone/configuration/standalone.xml ${JBOSS_HOME}/standalone/configuration/standalone.xml
+ADD ./eemessengerapp/target/*.war ${JBOSS_HOME}/standalone/deployments/
