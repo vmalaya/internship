@@ -12,6 +12,10 @@
     <artifactId>eemessenger</artifactId>
     <packaging>pom</packaging>
 
+    <properties>
+        <postgresql-driver.version>42.2.8</postgresql-driver.version>
+    </properties>
+
     <modules>
         <module>eemessengerapp</module>
         <module>eemessengerdocker</module>
