@@ -55,6 +55,14 @@ jobs:
       after_script:
         - ./mvnw -f ./strutsjpa/sjdocker/pom.xml docker-compose:down
 
+    - stage: test
+      jdk: openjdk8
+      name: run eemessanger e2e test
+      before_script:
+        - ./mvnw -pl :eemessengerapp clean package
+        - ./mvnw -f ./eemessenger/eemessengerdocker/pom.xml docker-compose:up
+      script: ./mvnw -f ./eemessenger/eemessengere2e/pom.xml -Pe2e -DargLine="-Deemessenger.host=jboss -Dselenide.browser=chrome -Dselenide.remote=http://127.0.0.1:4444/wd/hub"
+      after_script: ./mvnw -f eemessenger/eemessengerdocker/pom.xml docker-compose:down
 
 cache:
   packages: true

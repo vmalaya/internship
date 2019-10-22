@@ -18,6 +18,11 @@ import javax.servlet.annotation.WebInitParam;
                         description = "Set default package name as pages",
                         name = "struts.convention.package.locators",
                         value = "pages"
+                ),
+                @WebInitParam(
+                        description = "Set dev mode",
+                        name = "struts.devMode",
+                        value = "true"
                 )
         }
 )
