@@ -8,3 +8,6 @@
 !jboss/jboss-eap-7.2/standalone/configuration
 !strutsjpa/sjapp/target/*.war
 !eemessenger/eemessengerapp/target/*.war
+!eemessenger/eemessengerdocker/jboss-eap-7.2/modules
+!eemessenger/eemessengerdocker/jboss-eap-7.2/standalone/configuration
+
