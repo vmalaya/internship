@@ -58,6 +58,7 @@
         <module>struts</module>
         <module>strutssql</module>
         <module>strutsjpa</module>
+        <module>eemessenger8</module>
         <module>eemessenger</module>
     </modules>
 

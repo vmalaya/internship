@@ -30,6 +30,9 @@ Was used flyway database migration.
  
 The [strutsjpa] project is an implementation of [strutssql] project using JPA 
 Was used liquibase database migration.
+
+The [eemessenger] is a java EE application with messenger functionality
+
 <!--
 references
 -->
@@ -43,3 +46,4 @@ references
 [e2e]: e2e
 [strutssql]: strutssql
 [strutsjpa]: strutsjpa
+[eemessenger]: eemessenger
