@@ -6,10 +6,11 @@
 </head>
 <body>
 <h1>Hello, It is EE messenger implementation!</h1>
-<s:form action="hello" method="GET" >
-    <s:submit value="Press me, if you were here"/>
-</s:form>
-    <p> Current page was opened <s:property value="counter"/>  times!</p>
-<%--    <a href="/eemessenger"> Update</a>--%>
+
+    <s:form action="saveUsername" method="post" namespace="/">
+        <s:textfield name="username" label="username"/>
+        <s:submit value="Press me to save username"/>
+    </s:form>
+    <s:property value="usernames"/>
 </body>
 </html>
