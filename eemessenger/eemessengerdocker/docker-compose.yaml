@@ -6,20 +6,20 @@ volumes:
   postgresql-etc: {}
   postgresql-data: {}
 services:
-  selenium-hub:
-    image: selenium/hub:3.141.59-vanadium
-    ports:
-      - "4444:4444"
-    networks: [eemessengernet]
-  chrome:
-    image: selenium/node-chrome:3.141.59-vanadium
-    volumes:
-      - /dev/shm:/dev/shm
-    depends_on:
-      - selenium-hub
-    environment:
-      HUB_HOST: selenium-hub
-    networks: [eemessengernet]
+#  selenium-hub:
+#    image: selenium/hub:3.141.59-vanadium
+#    ports:
+#      - "4444:4444"
+#    networks: [eemessengernet]
+#  chrome:
+#    image: selenium/node-chrome:3.141.59-vanadium
+#    volumes:
+#      - /dev/shm:/dev/shm
+#    depends_on:
+#      - selenium-hub
+#    environment:
+#      HUB_HOST: selenium-hub
+#    networks: [eemessengernet]
   postgresql:
     image: healthcheck/postgres:latest
     environment:

@@ -11,11 +11,6 @@
     <modelVersion>4.0.0</modelVersion>
     <artifactId>eemessengerapp</artifactId>
     <packaging>war</packaging>
-    <properties>
-        <maven-clean-plugin.version>3.1.0</maven-clean-plugin.version>
-        <struts2-convention-plugin.version>2.5.20</struts2-convention-plugin.version>
-
-    </properties>
 
     <dependencies>
         <dependency>
@@ -33,6 +28,12 @@
             <version>${struts2.version}</version>
         </dependency>
         <dependency>
+            <groupId>javax</groupId>
+            <artifactId>javaee-api</artifactId>
+            <version>${javaee-api.version}</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
             <groupId>javax.enterprise</groupId>
             <artifactId>cdi-api</artifactId>
             <version>2.0.SP1</version>
@@ -43,6 +44,37 @@
             <artifactId>log4j-core</artifactId>
         </dependency>
         <dependency>
+            <groupId>javax.persistence</groupId>
+            <artifactId>javax.persistence-api</artifactId>
+            <optional>true</optional>
+            <scope>provided</scope>
+            <version>${javax.persistence-api.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.liquibase</groupId>
+            <artifactId>liquibase-core</artifactId>
+            <version>${liquibase.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.liquibase</groupId>
+            <artifactId>liquibase-cdi</artifactId>
+            <version>${liquibase.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-core</artifactId>
+            <version>${hibernate-core.version}</version>
+            <scope>provided</scope>
+            <optional>true</optional>
+        </dependency>
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-entitymanager</artifactId>
+            <version>${hibernate-core.version}</version>
+            <scope>provided</scope>
+            <optional>true</optional>
+        </dependency>
+        <dependency>
             <groupId>org.postgresql</groupId>
             <artifactId>postgresql</artifactId>
             <version>${postgresql-driver.version}</version>
@@ -50,7 +82,6 @@
     </dependencies>
 
     <build>
-        <finalName>eemessenger</finalName>
         <plugins>
             <plugin>
                 <groupId>com.github.spotbugs</groupId>
@@ -71,6 +102,19 @@
                 <configuration>
                     <source>${java.version}</source>
                     <target>${java.version}</target>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-ejb-plugin</artifactId>
+                <version>3.0.1</version>
+                <configuration>
+                    <ejbVersion>3.0</ejbVersion>
+                    <archive>
+                        <manifest>
+                            <addClasspath>true</addClasspath>
+                        </manifest>
+                    </archive>
                 </configuration>
             </plugin>
         </plugins>
