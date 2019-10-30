@@ -14,6 +14,7 @@
 
     <properties>
         <postgresql-driver.version>9.4-1206-jdbc4</postgresql-driver.version>
+        <postgres.service>postgresql</postgres.service>
     </properties>
 
     <modules>

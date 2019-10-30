@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <artifactId>internship</artifactId>
+        <groupId>com.github.vmalaya.sigmasoftware</groupId>
+        <version>1.0.0-SNAPSHOT</version>
+    </parent>
+
+    <modelVersion>4.0.0</modelVersion>
+    <artifactId>eemessengertest</artifactId>
+    <packaging>pom</packaging>
+
+    <modules>
+        <module>eemessengertestapp</module>
+        <module>eemessengertestpostgres</module>
+        <module>eemessengerteste2e</module>
+        <module>eemessengertestcompose</module>
+    </modules>
+
+    <properties>
+        <encoding>UTF-8</encoding>
+        <project.build.sourceEncoding>${encoding}</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>${encoding}</project.reporting.outputEncoding>
+
+        <java.version>1.8</java.version>
+        <maven-war-plugin.version>3.2.3</maven-war-plugin.version>
+        <docker-maven-plugin.version>0.31.0</docker-maven-plugin.version>
+        <maven-compiler-plugin.version>3.8.1</maven-compiler-plugin.version>
+        <maven-resources-plugin.version>3.1.0</maven-resources-plugin.version>
+        <docker-compose-maven-plugin.version>2.5.1</docker-compose-maven-plugin.version>
+        <docker-repository.name>vmalaya</docker-repository.name>
+    </properties>
+
+    <build>
+        <defaultGoal>clean package docker:build</defaultGoal>
+        <!--  docker images -f=reference='vmalaya/*' -->
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>io.fabric8</groupId>
+                    <artifactId>docker-maven-plugin</artifactId>
+                    <version>${docker-maven-plugin.version}</version>
+                    <configuration>
+                        <follow>false</follow>
+                        <verbose>true</verbose>
+                        <useColor>true</useColor>
+                        <logDate>default</logDate>
+                        <autoPull>always</autoPull>
+                        <keepRunning>false</keepRunning>
+                        <watchInterval>500</watchInterval>
+                        <allContainers>true</allContainers>
+                        <removeVolumes>true</removeVolumes>
+                        <autoCreateCustomNetworks>false</autoCreateCustomNetworks>
+                        <images>
+                            <image>
+                                <name>${docker-repository.name}/${project.artifactId}:${project.version}</name>
+                            </image>
+                        </images>
+                    </configuration>
+                </plugin>
+
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-compiler-plugin</artifactId>
+                    <version>${maven-compiler-plugin.version}</version>
+                    <configuration>
+                        <source>${java.version}</source>
+                        <target>${java.version}</target>
+                    </configuration>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+    </build>
+</project>
