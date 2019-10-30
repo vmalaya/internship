@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <artifactId>eemessengertest</artifactId>
+        <groupId>com.github.vmalaya.sigmasoftware</groupId>
+        <version>1.0.0-SNAPSHOT</version>
+    </parent>
+
+    <modelVersion>4.0.0</modelVersion>
+    <artifactId>eemessengertestcompose</artifactId>
+    <packaging>pom</packaging>
+
+    
+    <build>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>com.dkanejs.maven.plugins</groupId>
+                    <artifactId>docker-compose-maven-plugin</artifactId>
+                    <version>${docker-compose-maven-plugin.version}</version>
+                    <configuration>
+                        <detail>true</detail>
+                        <verbose>false</verbose>
+                        <detachedMode>true</detachedMode>
+                        <ignorePullFailures>true</ignorePullFailures>
+                        <removeImagesType>local</removeImagesType>
+                        <removeImages>true</removeImages>
+                        <removeOrphans>true</removeOrphans>
+                        <removeVolumes>true</removeVolumes>
+                    </configuration>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+    </build>
+
+    <profiles>
+        <!-- mvn -pl trololo -P compose -->
+        <profile>
+            <id>compose-create</id>
+            <build>
+                <defaultGoal>resources:resources</defaultGoal>
+                <resources>
+                    <resource>
+                        <directory>./templates</directory>
+                        <filtering>true</filtering>
+                    </resource>
+                </resources>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-resources-plugin</artifactId>
+                        <version>${maven-resources-plugin.version}</version>
+                        <configuration>
+                            <delimiters>
+                                <delimiter>${*}</delimiter>
+                            </delimiters>
+                            <outputDirectory>./</outputDirectory>
+                            <overwrite>true</overwrite>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+        <!--
+            mvn -pl trololo -P up
+            mvn -pl trololo -P up,app
+            mvn -pl trololo -P up,e2e
+        -->
+        <profile>
+            <id>up</id>
+            <build>
+                <defaultGoal>docker-compose:up</defaultGoal>
+            </build>
+        </profile>
+        <!--
+            mvn -pl trololo -P down
+            mvn -pl trololo -P down,app
+            mvn -pl trololo -P down,e2e
+        -->
+        <profile>
+            <id>down</id>
+            <build>
+                <defaultGoal>docker-compose:down</defaultGoal>
+            </build>
+        </profile>
+        <!--
+            mvn -pl trololo -P app
+            mvn -pl trololo -P up,app
+            mvn -pl trololo -P down,app
+        -->
+        <profile>
+            <id>app</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>com.dkanejs.maven.plugins</groupId>
+                        <artifactId>docker-compose-maven-plugin</artifactId>
+                        <configuration>
+                            <composeFile>${project.basedir}/docker-compose.yml</composeFile>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+        <!--
+            mvn -pl trololo -P e2e
+            mvn -pl trololo -P up,e2e
+            mvn -pl trololo -P down,e2e
+        -->
+        <profile>
+            <id>e2e</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>com.dkanejs.maven.plugins</groupId>
+                        <artifactId>docker-compose-maven-plugin</artifactId>
+                        <configuration>
+                            <composeFile>${project.basedir}/docker-compose-e2e.yml</composeFile>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
+
+
+</project>

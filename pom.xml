@@ -60,6 +60,7 @@
         <module>strutsjpa</module>
         <module>eemessenger8</module>
         <module>eemessenger</module>
+        <module>eemessengertest</module>
     </modules>
 
     <build>
