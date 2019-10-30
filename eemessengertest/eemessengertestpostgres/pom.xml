@@ -3,13 +3,13 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
-        <artifactId>internship</artifactId>
+        <artifactId>eemessengertest</artifactId>
         <groupId>com.github.vmalaya.sigmasoftware</groupId>
         <version>1.0.0-SNAPSHOT</version>
     </parent>
 
     <modelVersion>4.0.0</modelVersion>
-    <artifactId>eemessenger8</artifactId>
+    <artifactId>eemessengertestpostgres</artifactId>
     <packaging>pom</packaging>
 
     <properties>
@@ -17,9 +17,13 @@
         <postgres.service>postgresql</postgres.service>
     </properties>
 
-    <modules>
-        <module>eemessengerapp8</module>
-        <module>eemessengere2e8</module>
-    </modules>
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>io.fabric8</groupId>
+                <artifactId>docker-maven-plugin</artifactId>
+            </plugin>
+        </plugins>
+    </build>
 
 </project>

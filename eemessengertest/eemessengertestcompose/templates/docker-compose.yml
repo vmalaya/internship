@@ -1,0 +1,33 @@
+version: '2.1'
+networks:
+  eemessengernet:
+    driver: bridge
+volumes:
+  postgresql-etc: {}
+  postgresql-data: {}
+services:
+  postgresql:
+    image: vmalaya/eemessengertestpostgres:${project.version}
+    environment:
+      POSTGRES_DB: eemessenger
+      POSTGRES_USER: eemessenger
+      POSTGRES_PASSWORD: eemessenger
+      POSTGRES_HOST: postgresql
+      POSTGRES_PORT: 5432
+    volumes:
+      - postgresql-data:/var/lib/postgresql:rw
+      - postgresql-etc:/etc/postgresql:rw
+    ports: ['5432']
+    networks: [eemessengernet]
+  app:
+    image: vmalaya/eemessengertestapp:${project.version}
+    ports: ['8080:8080']
+    environment:
+      POSTGRES_DB: eemessenger
+      POSTGRES_USER: eemessenger
+      POSTGRES_PASSWORD: eemessenger
+      POSTGRES_HOST: postgresql
+      POSTGRES_PORT: 5432
+    networks: [eemessengernet]
+    depends_on:
+      - postgresql
