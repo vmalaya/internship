@@ -7,27 +7,19 @@ volumes:
   postgresql-data: {}
 services:
   postgresql:
-    image: vmalaya/eemessengertestpostgres:${project.version}
-    environment:
-      POSTGRES_DB: eemessenger
-      POSTGRES_USER: eemessenger
-      POSTGRES_PASSWORD: eemessenger
-      POSTGRES_HOST: postgresql
-      POSTGRES_PORT: 5432
+    image: vmalaya/eemessengertestpostgres:1.0.0-SNAPSHOT
+    container_name: postgresql
     volumes:
       - postgresql-data:/var/lib/postgresql:rw
       - postgresql-etc:/etc/postgresql:rw
     ports: ['5432']
     networks: [eemessengernet]
+    hostname: postgresql
   app:
-    image: vmalaya/eemessengertestapp:${project.version}
+    image: vmalaya/eemessengertestapp:1.0.0-SNAPSHOT
+    container_name: app
     ports: ['8080:8080']
-    environment:
-      POSTGRES_DB: eemessenger
-      POSTGRES_USER: eemessenger
-      POSTGRES_PASSWORD: eemessenger
-      POSTGRES_HOST: postgresql
-      POSTGRES_PORT: 5432
     networks: [eemessengernet]
     depends_on:
       - postgresql
+    hostname: app

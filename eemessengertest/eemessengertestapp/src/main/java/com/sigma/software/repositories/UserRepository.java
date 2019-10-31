@@ -34,7 +34,7 @@ public class UserRepository {
         }
     }
     public List<String> findAllUsernames() {
-        TypedQuery<String> query = entityManager.createQuery("SELECT u.name from User as u", String.class);
+        TypedQuery<String> query = entityManager.createQuery("SELECT u.username from User as u", String.class);
         List<String> resultList = query.getResultList();
         return Collections.unmodifiableList(resultList);
     }
