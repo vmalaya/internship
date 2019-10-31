@@ -10,4 +10,9 @@
 !eemessenger/eemessengerapp/target/*.war
 !eemessenger/eemessengerdocker/jboss-eap-7.2/modules
 !eemessenger/eemessengerdocker/jboss-eap-7.2/standalone/configuration
+!eemessenger8/eemessengerapp8/jboss-eap-7.2/modules
+!eemessenger8/eemessengerapp8/jboss-eap-7.2/standalone/configuration
+!eemessenger8/eemessengerapp8/target/*.war
+!eemessengertest
+
 

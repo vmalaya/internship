@@ -11,15 +11,15 @@
                 <constraints nullable="false" />
             </column>
 
-            <column name="name" type="VARCHAR(60)">
+            <column name="username" type="VARCHAR(60)">
                 <constraints nullable="false" />
             </column>
         </createTable>
 
         <addPrimaryKey columnNames="id" constraintName="users_pkey" tableName="users"/>
 
-        <createIndex indexName="users_name_index" tableName="users">
-            <column name="name"/>
+        <createIndex indexName="users_username_index" tableName="users">
+            <column name="username"/>
         </createIndex>
     </changeSet>
 </databaseChangeLog>
