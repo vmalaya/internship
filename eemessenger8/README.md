@@ -4,6 +4,8 @@
 ```shell script
 mvnw -pl :eemessengerapp package docker:build docker:start
 
+open on http://127.0.0.1:8080/eemessenger
+
 mvnw -pl :eemessengerapp docker:stop docker:remove clean
 ```
 

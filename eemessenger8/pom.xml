@@ -18,7 +18,6 @@
 
     <modules>
         <module>eemessengerapp8</module>
-        <module>eemessengerdocker8</module>
         <module>eemessengere2e8</module>
     </modules>
 
