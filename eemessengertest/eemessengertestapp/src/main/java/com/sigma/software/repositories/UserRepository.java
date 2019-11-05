@@ -33,9 +33,14 @@ public class UserRepository {
             e.printStackTrace();
         }
     }
-    public List<String> findAllUsernames() {
-        TypedQuery<String> query = entityManager.createQuery("SELECT u.name from User as u", String.class);
-        List<String> resultList = query.getResultList();
+
+    public List<Long> findAllUsernames() {
+        TypedQuery<Long> query = entityManager.createQuery("SELECT u.id from User as u", Long.class);
+        List<Long> resultList = query.getResultList();
         return Collections.unmodifiableList(resultList);
+    }
+
+    public User findUser(Long userId) {
+        return entityManager.getReference(User.class, userId);
     }
 }

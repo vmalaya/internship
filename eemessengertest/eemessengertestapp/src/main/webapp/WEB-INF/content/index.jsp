@@ -11,6 +11,5 @@
         <s:textfield name="username" label="username"/>
         <s:submit value="Press me to save username"/>
     </s:form>
-    <s:property value="usernames"/>
 </body>
 </html>

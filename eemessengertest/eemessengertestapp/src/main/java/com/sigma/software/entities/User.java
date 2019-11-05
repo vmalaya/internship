@@ -1,6 +1,7 @@
 package com.sigma.software.entities;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Table(name = "users")
@@ -12,6 +13,12 @@ public class User {
 
     @Column(name = "name")
     private String name;
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "sender")
+    private List<Message> sentMessages;
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "recipient")
+    private List<Message> receivedMessages;
 
     public User() {
     }
@@ -34,6 +41,22 @@ public class User {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public List<Message> getSentMessages() {
+        return sentMessages;
+    }
+
+    public void setSentMessages(List<Message> sentMessages) {
+        this.sentMessages = sentMessages;
+    }
+
+    public List<Message> getReceivedMessages() {
+        return receivedMessages;
+    }
+
+    public void setReceivedMessages(List<Message> receivedMessages) {
+        this.receivedMessages = receivedMessages;
     }
 
     @Override
