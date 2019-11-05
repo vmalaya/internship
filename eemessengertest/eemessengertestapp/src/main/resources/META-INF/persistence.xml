@@ -3,6 +3,7 @@
     <persistence-unit name="com.sigma.software" transaction-type="JTA">
         <jta-data-source>java:jboss/datasources/ExampleDS</jta-data-source>
         <class>com.sigma.software.entities.User</class>
+        <class>com.sigma.software.entities.Message</class>
         <properties>
             <property name="hibernate.hbm2ddl.auto" value="update"/>
             <property name="hibernate.show_sql" value="true"/>

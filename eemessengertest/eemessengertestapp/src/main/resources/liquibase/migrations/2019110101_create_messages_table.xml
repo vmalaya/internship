@@ -22,6 +22,10 @@
             <column name="body" type="VARCHAR(100)">
                 <constraints nullable="false" />
             </column>
+
+            <column name="datetime" type="DATETIME">
+                <constraints nullable="false"/>
+            </column>
         </createTable>
 
         <addPrimaryKey columnNames="id" constraintName="messages_pkey" tableName="messages"/>
@@ -35,5 +39,10 @@
         <createIndex indexName="messages_body_index" tableName="messages">
             <column name="body"/>
         </createIndex>
+
+        <createIndex indexName="messages_datetime_index" tableName="messages">
+            <column name="datetime"/>
+        </createIndex>
+
     </changeSet>
 </databaseChangeLog>
