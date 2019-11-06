@@ -14,6 +14,9 @@
             <column name="username" type="VARCHAR(60)">
                 <constraints nullable="false" />
             </column>
+            <column name="password" type="VARCHAR(60)">
+                <constraints nullable="false"/>
+            </column>
         </createTable>
 
         <addPrimaryKey columnNames="id" constraintName="users_pkey" tableName="users"/>

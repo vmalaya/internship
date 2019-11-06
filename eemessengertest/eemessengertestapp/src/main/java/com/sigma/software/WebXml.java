@@ -23,7 +23,8 @@ import javax.servlet.annotation.WebInitParam;
                         description = "Set dev mode",
                         name = "struts.devMode",
                         value = "true"
-                )
+                ),
+
         }
 )
 public class WebXml extends StrutsPrepareAndExecuteFilter { }
