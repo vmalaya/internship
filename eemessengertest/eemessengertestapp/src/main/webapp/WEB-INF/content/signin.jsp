@@ -1,3 +1,4 @@
+<%@ taglib prefix="s" uri="/struts-tags" %>
 <%--
   Created by IntelliJ IDEA.
   User: valentyna.mala
@@ -8,9 +9,13 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
-    <title>Title</title>
+    <title>Sign in page</title>
 </head>
 <body>
-
+<form method="POST" action="j_security_check">
+    User Name: <input type="text" name="j_username" /><br />
+    Password: <input type="password" name="j_password" /><br />
+    <input type="submit" value="Login" />
+</form>
 </body>
 </html>

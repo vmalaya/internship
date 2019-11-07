@@ -3,10 +3,25 @@
          xmlns="http://java.sun.com/xml/ns/j2ee"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd">
+
+    <security-constraint>
+        <web-resource-collection>
+            <web-resource-name>All resources</web-resource-name>
+            <description>Protects all resources</description>
+            <url-pattern>/*</url-pattern>
+        </web-resource-collection>
+        <auth-constraint>
+            <role-name>WebAppUser</role-name>
+        </auth-constraint>
+    </security-constraint>
+
+    <security-role>
+        <role-name>WebAppUser</role-name>
+    </security-role>
     <login-config>
         <auth-method>FORM</auth-method>
         <form-login-config>
-            <form-login-page>content/signin.jsp</form-login-page>
+            <form-login-page>/WEB-INF/content/signin.jsp</form-login-page>
             <form-error-page>/error.xhtml</form-error-page>
         </form-login-config>
     </login-config>

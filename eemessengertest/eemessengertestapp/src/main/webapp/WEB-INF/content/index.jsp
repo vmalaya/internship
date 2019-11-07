@@ -9,7 +9,10 @@
 
     <s:form action="saveUsername" method="post" namespace="/">
         <s:textfield name="username" label="username"/>
+        <s:password name="password" label="password"/>
         <s:submit value="Press me to save username"/>
     </s:form>
+<s:a href="./signin.jsp">sign in</s:a>
+
 </body>
 </html>
