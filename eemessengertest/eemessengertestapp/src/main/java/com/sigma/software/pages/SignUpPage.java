@@ -12,14 +12,13 @@ import org.apache.struts2.convention.annotation.Results;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.naming.NamingException;
-import java.util.List;
 
 @Results({
         @Result(name = "success", location = "index.jsp")
 })
 @RequestScoped
 @Namespace("/")
-public class SignInPage extends ActionSupport {
+public class SignUpPage extends ActionSupport {
 
     private static final long serialVersionUID = 4026441208456426629L;
     @Inject
@@ -28,9 +27,9 @@ public class SignInPage extends ActionSupport {
 
     @Action("/saveUsername")
     public String execute() throws NamingException {
-        LogManager.getLogger().info("\n\n\n ...saving message...\n\n\n");
+        LogManager.getLogger().info("\n\n\n ...saving user...\n\n\n");
         userRepository.save(new User(username));
-        return "messenger";
+        return "signin";
     }
 
     public void setUsername(String name) {

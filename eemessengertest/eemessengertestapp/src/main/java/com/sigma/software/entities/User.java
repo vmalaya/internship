@@ -14,6 +14,9 @@ public class User {
     @Column(name = "name")
     private String name;
 
+    @Column
+    private String password;
+
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "sender")
     private List<Message> sentMessages;
 
@@ -41,6 +44,14 @@ public class User {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     public List<Message> getSentMessages() {
