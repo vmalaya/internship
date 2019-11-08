@@ -25,6 +25,11 @@ public class SignUpPage extends ActionSupport {
     private UserRepository userRepository;
     private String username;
 
+    @Action("/sign-up")
+    public String open(){
+        return SUCCESS;
+    }
+
     @Action("/saveUsername")
     public String execute() throws NamingException {
         LogManager.getLogger().info("\n\n\n ...saving user...\n\n\n");
