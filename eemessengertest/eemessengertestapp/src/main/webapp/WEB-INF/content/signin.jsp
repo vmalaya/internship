@@ -17,5 +17,6 @@
     Password: <input type="password" name="j_password" /><br />
     <input type="submit" value="Login" />
 </form>
+<a href="/eemessenger/sign-up">Sing up</a>
 </body>
 </html>
