@@ -1,5 +1,6 @@
 package com.sigma.software.repositories;
 
+import com.sigma.software.entities.Role;
 import com.sigma.software.entities.User;
 
 import javax.enterprise.context.ApplicationScoped;
@@ -27,6 +28,7 @@ public class UserRepository {
             e.printStackTrace();
         }
         entityManager.persist(user);
+        entityManager.merge(new Role("user", user));
         try {
             transaction.commit();
         } catch (RollbackException | HeuristicRollbackException | SystemException | HeuristicMixedException e) {

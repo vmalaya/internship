@@ -12,11 +12,11 @@
     <title>Sign in page</title>
 </head>
 <body>
-<form method="POST" action="j_security_check">
-    User Name: <input type="text" name="j_username" /><br />
-    Password: <input type="password" name="j_password" /><br />
-    <input type="submit" value="Login" />
-</form>
-<a href="/eemessenger/sign-up">Sing up</a>
+    <form method="POST" action="j_security_check">
+        User Name: <input type="text" name="j_username" /><br />
+        Password:  <input type="password" name="j_password" /><br />
+        <input type="submit" value="Login" />
+    </form>
+    <a href="/eemessenger">Sing up</a>
 </body>
 </html>

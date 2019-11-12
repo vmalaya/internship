@@ -7,6 +7,10 @@
     <title>Error</title>
 </head>
 <body>
-
+    <h1>Authentication Error</h1>
+    <p style="color: red">
+    Invalid username and/or password.
+    </p>
+    <p><a href="/eemessenger">Try again?</a></p>
 </body>
 </html>

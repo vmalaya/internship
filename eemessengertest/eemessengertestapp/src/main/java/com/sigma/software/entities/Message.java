@@ -15,7 +15,7 @@ public class Message {
     @JoinColumn(name = "from_id", referencedColumnName = "id")
     private User sender;
 
-    @ManyToOne(fetch =FetchType.EAGER, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinColumn(name = "to_id", referencedColumnName = "id")
     private User recipient;
 

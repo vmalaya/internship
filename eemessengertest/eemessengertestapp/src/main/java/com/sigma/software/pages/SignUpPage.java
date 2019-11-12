@@ -23,21 +23,20 @@ public class SignUpPage extends ActionSupport {
     private static final long serialVersionUID = 4026441208456426629L;
     @Inject
     private UserRepository userRepository;
-    private String username;
-
-    @Action("/sign-up")
-    public String open(){
-        return SUCCESS;
-    }
+    private User userBean;
 
     @Action("/saveUsername")
-    public String execute() throws NamingException {
+    public String input() throws NamingException {
         LogManager.getLogger().info("\n\n\n ...saving user...\n\n\n");
-        userRepository.save(new User(username));
-        return "signin";
+        userRepository.save(userBean);
+        return "send-message/messenger";
     }
 
-    public void setUsername(String name) {
-        this.username = name;
+    public User getUserBean() {
+        return userBean;
+    }
+
+    public void setUserBean(User userBean) {
+        this.userBean = userBean;
     }
 }

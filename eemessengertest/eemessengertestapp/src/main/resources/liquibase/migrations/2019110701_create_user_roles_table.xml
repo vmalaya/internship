@@ -10,11 +10,11 @@
                 <constraints nullable="false" />
             </column>
 
-            <column name="user_id" type="BIGINT">
-                <constraints nullable="false" />
-            </column>
             <column name="role" type="VARCHAR(60)" defaultValue="user">
                 <constraints nullable="false"/>
+            </column>
+            <column name="user_id" type="BIGINT">
+                <constraints nullable="false" />
             </column>
         </createTable>
 
@@ -26,6 +26,5 @@
         <createIndex indexName="user_roles_role_index" tableName="user_roles">
             <column name="role"/>
         </createIndex>
-
     </changeSet>
 </databaseChangeLog>
