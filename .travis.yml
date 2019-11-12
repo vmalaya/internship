@@ -69,7 +69,7 @@ jobs:
       name: run eemessanger8 e2e test
       before_script:
         - ./mvnw -pl :eemessengerapp8 package docker:build docker:start
-      script: ./mvnw -f ./eemessenger8/eemessengere2e8/pom.xml -Pe2e -DargLine="-Deemessenger.host=jboss -Dselenide.browser=chrome -Dselenide.remote=http://127.0.0.1:4444/wd/hub"
+      script: ./mvnw -f ./eemessenger8/eemessengere2e8/pom.xml -Pe2e -DargLine="-Deemessenger.host=eemessengernet -Dselenide.browser=chrome -Dselenide.remote=http://127.0.0.1:4444/wd/hub"
       after_script: ./mvnw -pl :eemessengerapp8 docker:stop docker:remove clean
 cache:
   packages: true
