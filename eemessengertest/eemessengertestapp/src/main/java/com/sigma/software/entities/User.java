@@ -23,6 +23,12 @@ public class User {
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "recipient")
     private List<Message> receivedMessages;
 
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
+    private List<Role> roles;
+
+    public User(String username, String password) {
+    }
+
     public User() {
     }
 
@@ -68,6 +74,14 @@ public class User {
 
     public void setReceivedMessages(List<Message> receivedMessages) {
         this.receivedMessages = receivedMessages;
+    }
+
+    public List<Role> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(List<Role> roles) {
+        this.roles = roles;
     }
 
     @Override

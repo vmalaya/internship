@@ -20,7 +20,7 @@ import java.util.List;
 @Namespace("/send-message")
 @Results({
         @Result(name = "input", location = "showMessages", type = "redirect"),
-        @Result(name = "success", location = "messenger.jsp")
+        @Result(name = "success", location = "send-message/messenger.jsp")
 })
 @RequestScoped
 public class MessagePage extends ActionSupport {
