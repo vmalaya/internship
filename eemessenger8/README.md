@@ -2,11 +2,12 @@
 ## Java Enterprise Edition application
 
 ```shell script
-mvnw -pl :eemessengerapp package docker:build docker:start
+mvnw -pl :eemessengerapp8 package docker:build docker:start
 
 open on http://127.0.0.1:8080/eemessenger
 
-mvnw -pl :eemessengerapp docker:stop docker:remove clean
+mvnw -f ./eemessenger8/eemessengere2e8/pom.xml -Pe2e -DargLine="-Deemessenger.host=eemessengernet -Dselenide.browser=chrome -Dselenide.remote=http://127.0.0.1:4444/wd/hub"
+mvnw -pl :eemessengerapp8 docker:stop docker:remove clean
 ```
 
 ### Project contains listed below technologies:

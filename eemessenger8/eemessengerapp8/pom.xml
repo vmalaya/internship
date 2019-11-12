@@ -13,7 +13,7 @@
     <packaging>war</packaging>
 
     <properties>
-        <jboss.port>8080 </jboss.port>
+        <jboss.port>8080</jboss.port>
         <selenium-hub.port>4444</selenium-hub.port>
         <jboss.service>jboss</jboss.service>
         <chrome.service>chrome</chrome.service>
