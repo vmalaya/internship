@@ -1,5 +1,6 @@
 package com.sigma.software.pages;
 
+import com.opensymphony.xwork2.ActionContext;
 import com.opensymphony.xwork2.ActionSupport;
 import com.sigma.software.entities.User;
 import com.sigma.software.repositories.UserRepository;
@@ -14,7 +15,8 @@ import javax.inject.Inject;
 import javax.naming.NamingException;
 
 @Results({
-        @Result(name = "success", location = "index.jsp")
+        @Result(name = "success", location = "index.jsp"),
+        @Result(name = "input", location = "index.jsp")
 })
 @RequestScoped
 @Namespace("/")

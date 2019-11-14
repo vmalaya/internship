@@ -14,5 +14,9 @@
     <a href="/eemessenger">Go back</a>
 
     <s:property value="messages"/>
+
+    <s:form action="sign-out" method="POST" name="/">
+        <s:submit value="Sign Out"/>
+    </s:form>
 </body>
 </html>
