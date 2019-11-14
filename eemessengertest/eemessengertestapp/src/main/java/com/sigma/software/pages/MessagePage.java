@@ -1,11 +1,12 @@
 package com.sigma.software.pages;
 
+import com.opensymphony.xwork2.ActionContext;
 import com.opensymphony.xwork2.ActionSupport;
 import com.sigma.software.entities.Message;
-import com.sigma.software.entities.User;
 import com.sigma.software.repositories.MessageRepository;
 import com.sigma.software.repositories.UserRepository;
 import org.apache.logging.log4j.LogManager;
+import org.apache.struts2.ServletActionContext;
 import org.apache.struts2.convention.annotation.Action;
 import org.apache.struts2.convention.annotation.Namespace;
 import org.apache.struts2.convention.annotation.Result;
@@ -14,6 +15,9 @@ import org.apache.struts2.convention.annotation.Results;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.naming.NamingException;
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.servlet.ServletException;
 import java.time.ZonedDateTime;
 import java.util.List;
 
@@ -48,6 +52,12 @@ public class MessagePage extends ActionSupport {
     public String execute() {
         messages = messageRepository.findAllMessages();
         return SUCCESS;
+    }
+
+    @Action("/sign-out")
+    public String signout() throws ServletException {
+        ServletActionContext.getRequest().logout();
+        return "index";
     }
 
     public void setSender(Long sender) {
