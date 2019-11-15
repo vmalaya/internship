@@ -1,6 +1,5 @@
 package com.sigma.software.pages;
 
-import com.opensymphony.xwork2.ActionContext;
 import com.opensymphony.xwork2.ActionSupport;
 import com.sigma.software.entities.User;
 import com.sigma.software.repositories.UserRepository;
