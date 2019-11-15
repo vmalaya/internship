@@ -27,4 +27,5 @@ import javax.servlet.annotation.WebInitParam;
 
         }
 )
-public class WebXml extends StrutsPrepareAndExecuteFilter { }
+public class WebXml extends StrutsPrepareAndExecuteFilter {
+}

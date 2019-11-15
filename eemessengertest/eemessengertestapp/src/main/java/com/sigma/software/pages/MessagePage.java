@@ -1,6 +1,5 @@
 package com.sigma.software.pages;
 
-import com.opensymphony.xwork2.ActionContext;
 import com.opensymphony.xwork2.ActionSupport;
 import com.sigma.software.entities.Message;
 import com.sigma.software.repositories.MessageRepository;
@@ -15,8 +14,6 @@ import org.apache.struts2.convention.annotation.Results;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.naming.NamingException;
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
 import javax.servlet.ServletException;
 import java.time.ZonedDateTime;
 import java.util.List;
