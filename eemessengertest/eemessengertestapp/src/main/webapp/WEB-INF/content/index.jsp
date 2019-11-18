@@ -7,8 +7,8 @@
 <body>
 <h1>Hello, It is EE messenger implementation!</h1>
 
-    <s:form action="saveUsername" method="post" namespace="/">
-        <s:textfield name="userBean.username" label="username"/>
+    <s:form action="saveUsername" method="post" namespace="/sign-up">
+        <s:textfield name="userBean.username" label="username" />
         <s:password name="userBean.password" label="password"/>
         <s:submit value="Press me to save username"/>
     </s:form>

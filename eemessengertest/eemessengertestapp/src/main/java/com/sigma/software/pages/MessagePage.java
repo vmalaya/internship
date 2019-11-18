@@ -37,6 +37,11 @@ public class MessagePage extends ActionSupport {
     @Inject
     private UserRepository userRepository;
 
+    @Action("/page")
+    public String open() {
+        return SUCCESS;
+    }
+
     @Action("/saveMessage")
     public String input() throws NamingException {
         LogManager.getLogger().info("\n\n\n ...saving message...\n\n\n");
