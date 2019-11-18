@@ -48,13 +48,17 @@ public class MessageRepository {
 
     public List<Message> findSentMessages(Long userId) {
         List<Message> resultList = entityManager.createQuery("select m from Message as m where m.sender.id = :userId",
-                                                             Message.class).setParameter("userId",userId).getResultList();
+                                                             Message.class)
+                                                .setParameter("userId", userId)
+                                                .getResultList();
         return Collections.unmodifiableList(resultList);
     }
 
     public List<Message> findReceivedMessages(Long userId) {
         List<Message> resultList = entityManager.createQuery("select m from Message as m where m.recipient.id = :userId",
-                                                             Message.class).setParameter("userId", userId).getResultList();
+                                                             Message.class)
+                                                .setParameter("userId", userId)
+                                                .getResultList();
         return Collections.unmodifiableList(resultList);
     }
 }
