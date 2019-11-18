@@ -1,7 +1,9 @@
 package com.sigma.software.repositories;
 
+import com.opensymphony.xwork2.ActionContext;
 import com.sigma.software.entities.Role;
 import com.sigma.software.entities.User;
+import org.apache.struts2.ServletActionContext;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.naming.InitialContext;
@@ -40,6 +42,15 @@ public class UserRepository {
         TypedQuery<Long> query = entityManager.createQuery("SELECT u.id from User as u", Long.class);
         List<Long> resultList = query.getResultList();
         return Collections.unmodifiableList(resultList);
+    }
+
+    public User getCurrentUser() {
+        String username = ServletActionContext.getRequest().getUserPrincipal().getName();
+        Long currentUserId = entityManager.createQuery("SELECT u.id from User as u where u.username =: currentUser",
+                                                     Long.class)
+                                        .setParameter("currentUser", username)
+                                        .getSingleResult();
+        return findUser(currentUserId);
     }
 
     public User findUser(Long userId) {
