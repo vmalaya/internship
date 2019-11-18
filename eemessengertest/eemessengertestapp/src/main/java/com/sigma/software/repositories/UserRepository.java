@@ -1,6 +1,5 @@
 package com.sigma.software.repositories;
 
-import com.opensymphony.xwork2.ActionContext;
 import com.sigma.software.entities.Role;
 import com.sigma.software.entities.User;
 import org.apache.struts2.ServletActionContext;
@@ -47,9 +46,9 @@ public class UserRepository {
     public User getCurrentUser() {
         String username = ServletActionContext.getRequest().getUserPrincipal().getName();
         Long currentUserId = entityManager.createQuery("SELECT u.id from User as u where u.username =: currentUser",
-                                                     Long.class)
-                                        .setParameter("currentUser", username)
-                                        .getSingleResult();
+                                                       Long.class)
+                                          .setParameter("currentUser", username)
+                                          .getSingleResult();
         return findUser(currentUserId);
     }
 
