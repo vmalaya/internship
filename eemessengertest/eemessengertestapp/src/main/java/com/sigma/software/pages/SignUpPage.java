@@ -15,10 +15,10 @@ import javax.naming.NamingException;
 
 @Results({
         @Result(name = "success", location = "index.jsp"),
-        @Result(name = "input", location = "index.jsp")
+        @Result(name = "input", type = "redirect", location = "/send-message/page")
 })
 @RequestScoped
-@Namespace("/")
+@Namespace("/sign-up")
 public class SignUpPage extends ActionSupport {
 
     private static final long serialVersionUID = 4026441208456426629L;
@@ -30,7 +30,7 @@ public class SignUpPage extends ActionSupport {
     public String input() throws NamingException {
         LogManager.getLogger().info("\n\n\n ...saving user...\n\n\n");
         userRepository.save(userBean);
-        return "send-message/messenger";
+        return INPUT;
     }
 
     public User getUserBean() {

@@ -11,11 +11,10 @@
         <s:textfield name="body" label="body"/>
         <s:submit value="Press me to save message"/>
     </s:form>
-    <a href="/eemessenger">Go back</a>
 
     <s:property value="messages"/>
 
-    <s:form action="sign-out" method="POST" name="/">
+    <s:form action="sign-out" method="POST" namespace="/send-message">
         <s:submit value="Sign Out"/>
     </s:form>
 </body>
