@@ -5,6 +5,7 @@
     <title>Messenger</title>
 </head>
 <body>
+You are log in as <s:property value="currentUser.username"/>
     <s:form action="saveMessage" method="POST" namespace="/send-message">
         <s:textfield name="sender" label="from"/>
         <s:textfield name="recipient" label="to"/>
@@ -17,5 +18,6 @@
     <s:form action="sign-out" method="POST" namespace="/send-message">
         <s:submit value="Sign Out"/>
     </s:form>
+
 </body>
 </html>

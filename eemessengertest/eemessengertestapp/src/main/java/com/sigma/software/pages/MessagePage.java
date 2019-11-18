@@ -2,6 +2,7 @@ package com.sigma.software.pages;
 
 import com.opensymphony.xwork2.ActionSupport;
 import com.sigma.software.entities.Message;
+import com.sigma.software.entities.User;
 import com.sigma.software.repositories.MessageRepository;
 import com.sigma.software.repositories.UserRepository;
 import org.apache.logging.log4j.LogManager;
@@ -31,6 +32,7 @@ public class MessagePage extends ActionSupport {
     private Long recipient;
     private String body;
     private List<Message> messages;
+    private User currentUser;
 
     @Inject
     private MessageRepository messageRepository;
@@ -39,6 +41,7 @@ public class MessagePage extends ActionSupport {
 
     @Action("/page")
     public String open() {
+        currentUser = userRepository.getCurrentUser();
         return SUCCESS;
     }
 
@@ -76,5 +79,9 @@ public class MessagePage extends ActionSupport {
 
     public List getMessages() {
         return messages;
+    }
+
+    public User getCurrentUser() {
+        return currentUser;
     }
 }
