@@ -1,6 +1,8 @@
 package com.sigma.software.entities;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.util.List;
 
 @Entity
@@ -11,9 +13,13 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "name")
-    private String name;
+    @NotNull
+    @Size(min = 1, message = "Username may not be empty")
+    @Column(name = "username")
+    private String username;
 
+    @NotNull
+    @Size(min = 1, message = "Password may not be empty")
     @Column
     private String password;
 
@@ -32,8 +38,8 @@ public class User {
     public User() {
     }
 
-    public User(String name) {
-        this.name = name;
+    public User(String username) {
+        this.username = username;
     }
 
     public Long getId() {
@@ -44,12 +50,12 @@ public class User {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
+    public String getUsername() {
+        return username;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     public String getPassword() {
@@ -88,7 +94,7 @@ public class User {
     public String toString() {
         return "User{" +
                 "id=" + id +
-                ", name='" + name + '\'' +
+                ", username='" + username + '\'' +
                 '}';
     }
 }

@@ -14,6 +14,7 @@ import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.naming.NamingException;
 import javax.servlet.ServletException;
+import javax.validation.Valid;
 
 @Results({
         @Result(name = "success", location = "index.jsp"),
@@ -26,6 +27,7 @@ public class SignUpPage extends ActionSupport {
     private static final long serialVersionUID = 4026441208456426629L;
     @Inject
     private UserRepository userRepository;
+    @Valid
     private User userBean;
 
     @Action("/saveUsername")
