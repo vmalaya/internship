@@ -29,7 +29,7 @@ import java.util.List;
 public class MessagePage extends ActionSupport {
     private static final long serialVersionUID = -6836296086197488826L;
 
-    private Long recipient;
+    private String recipientUsername;
     private String body;
     private List<Message> messages;
     private User currentUser;
@@ -52,7 +52,7 @@ public class MessagePage extends ActionSupport {
     @Action("/saveMessage")
     public String input() throws NamingException {
         LogManager.getLogger().info("\n\n\n ...saving message...\n\n\n");
-        messageRepository.save(new Message(currentUser, userRepository.findUser(recipient), body,
+        messageRepository.save(new Message(currentUser, userRepository.findUserByUsername(recipientUsername), body,
                                            ZonedDateTime.now()));
         return INPUT;
     }
@@ -69,8 +69,12 @@ public class MessagePage extends ActionSupport {
         return "index";
     }
 
-    public void setRecipient(Long recipient) {
-        this.recipient = recipient;
+    public String getRecipientUsername() {
+        return recipientUsername;
+    }
+
+    public void setRecipientUsername(String recipientUsername) {
+        this.recipientUsername = recipientUsername;
     }
 
     public void setBody(String body) {

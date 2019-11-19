@@ -7,8 +7,7 @@
 <body>
 You are login as <s:property value="currentUser"/>
     <s:form action="saveMessage" method="POST" namespace="/send-message">
-<%--        <s:textfield name="sender" label="from"/>--%>
-        <s:textfield name="recipient" label="to"/>
+        <s:textfield name="recipientUsername" label="to"/>
         <s:textfield name="body" label="body"/>
         <s:submit value="Press me to save message"/>
     </s:form>
