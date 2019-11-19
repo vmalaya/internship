@@ -29,7 +29,10 @@ public class MessageRepository {
         }
         message.setDateTime(ZonedDateTime.now());
         User sender = message.getSender();
-        sender.setSentMessages(findSentMessages(sender.getId()));
+        // sender.setSentMessages(findSentMessages(sender.getId()));
+        Long senderId = sender.getId();
+        List<Message> sentMessages = findSentMessages(senderId);
+        sender.setSentMessages(sentMessages);
         User recipient = message.getRecipient();
         recipient.setReceivedMessages(findReceivedMessages(recipient.getId()));
         entityManager.merge(message);
