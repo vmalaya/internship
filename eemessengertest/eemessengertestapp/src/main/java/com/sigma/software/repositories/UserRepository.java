@@ -45,14 +45,18 @@ public class UserRepository {
 
     public User getCurrentUser() {
         String username = ServletActionContext.getRequest().getUserPrincipal().getName();
-        Long currentUserId = entityManager.createQuery("SELECT u.id from User as u where u.username =: currentUser",
-                                                       Long.class)
-                                          .setParameter("currentUser", username)
-                                          .getSingleResult();
-        return findUser(currentUserId);
+        return findUserByUsername(username);
     }
 
     public User findUser(Long userId) {
         return entityManager.getReference(User.class, userId);
+    }
+
+    public User findUserByUsername(String username) {
+        Long userId = entityManager.createQuery("SELECT u.id from User as u where u.username =: username",
+                                                       Long.class)
+                                          .setParameter("username", username)
+                                          .getSingleResult();
+        return findUser(userId);
     }
 }
