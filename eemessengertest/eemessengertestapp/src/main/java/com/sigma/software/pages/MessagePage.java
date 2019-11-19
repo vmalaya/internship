@@ -59,7 +59,7 @@ public class MessagePage extends ActionSupport {
 
     @Action("/showMessages")
     public String execute() {
-        messages = messageRepository.findAllMessages();
+        messages = messageRepository.findMessages(currentUser);
         return SUCCESS;
     }
 

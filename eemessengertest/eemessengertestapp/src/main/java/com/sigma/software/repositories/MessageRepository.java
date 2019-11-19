@@ -64,4 +64,12 @@ public class MessageRepository {
                                                 .getResultList();
         return Collections.unmodifiableList(resultList);
     }
+
+    public List<Message> findMessages(User user) {
+        List<Message> messages = entityManager.createQuery("select m from Message as m where  m.sender.id = :id or m.recipient.id =:id",
+                                         Message.class)
+                               .setParameter("id", user.getId())
+                               .getResultList();
+        return Collections.unmodifiableList(messages);
+    }
 }
