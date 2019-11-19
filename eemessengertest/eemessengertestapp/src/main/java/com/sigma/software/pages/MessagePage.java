@@ -40,7 +40,7 @@ public class MessagePage extends ActionSupport {
     private UserRepository userRepository;
 
     @PostConstruct
-    public void init(){
+    public void init() {
         currentUser = userRepository.getCurrentUser();
     }
 

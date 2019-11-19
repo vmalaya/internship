@@ -23,6 +23,16 @@ import javax.servlet.annotation.WebInitParam;
                         description = "Set dev mode",
                         name = "struts.devMode",
                         value = "true"
+                ),
+                @WebInitParam(
+                        description = "Set validation provider class",
+                        name = "struts.beanValidation.providerClass",
+                        value = "org.hibernate.validator.HibernateValidator"
+                ),
+                @WebInitParam(
+                        description = "Ignore xml configuration",
+                        name = "struts.beanValidation.ignoreXMLConfiguration",
+                        value = "false"
                 )
         }
 )

@@ -19,6 +19,7 @@
         <JBOSS_HOME>/home/jboss/jboss-eap-7.2</JBOSS_HOME>
         <jboss.image>daggerok/jboss-eap-7.2:7.2.0-alpine</jboss.image>
         <postgresql-driver.version>9.4-1206-jdbc4</postgresql-driver.version>
+        <struts2-bean-validation-plugin.version>2.5.20</struts2-bean-validation-plugin.version>
     </properties>
 
     <dependencies>
@@ -94,6 +95,12 @@
             <version>3.0.1</version>
             <scope>provided</scope>
         </dependency>
+        <dependency>
+            <groupId>org.apache.struts</groupId>
+            <artifactId>struts2-bean-validation-plugin</artifactId>
+            <version>${struts2-bean-validation-plugin.version}</version>
+        </dependency>
+
     </dependencies>
 
     <build>
