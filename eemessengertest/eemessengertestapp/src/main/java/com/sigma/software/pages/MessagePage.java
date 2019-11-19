@@ -12,6 +12,7 @@ import org.apache.struts2.convention.annotation.Namespace;
 import org.apache.struts2.convention.annotation.Result;
 import org.apache.struts2.convention.annotation.Results;
 
+import javax.annotation.PostConstruct;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.naming.NamingException;
@@ -28,7 +29,6 @@ import java.util.List;
 public class MessagePage extends ActionSupport {
     private static final long serialVersionUID = -6836296086197488826L;
 
-    private Long sender;
     private Long recipient;
     private String body;
     private List<Message> messages;
@@ -39,16 +39,20 @@ public class MessagePage extends ActionSupport {
     @Inject
     private UserRepository userRepository;
 
+    @PostConstruct
+    public void init(){
+        currentUser = userRepository.getCurrentUser();
+    }
+
     @Action("/page")
     public String open() {
-        currentUser = userRepository.getCurrentUser();
         return SUCCESS;
     }
 
     @Action("/saveMessage")
     public String input() throws NamingException {
         LogManager.getLogger().info("\n\n\n ...saving message...\n\n\n");
-        messageRepository.save(new Message(userRepository.findUser(sender), userRepository.findUser(recipient), body,
+        messageRepository.save(new Message(currentUser, userRepository.findUser(recipient), body,
                                            ZonedDateTime.now()));
         return INPUT;
     }
@@ -63,10 +67,6 @@ public class MessagePage extends ActionSupport {
     public String signout() throws ServletException {
         ServletActionContext.getRequest().logout();
         return "index";
-    }
-
-    public void setSender(Long sender) {
-        this.sender = sender;
     }
 
     public void setRecipient(Long recipient) {
