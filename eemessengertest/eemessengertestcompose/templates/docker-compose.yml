@@ -23,3 +23,8 @@ services:
     depends_on:
       - postgresql
     hostname: app
+  healthcheck:
+    image: alpine
+    depends_on:
+      app:
+        condition: service_healthy
