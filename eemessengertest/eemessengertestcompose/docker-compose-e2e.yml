@@ -38,4 +38,10 @@ services:
       - postgresql
       - chrome
     hostname: app
+  healthcheck:
+    image: alpine
+    depends_on:
+      app:
+        condition: service_healthy
+
 
