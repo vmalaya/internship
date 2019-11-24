@@ -18,12 +18,15 @@ import javax.inject.Inject;
 import javax.naming.NamingException;
 import javax.servlet.ServletException;
 import java.time.ZonedDateTime;
+import java.util.LinkedList;
 import java.util.List;
 
 @Namespace("/send-message")
 @Results({
-        @Result(name = "input", location = "showMessages", type = "redirect"),
-        @Result(name = "success", location = "send-message/messenger.jsp")
+        @Result(name = "input", location = "contactsList", type = "redirect"),
+        @Result(name = "success", location = "send-message/messenger.jsp"),
+        @Result(name = "logout", type = "redirect", location = "/send-message/page")
+
 })
 @RequestScoped
 public class MessagePage extends ActionSupport {
@@ -33,6 +36,7 @@ public class MessagePage extends ActionSupport {
     private String body;
     private List<Message> messages;
     private User currentUser;
+    private List<User> contactsList;
 
     @Inject
     private MessageRepository messageRepository;
@@ -42,6 +46,7 @@ public class MessagePage extends ActionSupport {
     @PostConstruct
     public void init() {
         currentUser = userRepository.getCurrentUser();
+        messages = messageRepository.findMessages(currentUser);
     }
 
     @Action("/page")
@@ -57,16 +62,35 @@ public class MessagePage extends ActionSupport {
         return INPUT;
     }
 
-    @Action("/showMessages")
-    public String execute() {
-        messages = messageRepository.findMessages(currentUser);
+//    @Action("/showMessages")
+//    public String execute() {
+//        messages = messageRepository.findMessages(currentUser);
+//        return SUCCESS;
+//    }
+
+    @Action("/contactsList")
+    public String execute(){
+        contactsList = new LinkedList<User>();
+        for (Message message: messages) {
+            User contact = message.getSender();
+            if(!contact.equals(currentUser)){
+                if(!contactsList.contains(contact)){
+                    contactsList.add(contact);
+                }
+            }else{
+                contact = message.getRecipient();
+                if(!contactsList.contains(contact)){
+                    contactsList.add(contact);
+                }
+            }
+        }
         return SUCCESS;
     }
 
     @Action("/sign-out")
     public String signout() throws ServletException {
         ServletActionContext.getRequest().logout();
-        return "index";
+        return "logout";
     }
 
     public String getRecipientUsername() {
@@ -87,5 +111,9 @@ public class MessagePage extends ActionSupport {
 
     public User getCurrentUser() {
         return currentUser;
+    }
+
+    public List<User> getContactsList(){
+        return contactsList;
     }
 }
