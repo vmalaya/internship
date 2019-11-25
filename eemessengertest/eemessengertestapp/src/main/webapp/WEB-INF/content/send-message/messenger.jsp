@@ -11,7 +11,7 @@
                 You are login as <s:property value="currentUser"/>
                 <c:forEach items="${contactsList}" var="contact">
                     <li>
-                        ${contact.username}
+                       ${contact.username}
                     </li>
                 </c:forEach>
             </div>
@@ -28,6 +28,9 @@
             <s:form action="sign-out" method="POST" namespace="/send-message">
                 <s:submit class="ml-auto btn btn-warning" value="Sign Out"/>
             </s:form>
+            <s:form action="chat" method="POST" namespace="/send-message">
+            </s:form>
+                <s:property value="chat"/>
         </div>
     </div>
 

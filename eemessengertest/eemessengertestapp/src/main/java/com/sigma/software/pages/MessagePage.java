@@ -35,6 +35,8 @@ public class MessagePage extends ActionSupport {
     private List<Message> messages;
     private User currentUser;
     private List<User> contactsList;
+    // private User contact;
+    private List<Message> chat;
 
     @Inject
     private MessageRepository messageRepository;
@@ -62,6 +64,12 @@ public class MessagePage extends ActionSupport {
         return INPUT;
     }
 
+    @Action("/sign-out")
+    public String signout() throws ServletException {
+        ServletActionContext.getRequest().logout();
+        return INPUT;
+    }
+
     public String getContacts() {
         for (Message message : messages) {
             if (message.getSender().getUsername().equals(currentUser.getUsername())) {
@@ -74,10 +82,22 @@ public class MessagePage extends ActionSupport {
         return SUCCESS;
     }
 
-    @Action("/sign-out")
-    public String signout() throws ServletException {
-        ServletActionContext.getRequest().logout();
-        return INPUT;
+    @Action("/chat")
+    public String chat() {
+        User contact = userRepository.findUserByUsername(recipientUsername);
+        for (Message message : messages) {
+            if (message.getSender().getUsername().equals(currentUser.getUsername())) {
+                if (message.getRecipient().getUsername().equals(contact.getUsername())) {
+                    chat.add(message);
+                }
+            } else if (message.getSender().getUsername().equals(contact.getUsername())) {
+                if (message.getRecipient().getUsername().equals(currentUser.getUsername())) {
+                    chat.add(message);
+                }
+            }
+        }
+        LogManager.getLogger().info("\n\n\n " + chat + "\n\n\n");
+        return SUCCESS;
     }
 
     public String getRecipientUsername() {
@@ -102,5 +122,17 @@ public class MessagePage extends ActionSupport {
 
     public List<User> getContactsList() {
         return contactsList;
+    }
+
+    // public void setContact(User contact) {
+    //     this.contact = contact;
+    // }
+
+    public List<Message> getChat() {
+        return chat;
+    }
+
+    public void setChat(List<Message> chat) {
+        this.chat = chat;
     }
 }
