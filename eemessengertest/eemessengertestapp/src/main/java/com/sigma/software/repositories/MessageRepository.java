@@ -9,7 +9,6 @@ import javax.naming.NamingException;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
-import javax.persistence.TypedQuery;
 import javax.transaction.*;
 import java.time.ZonedDateTime;
 import java.util.Collections;
@@ -29,7 +28,6 @@ public class MessageRepository {
         }
         message.setDateTime(ZonedDateTime.now());
         User sender = message.getSender();
-        // sender.setSentMessages(findSentMessages(sender.getId()));
         Long senderId = sender.getId();
         List<Message> sentMessages = findSentMessages(senderId);
         sender.setSentMessages(sentMessages);
@@ -41,12 +39,6 @@ public class MessageRepository {
         } catch (RollbackException | HeuristicRollbackException | SystemException | HeuristicMixedException e) {
             e.printStackTrace();
         }
-    }
-
-    public List<Message> findAllMessages() {
-        TypedQuery<Message> query = entityManager.createQuery("SELECT m from Message as m", Message.class);
-        List<Message> resultList = query.getResultList();
-        return Collections.unmodifiableList(resultList);
     }
 
     public List<Message> findSentMessages(Long userId) {
@@ -66,10 +58,11 @@ public class MessageRepository {
     }
 
     public List<Message> findMessages(User user) {
-        List<Message> messages = entityManager.createQuery("select m from Message as m where  m.sender.id = :id or m.recipient.id =:id",
-                                         Message.class)
-                               .setParameter("id", user.getId())
-                               .getResultList();
+        List<Message> messages = entityManager.createQuery(
+                "select m from Message as m where  m.sender.id = :id or m.recipient.id =:id",
+                Message.class)
+                                              .setParameter("id", user.getId())
+                                              .getResultList();
         return Collections.unmodifiableList(messages);
     }
 }
