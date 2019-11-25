@@ -7,14 +7,14 @@
 <div class="container d-flex align-items-center justify-content-center">
     <div class="card">
         <div class="card-header">
-            <div class="label">
+            <ul class="label">
                 You are login as <s:property value="currentUser"/>
                 <c:forEach items="${contactsList}" var="contact">
                     <li>
                        ${contact.username}
                     </li>
                 </c:forEach>
-            </div>
+            </ul>
 
         </div>
         <div class="card-body">
@@ -30,11 +30,25 @@
             </s:form>
             <s:form action="chat" method="POST" namespace="/send-message">
             </s:form>
+<%--            <s:submit type="button" />--%>
                 <s:property value="chat"/>
         </div>
     </div>
 
 </div>
+<script>
+    var contacts = document.querySelectorAll('.label li');
+    contacts.forEach(function (item) {
+
+        item.addEventListener('click', function() {
+                var date = new Date();
+                var DAYS = 30;
+                date.setTime(date.getTime()+(DAYS*24*60*60*1000));
+                var expires = "; expires="+date.toGMTString();
+                document.cookie = "clickedUser=" + item.innerText + expires;
+        });
+    });
+</script>
 
 </body>
 <head>
