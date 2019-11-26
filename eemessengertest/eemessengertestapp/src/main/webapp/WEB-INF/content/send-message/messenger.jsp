@@ -5,28 +5,32 @@
 <html>
 <body class="max-vh-100 overflow-hidden">
 <div class="container d-flex align-items-center justify-content-center">
-    <div class="card">
-        <div class="card-header">
-            <ul class="label">
-                You are login as <s:property value="currentUser"/>
+    <div class="card-msg d-flex vw-80 flex-wrap">
+        <div class="card-header w-25 border flex-column">
+            <h4 class="d-flex text-white mb-2 p-2 border">
+                <s:property value="currentUser" />
+            </h4>
+            <ul class="label d-flex flex-column pl-0 mb-0">
                 <c:forEach items="${contactsList}" var="contact">
-                    <li>
-                        <a href="chat">
+                    <li class="w-100">
+                        <a class="d-flex w-100 pt-2 pb-2 text-white border" href="chat">
                                 ${contact.username}
                         </a>
                     </li>
                 </c:forEach>
             </ul>
-
         </div>
-        <div class="card-body">
-            <s:form action="saveMessage" method="POST" namespace="/send-message">
-                <s:textfield class="form-control" name="recipientUsername" label="to"/>
-                <s:textfield class="form-control" name="body" label="body"/>
-                <s:submit class="ml-auto btn btn-warning" value="Press me to save message"/>
-            </s:form>
+        <div class="card-body w-75 d-flex flex-column align-items-stretch">
+            <div class="card-chat-field">Here will be messages</div>
+            <div class="card-msg-field d-flex w-100 align-self-end">
+                <s:form action="saveMessage" method="POST" namespace="/send-message">
+                    <s:textfield class="form-control" name="recipientUsername" label="to" placeholder="username" />
+                    <s:textfield class="form-control" name="body" label="body" placeholder="type in here" />
+                    <s:submit class="ml-auto btn btn-warning" value="Send" />
+                </s:form>
+            </div>
         </div>
-        <div class="card-footer">
+        <div class="card-footer w-100">
             <s:form action="sign-out" method="POST" namespace="/send-message">
                 <s:submit class="ml-auto btn btn-warning" value="Sign Out"/>
             </s:form>
