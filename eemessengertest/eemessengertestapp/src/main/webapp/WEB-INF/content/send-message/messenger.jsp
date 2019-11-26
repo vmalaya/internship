@@ -11,7 +11,9 @@
                 You are login as <s:property value="currentUser"/>
                 <c:forEach items="${contactsList}" var="contact">
                     <li>
-                       ${contact.username}
+                        <a href="chat">
+                                ${contact.username}
+                        </a>
                     </li>
                 </c:forEach>
             </ul>
@@ -28,10 +30,10 @@
             <s:form action="sign-out" method="POST" namespace="/send-message">
                 <s:submit class="ml-auto btn btn-warning" value="Sign Out"/>
             </s:form>
-            <s:form action="chat" method="POST" namespace="/send-message">
-            </s:form>
-<%--            <s:submit type="button" />--%>
-                <s:property value="chat"/>
+            <%--            <s:form action="chat" method="POST" namespace="/send-message">--%>
+            <%--            </s:form>--%>
+            <%--            <s:submit type="button" />--%>
+            <s:property value="chat"/>
         </div>
     </div>
 
@@ -40,12 +42,12 @@
     var contacts = document.querySelectorAll('.label li');
     contacts.forEach(function (item) {
 
-        item.addEventListener('click', function() {
-                var date = new Date();
-                var DAYS = 30;
-                date.setTime(date.getTime()+(DAYS*24*60*60*1000));
-                var expires = "; expires="+date.toGMTString();
-                document.cookie = "clickedUser=" + item.innerText + expires;
+        item.addEventListener('click', function () {
+            var date = new Date();
+            var DAYS = 30;
+            date.setTime(date.getTime() + (DAYS * 24 * 60 * 60 * 1000));
+            var expires = "; expires=" + date.toGMTString();
+            document.cookie = "clickedUser=" + item.innerText + expires;
         });
     });
 </script>

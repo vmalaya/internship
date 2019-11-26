@@ -17,13 +17,17 @@ import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.naming.NamingException;
 import javax.servlet.ServletException;
+import javax.servlet.http.Cookie;
 import java.time.ZonedDateTime;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 
 @Namespace("/send-message")
 @Results({
         @Result(name = "input", type = "redirect", location = "/send-message/page"),
+        @Result(name = "view", type = "redirect", location = "/send-message/chat"),
         @Result(name = "success", location = "send-message/messenger.jsp")
 })
 @RequestScoped
@@ -35,7 +39,6 @@ public class MessagePage extends ActionSupport {
     private List<Message> messages;
     private User currentUser;
     private List<User> contactsList;
-    // private User contact;
     private List<Message> chat;
 
     @Inject
@@ -47,12 +50,12 @@ public class MessagePage extends ActionSupport {
     public void init() {
         currentUser = userRepository.getCurrentUser();
         messages = messageRepository.findMessages(currentUser);
-        contactsList = new LinkedList<>();
+        contactsList = getContacts();
     }
 
     @Action("/page")
     public String open() {
-        return getContacts();
+        return SUCCESS;
     }
 
     @Action("/saveMessage")
@@ -61,7 +64,7 @@ public class MessagePage extends ActionSupport {
         User recipient = userRepository.findUserByUsername(recipientUsername);
         messageRepository.save(new Message(currentUser, recipient, body,
                                            ZonedDateTime.now()));
-        return INPUT;
+        return "view";
     }
 
     @Action("/sign-out")
@@ -70,7 +73,33 @@ public class MessagePage extends ActionSupport {
         return INPUT;
     }
 
-    public String getContacts() {
+    @Action("/chat")
+    public String chat() {
+        chat = new LinkedList<>();
+        Cookie[] cookies = ServletActionContext.getRequest().getCookies();
+        HashMap<String, String> hashMap = new HashMap<>();
+        for (Cookie c : cookies) {
+            hashMap.put(c.getName(), c.getValue());
+        }
+        String clickedUser = hashMap.get("clickedUser");
+        LogManager.getLogger().info("\n\n\n " + clickedUser + "\n\n\n");
+        for (Message message : messages) {
+            if (message.getSender().getUsername().equals(currentUser.getUsername())) {
+                if (message.getRecipient().getUsername().equals(clickedUser)) {
+                    chat.add(message);
+                }
+            } else if (message.getSender().getUsername().equals(clickedUser)) {
+                if (message.getRecipient().getUsername().equals(currentUser.getUsername())) {
+                    chat.add(message);
+                }
+            }
+        }
+        LogManager.getLogger().info("\n\n\n " + chat + "\n\n\n");
+        return SUCCESS;
+    }
+
+    public List<User> getContacts() {
+        ArrayList contactsList = new ArrayList();
         for (Message message : messages) {
             if (message.getSender().getUsername().equals(currentUser.getUsername())) {
                 if (!contactsList.contains(message.getRecipient())) contactsList.add(message.getRecipient());
@@ -79,25 +108,7 @@ public class MessagePage extends ActionSupport {
             }
         }
         LogManager.getLogger().info("\n\n\n " + contactsList.toString() + " \n\n");
-        return SUCCESS;
-    }
-
-    @Action("/chat")
-    public String chat() {
-        User contact = userRepository.findUserByUsername(recipientUsername);
-        for (Message message : messages) {
-            if (message.getSender().getUsername().equals(currentUser.getUsername())) {
-                if (message.getRecipient().getUsername().equals(contact.getUsername())) {
-                    chat.add(message);
-                }
-            } else if (message.getSender().getUsername().equals(contact.getUsername())) {
-                if (message.getRecipient().getUsername().equals(currentUser.getUsername())) {
-                    chat.add(message);
-                }
-            }
-        }
-        LogManager.getLogger().info("\n\n\n " + chat + "\n\n\n");
-        return SUCCESS;
+        return contactsList;
     }
 
     public String getRecipientUsername() {
@@ -123,10 +134,6 @@ public class MessagePage extends ActionSupport {
     public List<User> getContactsList() {
         return contactsList;
     }
-
-    // public void setContact(User contact) {
-    //     this.contact = contact;
-    // }
 
     public List<Message> getChat() {
         return chat;
