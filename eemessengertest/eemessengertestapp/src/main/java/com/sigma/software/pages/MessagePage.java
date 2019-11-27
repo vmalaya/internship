@@ -33,6 +33,7 @@ import java.util.List;
 @RequestScoped
 public class MessagePage extends ActionSupport {
     private static final long serialVersionUID = -6836296086197488826L;
+    private static Boolean savedMessage = false;
 
     private String recipientUsername;
     private String body;
@@ -64,6 +65,8 @@ public class MessagePage extends ActionSupport {
         User recipient = userRepository.findUserByUsername(recipientUsername);
         messageRepository.save(new Message(currentUser, recipient, body,
                                            ZonedDateTime.now()));
+        ServletActionContext.getResponse().addCookie(new Cookie("recipient", recipientUsername));
+        savedMessage = true;
         return "view";
     }
 
@@ -76,25 +79,15 @@ public class MessagePage extends ActionSupport {
     @Action("/chat")
     public String chat() {
         chat = new LinkedList<>();
-        Cookie[] cookies = ServletActionContext.getRequest().getCookies();
-        HashMap<String, String> hashMap = new HashMap<>();
-        for (Cookie c : cookies) {
-            hashMap.put(c.getName(), c.getValue());
-        }
-        String clickedUser = hashMap.get("clickedUser");
-        LogManager.getLogger().info("\n\n\n " + clickedUser + "\n\n\n");
+        String relatedChatUser = findRelatedChatUser(savedMessage);
+        savedMessage = false;
         for (Message message : messages) {
             if (message.getSender().getUsername().equals(currentUser.getUsername())) {
-                if (message.getRecipient().getUsername().equals(clickedUser)) {
-                    chat.add(message);
-                }
-            } else if (message.getSender().getUsername().equals(clickedUser)) {
-                if (message.getRecipient().getUsername().equals(currentUser.getUsername())) {
-                    chat.add(message);
-                }
+                if (message.getRecipient().getUsername().equals(relatedChatUser)) chat.add(message);
+            } else if (message.getSender().getUsername().equals(relatedChatUser)) {
+                if (message.getRecipient().getUsername().equals(currentUser.getUsername())) chat.add(message);
             }
         }
-        LogManager.getLogger().info("\n\n\n " + chat + "\n\n\n");
         return SUCCESS;
     }
 
@@ -107,8 +100,27 @@ public class MessagePage extends ActionSupport {
                 if (!contactsList.contains(message.getSender())) contactsList.add(message.getSender());
             }
         }
-        LogManager.getLogger().info("\n\n\n " + contactsList.toString() + " \n\n");
         return contactsList;
+    }
+
+    private String getCookieValue(String cookieName) {
+        Cookie[] cookies = ServletActionContext.getRequest().getCookies();
+        HashMap<String, String> hashMap = new HashMap<>();
+        for (Cookie c : cookies) {
+            hashMap.put(c.getName(), c.getValue());
+        }
+        LogManager.getLogger().info("\n\n\n" + "Cookies\n" + hashMap + "\n\n\n");
+        return hashMap.get(cookieName);
+    }
+
+    private String findRelatedChatUser(Boolean savedMessage) {
+        String cookieName;
+        if (savedMessage.equals(true)) {
+            cookieName = "recipient";
+        } else cookieName = "clickedUser";
+        String relatedUser = getCookieValue(cookieName);
+        LogManager.getLogger().info("\n\n\n " + relatedUser + "\n\n\n");
+        return relatedUser;
     }
 
     public String getRecipientUsername() {
