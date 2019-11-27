@@ -34,7 +34,7 @@ public class SignUpPage extends ActionSupport {
     public String input() throws NamingException, ServletException {
         LogManager.getLogger().info("\n\n\n ...saving user...\n\n\n");
         userRepository.save(userBean);
-        ServletActionContext.getRequest().login(userBean.getUsername(), userBean.getUsername());
+        ServletActionContext.getRequest().login(userBean.getUsername(), userBean.getPassword());
         return INPUT;
     }
 
