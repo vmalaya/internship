@@ -205,3 +205,32 @@ input:focus {
     /*overflow-y: scroll;*/
 }
 
+#sign-out {
+    margin-bottom: 0;
+}
+
+.card-header .card-footer .form {
+    width: 100%;
+}
+
+.card-header .card-footer form,
+.card-header .card-footer table,
+.card-header .card-footer tr,
+.card-header .card-footer tbody,
+.card-header .card-footer td,
+.card-header .card-footer .formButton {
+    width: 100%;
+    display: flex;
+}
+
+li a {
+    background-color: transparent;
+    text-decoration: none!important;
+    transition: color 0.3s ease, background-color 0.3s ease;
+    cursor: pointer;
+}
+
+li:hover a {
+    color: black !important;
+    background-color: rgba(255, 255, 255, 0.4);
+}

@@ -6,22 +6,27 @@
 <body class="max-vh-100 overflow-hidden">
 <div class="container d-flex align-items-center justify-content-center">
     <div class="card-msg d-flex vw-80 flex-wrap">
-        <div class="card-header w-25 flex-column border-right">
+        <div class="card-header w-25 d-flex flex-column border-right">
             <div class="text-light">
                 <label>You are logged in as</label>
             </div>
             <h4 class="d-flex text-white mb-0 p-1 border-light">
                 <s:property value="currentUser.username"/>
             </h4>
-            <ul class="label d-flex flex-column-reverse border-top pl-0 mb-0">
+            <ul class="label d-flex flex-column-reverse border-top pt-4 pl-0 mb-0">
                 <c:forEach items="${contactsList}" var="contact">
-                    <li class="w-100">
-                        <h6 class="d-flex w-100 pt-2 pb-2 text-white" href="chat">
-                                ${contact.username}
-                        </h6>
+                    <li class="w-100 pt-2 pb-2">
+                        <a class="d-flex w-100 p-2 text-white" href="chat">
+                            <h6 class="m-0">${contact.username}</h6>
+                        </a>
                     </li>
                 </c:forEach>
             </ul>
+            <div class="card-footer d-flex w-100 mt-auto p-0 pt-4">
+                <s:form action="sign-out" method="POST" namespace="/send-message">
+                    <s:submit class="btn mb-1 w-100 btn-warning" value="Sign Out"/>
+                </s:form>
+            </div>
         </div>
         <div class="card-body w-75 d-flex flex-column align-items-stretch ">
             <div class="card-chat-field flex-column-reverse overflow-auto">
@@ -61,11 +66,6 @@
                 </s:form>
             </div>
         </div>
-        <div class="card-footer w-100">
-            <s:form action="sign-out" method="POST" namespace="/send-message">
-                <s:submit class="ml-auto btn btn-warning" value="Sign Out"/>
-            </s:form>
-        </div>
     </div>
 
 </div>
@@ -74,6 +74,7 @@
     contacts.forEach(function (item) {
 
         item.addEventListener('click', function () {
+            console.log('click');
             var date = new Date();
             var DAYS = 30;
             date.setTime(date.getTime() + (DAYS * 24 * 60 * 60 * 1000));
