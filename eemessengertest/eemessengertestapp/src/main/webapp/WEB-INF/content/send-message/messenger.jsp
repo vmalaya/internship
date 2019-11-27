@@ -16,15 +16,15 @@
             <ul class="label d-flex flex-column-reverse border-top pl-0 mb-0">
                 <c:forEach items="${contactsList}" var="contact">
                     <li class="w-100">
-                        <a class="d-flex w-100 pt-2 pb-2 text-white" href="chat">
+                        <h6 class="d-flex w-100 pt-2 pb-2 text-white" href="chat">
                                 ${contact.username}
-                        </a>
+                        </h6>
                     </li>
                 </c:forEach>
             </ul>
         </div>
-        <div class="card-body w-75 d-flex flex-column align-items-stretch">
-            <div class="card-chat-field flex-column-reverse">
+        <div class="card-body w-75 d-flex flex-column align-items-stretch ">
+            <div class="card-chat-field flex-column-reverse overflow-auto">
                 <c:forEach items="${chat}" var="message">
                     <c:if test="${message.sender.username == currentUser.username}">
                         <div class="d-flex justify-content-end pr-2 text-white">
