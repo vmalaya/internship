@@ -33,6 +33,9 @@ Was used liquibase database migration.
 
 The [eemessenger] is a java EE application with messenger functionality
 
+The [eemessenger8] is an example configuration fabric8 to build, up and down application in Docker  
+
+The [eemessengertest] is a EE application with chat functionality
 <!--
 references
 -->
@@ -47,3 +50,5 @@ references
 [strutssql]: strutssql
 [strutsjpa]: strutsjpa
 [eemessenger]: eemessenger
+[eemessenger8]: eemessenger8
+[eemessengertest]: eemessengertest
