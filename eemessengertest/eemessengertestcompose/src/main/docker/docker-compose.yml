@@ -7,7 +7,7 @@ volumes:
   postgresql-data: {}
 services:
   postgresql:
-    image: vmalaya/eemessengertestpostgres:1.0.0-SNAPSHOT
+    image: vmalaya/eemessengertestpostgres
     container_name: postgresql
     volumes:
       - postgresql-data:/var/lib/postgresql:rw
@@ -16,7 +16,7 @@ services:
     networks: [eemessengernet]
     hostname: postgresql
   app:
-    image: vmalaya/eemessengertestapp:1.0.0-SNAPSHOT
+    image: vmalaya/eemessengertestapp
     container_name: app
     ports: ['8080:8080']
     networks: [eemessengernet]
@@ -24,13 +24,3 @@ services:
       postgresql:
         condition: service_healthy
     hostname: app
-#    healthcheck:
-#      test: wget -q --spider http://127.0.0.1:8080/eemessenger/ || exit 1
-#      retries: 33
-#      timeout: 3s
-#      interval: 3s
-  healthcheck:
-    image: alpine
-    depends_on:
-      app:
-        condition: service_healthy

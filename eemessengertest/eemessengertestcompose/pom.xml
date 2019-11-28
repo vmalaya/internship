@@ -12,7 +12,6 @@
     <artifactId>eemessengertestcompose</artifactId>
     <packaging>pom</packaging>
 
-    
     <build>
         <pluginManagement>
             <plugins>
@@ -36,7 +35,7 @@
     </build>
 
     <profiles>
-        <!-- mvn -pl trololo -P compose -->
+        <!-- mvn -pl ... -P compose-create -->
         <profile>
             <id>compose-create</id>
             <build>
@@ -123,7 +122,85 @@
                 </plugins>
             </build>
         </profile>
+
+        <profile>
+            <id>start</id>
+            <build>
+                <defaultGoal>docker:start</defaultGoal>
+            </build>
+        </profile>
+
+        <profile>
+            <id>stop</id>
+            <build>
+                <defaultGoal>docker:stop</defaultGoal>
+            </build>
+        </profile>
+
+        <profile>
+            <id>f8app</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>io.fabric8</groupId>
+                        <artifactId>docker-maven-plugin</artifactId>
+                        <configuration>
+                            <skip>false</skip>
+                            <images>
+                                <image>
+                                    <alias>${project.artifactId}</alias>
+                                    <external>
+                                        <type>compose</type>
+                                        <basedir>./src/main/docker</basedir>
+                                        <composeFile>docker-compose.yml</composeFile>
+                                    </external>
+                                    <run>
+                                        <wait>
+                                            <http>
+                                                <url>http://127.0.0.1:8080/eemessenger/</url>
+                                                <method>GET</method>
+                                                <status>200</status>
+                                            </http>
+                                            <time>100000</time>
+                                        </wait>
+                                    </run>
+                                </image>
+                            </images>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+
+        <profile>
+            <id>f8e2e</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>io.fabric8</groupId>
+                        <artifactId>docker-maven-plugin</artifactId>
+                        <configuration>
+                            <skip>false</skip>
+                            <images>
+                                <image>
+                                    <alias>${project.artifactId}</alias>
+                                    <external>
+                                        <type>compose</type>
+                                        <basedir>./src/main/docker</basedir>
+                                        <composeFile>docker-compose-e2e.yml</composeFile>
+                                    </external>
+                                    <run>
+                                        <wait>
+                                            <log>Struts2 CDI integration initialized.</log>
+                                            <time>99000</time>
+                                        </wait>
+                                    </run>
+                                </image>
+                            </images>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
     </profiles>
-
-
 </project>

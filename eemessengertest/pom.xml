@@ -13,8 +13,10 @@
     <packaging>pom</packaging>
 
     <modules>
-        <module>eemessengertestapp</module>
         <module>eemessengertestpostgres</module>
+        <module>eemessengertestapp</module>
+        <module>eemessengertestchrome</module>
+        <module>eemessengertestselenium</module>
         <module>eemessengerteste2e</module>
         <module>eemessengertestcompose</module>
     </modules>
@@ -34,7 +36,7 @@
     </properties>
 
     <build>
-        <defaultGoal>clean package docker:build</defaultGoal>
+        <defaultGoal>docker:remove clean package docker:build</defaultGoal>
         <!--  docker images -f=reference='vmalaya/*' -->
         <pluginManagement>
             <plugins>
@@ -43,6 +45,7 @@
                     <artifactId>docker-maven-plugin</artifactId>
                     <version>${docker-maven-plugin.version}</version>
                     <configuration>
+                        <skip>true</skip>
                         <follow>false</follow>
                         <verbose>true</verbose>
                         <useColor>true</useColor>
@@ -52,10 +55,19 @@
                         <watchInterval>500</watchInterval>
                         <allContainers>true</allContainers>
                         <removeVolumes>true</removeVolumes>
+                        <imagePullPolicy>IfNotPresent</imagePullPolicy>
                         <autoCreateCustomNetworks>false</autoCreateCustomNetworks>
                         <images>
                             <image>
-                                <name>${docker-repository.name}/${project.artifactId}:${project.version}</name>
+                                <name>${docker-repository.name}/${project.artifactId}</name>
+                                <alias>${project.artifactId}</alias>
+                                <build>
+                                    <contextDir>${project.basedir}</contextDir>
+                                    <tags>
+                                        <tag>latest</tag>
+                                        <tag>${project.version}</tag>
+                                    </tags>
+                                </build>
                             </image>
                         </images>
                     </configuration>

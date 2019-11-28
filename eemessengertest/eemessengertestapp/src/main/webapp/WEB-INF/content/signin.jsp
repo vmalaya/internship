@@ -45,7 +45,7 @@
                         <input class="form-control" type="password" name="j_password" id="password" placeholder="Your Password" />
                     </div>
                     <div class="form-group d-flex align-items-center mb-0 justify-content-end">
-                        <input class="ml-auto btn btn-warning" type="submit" value="Sign In" />
+                        <input class="ml-auto btn clean-button" type="submit" value="Sign In" />
                     </div>
                 </form>
             </div>

@@ -3,6 +3,19 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
 <html>
+<head>
+    <title>Messenger</title>
+    <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/index.css">
+    <!-- Le styles -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <!--Bootstrap 4 CDN-->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
+          integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+    <!--Fontawesome CDN-->
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css"
+          integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
+</head>
 <body class="max-vh-100 overflow-hidden">
 <div class="container d-flex align-items-center justify-content-center">
     <div class="card-msg d-flex vw-80 flex-wrap">
@@ -24,7 +37,7 @@
             </ul>
             <div class="card-footer d-flex w-100 mt-auto p-0 pt-4">
                 <s:form action="sign-out" method="POST" namespace="/send-message">
-                    <s:submit class="btn mb-1 w-100 btn-warning" value="Sign Out"/>
+                    <s:submit class="btn mb-1 w-100 clean-button" value="Sign Out"/>
                 </s:form>
             </div>
         </div>
@@ -62,44 +75,24 @@
                 <s:form action="saveMessage" method="POST" namespace="/send-message">
                     <s:textfield class="form-control" name="recipientUsername" label="to" placeholder="username"/>
                     <s:textfield class="form-control" name="body" label="body" placeholder="type in here"/>
-                    <s:submit class="ml-auto btn btn-warning" value="Send"/>
+                    <s:submit class="ml-auto btn clean-button" value="Send"/>
                 </s:form>
             </div>
         </div>
     </div>
-
 </div>
 <script>
+    var DAYS = 30 * 24 * 60 * 60 * 1000;
     var contacts = document.querySelectorAll('.label li');
-    contacts.forEach(function (item) {
-
+    for (var item in contacts) {
         item.addEventListener('click', function () {
             console.log('click');
             var date = new Date();
-            var DAYS = 30;
-            date.setTime(date.getTime() + (DAYS * 24 * 60 * 60 * 1000));
+            date.setTime(date.getTime() + DAYS);
             var expires = "; expires=" + date.toGMTString();
             document.cookie = "clickedUser=" + item.innerText + expires;
         });
-    });
+    }
 </script>
-
 </body>
-<head>
-    <title>Messenger</title>
-
-    <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/index.css">
-    <!-- Le styles -->
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
-          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-
-    <!--Bootstrap 4 CDN-->
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
-          integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
-
-    <!--Fontawesome CDN-->
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css"
-          integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
-
-</head>
 </html>
