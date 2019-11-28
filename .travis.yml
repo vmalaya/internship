@@ -71,6 +71,16 @@ jobs:
         - ./mvnw -pl :eemessengerapp8 package docker:build docker:start
       script: ./mvnw -f ./eemessenger8/eemessengere2e8/pom.xml -Pe2e -DargLine="-Deemessenger.host=eemessengernet -Dselenide.browser=chrome -Dselenide.remote=http://127.0.0.1:4444/wd/hub"
       after_script: ./mvnw -pl :eemessengerapp8 docker:stop docker:remove clean
+
+    - stage: test
+      jdk: openjdk8
+      name: run eemessengertest e2e test
+      before_script:
+        - ./mvnw -f eemessengertest/pom.xml
+        - ./mvnw -f eemessengertest/eemessengertestcompose/pom.xml -P compose-create
+        - ./mvnw -f eemessengertest/eemessengertestcompose/pom.xml -P up,e2e
+      script: ./mvnw -f eemessengertest/eemessengerteste2e/pom.xml -P teste2e -DargLine="-Deemessenger.host=app -Dselenide.browser=chrome -Dselenide.remote=http://127.0.0.1:4444/wd/hub"
+      after_script: ./mvnw -f eemessengertest/eemessengertestcompose/pom.xml -P down,e2e
 cache:
   packages: true
   directories:
