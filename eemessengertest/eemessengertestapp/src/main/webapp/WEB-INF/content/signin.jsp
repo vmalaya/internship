@@ -51,7 +51,7 @@
             </div>
             <div class="card-footer">
                 <div class="d-flex justify-content-center links">
-                Don't you have an account?<a href="/eemessenger"> Sing up</a>
+                Don't you have an account?<a href="/eemessenger"> Sign up</a>
                 </div>
             </div>
         </div>
