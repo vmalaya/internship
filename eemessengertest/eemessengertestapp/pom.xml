@@ -105,12 +105,41 @@
             <artifactId>jstl</artifactId>
             <version>1.2</version>
         </dependency>
-
     </dependencies>
 
     <build>
         <finalName>eemessenger</finalName>
         <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-dependency-plugin</artifactId>
+                <version>${maven-dependency-plugin.version}</version>
+                <executions>
+                    <execution>
+                        <id>copy</id>
+                        <goals>
+                            <goal>copy</goal>
+                        </goals>
+                        <phase>process-resources</phase>
+                    </execution>
+                </executions>
+                <configuration>
+                    <artifactItems>
+                        <artifactItem>
+                            <groupId>org.postgresql</groupId>
+                            <artifactId>postgresql</artifactId>
+                            <version>${postgresql-driver.version}</version>
+                            <type>jar</type>
+                            <overWrite>false</overWrite>
+                            <!--<destFileName>optional-new-name.jar</destFileName>-->
+                        </artifactItem>
+                    </artifactItems>
+                    <outputDirectory>${project.basedir}/jboss-eap-7.2/modules/org/postgresql/main</outputDirectory>
+                    <overWriteSnapshots>true</overWriteSnapshots>
+                    <overWriteReleases>false</overWriteReleases>
+                    <overWriteIfNewer>true</overWriteIfNewer>
+                </configuration>
+            </plugin>
             <plugin>
                 <groupId>com.github.spotbugs</groupId>
                 <artifactId>spotbugs-maven-plugin</artifactId>
@@ -148,6 +177,7 @@
             <plugin>
                 <groupId>io.fabric8</groupId>
                 <artifactId>docker-maven-plugin</artifactId>
+                <configuration><skip>false</skip></configuration>
             </plugin>
         </plugins>
     </build>

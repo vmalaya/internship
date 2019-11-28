@@ -41,26 +41,6 @@
                     <skip>true</skip>
                 </configuration>
             </plugin>
-            <plugin>
-                <groupId>io.fabric8</groupId>
-                <artifactId>docker-maven-plugin</artifactId>
-                <configuration>
-                    <images>
-                        <image>
-                            <name>${docker-repository.name}/${selenium.service}:${project.version}</name>
-                            <build>
-                                <dockerFileDir>${project.basedir}/eemessengertestselenium</dockerFileDir>
-                            </build>
-                        </image>
-                        <image>
-                            <name>${docker-repository.name}/${chrome.service}:${project.version}</name>
-                            <build>
-                                <dockerFileDir>${project.basedir}/eemessengertestchrome</dockerFileDir>
-                            </build>
-                        </image>
-                    </images>
-                </configuration>
-            </plugin>
         </plugins>
     </build>
 

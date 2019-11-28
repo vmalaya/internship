@@ -38,9 +38,13 @@ services:
       - postgresql
       - chrome
     hostname: app
+#    healthcheck:
+#      test: wget -q --spider http://127.0.0.1:8080/eemessenger/ || exit 1
+#      retries: 33
+#      timeout: 3s
+#      interval: 3s
   healthcheck:
     image: alpine
     depends_on:
       app:
         condition: service_healthy
-
