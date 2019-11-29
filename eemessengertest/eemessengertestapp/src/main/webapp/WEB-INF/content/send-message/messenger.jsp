@@ -76,6 +76,10 @@
                 </s:form>
             </div>
         </div>
+            <div class="label d-flex w-100 justify-content-center bg-danger">
+                <s:property value="errorMessage"/>
+            </div>
+
     </div>
 </div>
 <script>
