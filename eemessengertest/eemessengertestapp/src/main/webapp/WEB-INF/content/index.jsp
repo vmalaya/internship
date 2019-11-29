@@ -37,7 +37,7 @@
                     <s:form action="saveUsername" method="post" namespace="/sign-up">
                             <s:textfield class="form-control" name="userBean.username" label="username" placeholder="Your Username" />
                             <s:password class="form-control" name="userBean.password" label="password" placeholder="Your Password" />
-                            <s:submit class="ml-auto btn btn-warning" value="Sign Up"/>
+                            <s:submit class="ml-auto btn clean-button" value="Sign Up"/>
                     </s:form>
             </div>
             <div class="card-footer">

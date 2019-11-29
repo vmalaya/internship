@@ -5,6 +5,7 @@
 _build and run application_
 
 ```shell script
+mvnw -f eemessengertest clean package
 mvnw -f eemessengertest/pom.xml
 mvnw -f eemessengertest/eemessengertestcompose/pom.xml -P compose-create
 mvnw -f eemessengertest/eemessengertestcompose/pom.xml -P up,app
@@ -20,6 +21,7 @@ mvnw -f eemessengertest/eemessengertestcompose/pom.xml -P down,app
 
 ```shell script
 # prepare
+mvnw -f eemessengertest clean package
 mvnw -f eemessengertest/pom.xml
 mvnw -f eemessengertest/eemessengertestcompose/pom.xml -P compose-create
 mvnw -f eemessengertest/eemessengertestcompose/pom.xml -P up,e2e

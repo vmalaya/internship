@@ -6,13 +6,10 @@
 <head>
     <title>Messenger</title>
     <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/index.css">
-    <!-- Le styles -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
           integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-    <!--Bootstrap 4 CDN-->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
           integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
-    <!--Fontawesome CDN-->
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css"
           integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
 </head>
@@ -84,7 +81,7 @@
 <script>
     var DAYS = 30 * 24 * 60 * 60 * 1000;
     var contacts = document.querySelectorAll('.label li');
-    for (var item in contacts) {
+    for (var item of contacts) {
         item.addEventListener('click', function () {
             console.log('click');
             var date = new Date();
