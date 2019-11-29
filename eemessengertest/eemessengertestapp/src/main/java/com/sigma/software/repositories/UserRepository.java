@@ -14,7 +14,6 @@ import javax.persistence.TypedQuery;
 import javax.transaction.*;
 import java.util.Collections;
 import java.util.List;
-import java.util.Objects;
 
 @ApplicationScoped
 public class UserRepository {
