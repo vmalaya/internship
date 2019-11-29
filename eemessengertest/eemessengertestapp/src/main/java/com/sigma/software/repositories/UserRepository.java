@@ -14,6 +14,7 @@ import javax.persistence.TypedQuery;
 import javax.transaction.*;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 
 @ApplicationScoped
 public class UserRepository {
@@ -58,5 +59,11 @@ public class UserRepository {
                                           .setParameter("username", username)
                                           .getSingleResult();
         return findUser(userId);
+    }
+    public Boolean isUser(String username){
+        Long counter = entityManager.createQuery("select count(u) from User as u where u.username =: username", Long.class)
+                                          .setParameter("username", username)
+                                          .getSingleResult();
+        return counter.equals(1L);
     }
 }

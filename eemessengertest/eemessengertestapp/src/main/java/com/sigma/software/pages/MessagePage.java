@@ -19,10 +19,7 @@ import javax.naming.NamingException;
 import javax.servlet.ServletException;
 import javax.servlet.http.Cookie;
 import java.time.ZonedDateTime;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
 @Namespace("/send-message")
 @Results({
@@ -34,6 +31,7 @@ import java.util.List;
 public class MessagePage extends ActionSupport {
     private static final long serialVersionUID = -6836296086197488826L;
     private static Boolean savedMessage = false;
+    private static String errorMessage;
 
     private String recipientUsername;
     private String body;
@@ -61,12 +59,19 @@ public class MessagePage extends ActionSupport {
 
     @Action("/saveMessage")
     public String input() throws NamingException {
-        LogManager.getLogger().info("\n\n\n ...saving message...\n\n\n");
-        User recipient = userRepository.findUserByUsername(recipientUsername);
-        messageRepository.save(new Message(currentUser, recipient, body,
-                                           ZonedDateTime.now()));
-        ServletActionContext.getResponse().addCookie(new Cookie("recipient", recipientUsername));
-        savedMessage = true;
+        if (recipientUsername.isEmpty()) errorMessage = "Please, input name of recipient";
+        else {
+            if(!userRepository.isUser(recipientUsername)) errorMessage = "There is no user with given username";
+            else{
+                errorMessage = null;
+                LogManager.getLogger().info("\n\n\n ...saving message...\n\n\n");
+                User recipient = userRepository.findUserByUsername(recipientUsername);
+                messageRepository.save(new Message(currentUser, recipient, body,
+                                                   ZonedDateTime.now()));
+                ServletActionContext.getResponse().addCookie(new Cookie("recipient", recipientUsername));
+                savedMessage = true;
+            }
+        }
         return "view";
     }
 
@@ -153,5 +158,9 @@ public class MessagePage extends ActionSupport {
 
     public void setChat(List<Message> chat) {
         this.chat = chat;
+    }
+
+    public String getErrorMessage() {
+        return errorMessage;
     }
 }
