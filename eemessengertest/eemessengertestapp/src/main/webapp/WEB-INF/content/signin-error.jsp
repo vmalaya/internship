@@ -30,7 +30,7 @@ PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
             <div class="card-header">
                 <h3 class="card-title text-center">Authentication Error</h3>
             </div>
-            <div class="card-body justify-content-center text-light">
+            <div class="card-body text-center text-light">
                      Invalid username and/or password.
             </div>
             <div class="card-footer">

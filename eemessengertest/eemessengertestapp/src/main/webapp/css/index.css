@@ -236,6 +236,7 @@ li:hover a {
 }
 
 .btn.clean-button {
+
     filter: invert(100%) !important;
     border: solid 0.5px grey !important;
 }

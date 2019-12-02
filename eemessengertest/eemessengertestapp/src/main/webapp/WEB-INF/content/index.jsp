@@ -45,7 +45,7 @@
                         Do you have an account?<a href="/eemessenger/send-message/page">Sign In</a>
                     </div>
             </div>
-            <div class="label justify-content-center bg-warning">
+            <div class="label justify-content-center bg-danger">
                 <s:property value="errorMessage"/>
             </div>
         </div>

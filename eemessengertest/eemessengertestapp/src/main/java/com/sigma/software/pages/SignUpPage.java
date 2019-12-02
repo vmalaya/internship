@@ -11,7 +11,9 @@ import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.naming.NamingException;
 import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+import java.util.Objects;
 
 @Results({
         @Result(name = "success", location = "index.jsp"),
@@ -38,11 +40,21 @@ public class SignUpPage extends ActionSupport {
             errorMessage = "There is such username. Please, input different one.";
             return SUCCESS;
         } else {
+            HttpServletRequest request = ServletActionContext.getRequest();
+            String remoteUser = request.getRemoteUser();
+            if (Objects.nonNull(remoteUser)) request.logout();
             LogManager.getLogger().info("\n\n\n ...saving user...\n\n\n");
+            format(userBean);
             userRepository.save(userBean);
-            ServletActionContext.getRequest().login(userBean.getUsername(), userBean.getPassword());
+            request.login(userBean.getUsername(), userBean.getPassword());
             return INPUT;
         }
+    }
+
+    private User format(User user){
+        user.setUsername(user.getUsername().trim());
+        user.setPassword(user.getPassword().trim());
+        return user;
     }
 
     public User getUserBean() {
