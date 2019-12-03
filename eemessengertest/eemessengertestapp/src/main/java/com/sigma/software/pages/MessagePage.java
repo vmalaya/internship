@@ -25,7 +25,7 @@ import java.util.*;
 @Namespace("/send-message")
 @Results({
         @Result(name = "input", type = "redirect", location = "/send-message/page"),
-        @Result(name = "view", type = "redirect", location = "/send-message/chat"),
+        @Result(name = "view", type = "redirect", location = "/send-message/chat?username=${recipientUsername}"),
         @Result(name = "success", location = "send-message/messenger.jsp")
 })
 @RequestScoped
@@ -34,7 +34,6 @@ public class MessagePage extends ActionSupport {
     private static final Logger log = LogManager.getLogger();
 
     private static final long serialVersionUID = -6836296086197488826L;
-    private static Boolean savedMessage = false;
     private static String errorMessage;
 
     private String recipientUsername;
@@ -76,15 +75,14 @@ public class MessagePage extends ActionSupport {
     public String input() throws NamingException {
         if (recipientUsername.isEmpty()) errorMessage = "Please, input name of recipient";
         else {
-            if(!userRepository.isUser(recipientUsername)) errorMessage = "There is no user with given username";
-            else{
+            if (!userRepository.isUser(recipientUsername)) errorMessage = "There is no user with given username";
+            else {
                 errorMessage = null;
                 LogManager.getLogger().info("\n\n\n ...saving message...\n\n\n");
                 User recipient = userRepository.findUserByUsername(recipientUsername);
                 messageRepository.save(new Message(currentUser, recipient, body,
                                                    ZonedDateTime.now()));
                 ServletActionContext.getResponse().addCookie(new Cookie("recipient", recipientUsername));
-                savedMessage = true;
             }
         }
         return "view";
@@ -93,6 +91,7 @@ public class MessagePage extends ActionSupport {
     @Action("/sign-out")
     public String signout() throws ServletException {
         ServletActionContext.getRequest().logout();
+        errorMessage = null;
         return INPUT;
     }
 
@@ -103,26 +102,6 @@ public class MessagePage extends ActionSupport {
         chat = (Objects.isNull(username) || "".equals(username.trim()))
                 ? new ArrayList<>() : messageRepository.findConversationBetween(currentUser.getUsername(), username);
         return SUCCESS;
-    }
-
-    private String getCookieValue(String cookieName) {
-        Cookie[] cookies = ServletActionContext.getRequest().getCookies();
-        HashMap<String, String> hashMap = new HashMap<>();
-        for (Cookie c : cookies) {
-            hashMap.put(c.getName(), c.getValue());
-        }
-        LogManager.getLogger().info("\n\n\n" + "Cookies\n" + hashMap + "\n\n\n");
-        return hashMap.get(cookieName);
-    }
-
-    private String findRelatedChatUser(Boolean savedMessage) {
-        String cookieName;
-        if (savedMessage.equals(true)) {
-            cookieName = "recipient";
-        } else cookieName = "clickedUser";
-        String relatedUser = getCookieValue(cookieName);
-        LogManager.getLogger().info("\n\n\n " + relatedUser + "\n\n\n");
-        return relatedUser;
     }
 
     public String getRecipientUsername() {
