@@ -240,3 +240,7 @@ li:hover a {
     filter: invert(100%) !important;
     border: solid 0.5px grey !important;
 }
+
+.height-24px {
+    height: 24px;
+}

@@ -22,7 +22,7 @@ import javax.servlet.annotation.WebInitParam;
                 @WebInitParam(
                         description = "Set dev mode",
                         name = "struts.devMode",
-                        value = "true"
+                        value = "false"
                 ),
                 @WebInitParam(
                         description = "Set validation provider class",

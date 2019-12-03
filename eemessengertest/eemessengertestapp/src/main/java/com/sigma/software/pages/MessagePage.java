@@ -6,6 +6,7 @@ import com.sigma.software.entities.User;
 import com.sigma.software.repositories.MessageRepository;
 import com.sigma.software.repositories.UserRepository;
 import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.apache.struts2.ServletActionContext;
 import org.apache.struts2.convention.annotation.Action;
 import org.apache.struts2.convention.annotation.Namespace;
@@ -19,10 +20,7 @@ import javax.naming.NamingException;
 import javax.servlet.ServletException;
 import javax.servlet.http.Cookie;
 import java.time.ZonedDateTime;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
 @Namespace("/send-message")
 @Results({
@@ -32,6 +30,9 @@ import java.util.List;
 })
 @RequestScoped
 public class MessagePage extends ActionSupport {
+
+    private static final Logger log = LogManager.getLogger();
+
     private static final long serialVersionUID = -6836296086197488826L;
     private static Boolean savedMessage = false;
     private static String errorMessage;
@@ -45,14 +46,25 @@ public class MessagePage extends ActionSupport {
 
     @Inject
     private MessageRepository messageRepository;
+
     @Inject
     private UserRepository userRepository;
+
+    private String username;
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public String getUsername() {
+        return username;
+    }
 
     @PostConstruct
     public void init() {
         currentUser = userRepository.getCurrentUser();
         messages = messageRepository.findMessages(currentUser);
-        contactsList = getContacts();
+        contactsList = messageRepository.findContacts(currentUser.getUsername());
     }
 
     @Action("/page")
@@ -86,29 +98,11 @@ public class MessagePage extends ActionSupport {
 
     @Action("/chat")
     public String chat() {
-        chat = new LinkedList<>();
-        String relatedChatUser = findRelatedChatUser(savedMessage);
-        savedMessage = false;
-        for (Message message : messages) {
-            if (message.getSender().getUsername().equals(currentUser.getUsername())) {
-                if (message.getRecipient().getUsername().equals(relatedChatUser)) chat.add(message);
-            } else if (message.getSender().getUsername().equals(relatedChatUser)) {
-                if (message.getRecipient().getUsername().equals(currentUser.getUsername())) chat.add(message);
-            }
-        }
+        log.info("username: {}, current user: {}", username, currentUser);
+        log.info("if: {}", Objects.isNull(username) || "".equals(username.trim()));
+        chat = (Objects.isNull(username) || "".equals(username.trim()))
+                ? new ArrayList<>() : messageRepository.findConversationBetween(currentUser.getUsername(), username);
         return SUCCESS;
-    }
-
-    public List<User> getContacts() {
-        ArrayList contactsList = new ArrayList();
-        for (Message message : messages) {
-            if (message.getSender().getUsername().equals(currentUser.getUsername())) {
-                if (!contactsList.contains(message.getRecipient())) contactsList.add(message.getRecipient());
-            } else {
-                if (!contactsList.contains(message.getSender())) contactsList.add(message.getSender());
-            }
-        }
-        return contactsList;
     }
 
     private String getCookieValue(String cookieName) {

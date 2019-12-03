@@ -20,6 +20,10 @@
         <jboss.image>daggerok/jboss-eap-7.2:7.2.0-alpine</jboss.image>
         <postgresql-driver.version>9.4-1206-jdbc4</postgresql-driver.version>
         <struts2-bean-validation-plugin.version>2.5.20</struts2-bean-validation-plugin.version>
+        <font-awesome.version>5.11.2</font-awesome.version>
+        <bootstrap.version>4.3.1</bootstrap.version>
+        <jquery.version>3.4.1</jquery.version>
+        <popper.js.version>1.15.0</popper.js.version>
     </properties>
 
     <dependencies>
@@ -104,6 +108,27 @@
             <groupId>jstl</groupId>
             <artifactId>jstl</artifactId>
             <version>1.2</version>
+        </dependency>
+        <!-- gui -->
+        <dependency>
+            <groupId>org.webjars</groupId>
+            <artifactId>jquery</artifactId>
+            <version>${jquery.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.webjars</groupId>
+            <artifactId>popper.js</artifactId>
+            <version>${popper.js.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.webjars</groupId>
+            <artifactId>bootstrap</artifactId>
+            <version>${bootstrap.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.webjars</groupId>
+            <artifactId>font-awesome</artifactId>
+            <version>${font-awesome.version}</version>
         </dependency>
     </dependencies>
 
