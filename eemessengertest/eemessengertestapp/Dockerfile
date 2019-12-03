@@ -1,5 +1,8 @@
 FROM daggerok/jboss-eap-7.2:7.2.0-alpine
-HEALTHCHECK --start-period=10s --timeout=2s --retries=99 \
+HEALTHCHECK --retries=33 \
+            --timeout=3s \
+            --interval=3s \
+            --start-period=3s \
         CMD wget -q --spider http://127.0.0.1:8080/eemessenger/ \
          || exit 1
 ENTRYPOINT standalone.sh -b 0.0.0.0
