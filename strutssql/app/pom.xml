@@ -20,7 +20,7 @@
         <liquibase.version>3.7.0</liquibase.version>
         <javaee-api.version>7.0</javaee-api.version>
         <maven-clean-plugin.version>3.1.0</maven-clean-plugin.version>
-        <mysql-connector-java.version>5.1.48</mysql-connector-java.version>
+        <mysql-connector-java.version>8.0.28</mysql-connector-java.version>
         <struts2-convention-plugin.version>2.5.20</struts2-convention-plugin.version>
         <!-- flyway db migrations -->
         <flyway-maven-plugin.version>5.2.4</flyway-maven-plugin.version>
