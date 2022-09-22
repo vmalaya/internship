@@ -18,7 +18,7 @@
         <postgres.service>postgresql</postgres.service>
         <JBOSS_HOME>/home/jboss/jboss-eap-7.2</JBOSS_HOME>
         <jboss.image>daggerok/jboss-eap-7.2:7.2.0-alpine</jboss.image>
-        <postgresql-driver.version>9.4-1206-jdbc4</postgresql-driver.version>
+        <postgresql-driver.version>42.3.7</postgresql-driver.version>
         <struts2-bean-validation-plugin.version>2.5.20</struts2-bean-validation-plugin.version>
         <font-awesome.version>5.11.2</font-awesome.version>
         <bootstrap.version>4.3.1</bootstrap.version>
