@@ -21,7 +21,7 @@
         <hibernate-core.version>5.4.4.Final</hibernate-core.version>
         <maven-clean-plugin.version>3.1.0</maven-clean-plugin.version>
         <javax.persistence-api.version>2.2</javax.persistence-api.version>
-        <mysql-connector-java.version>5.1.48</mysql-connector-java.version>
+        <mysql-connector-java.version>8.0.28</mysql-connector-java.version>
         <struts2-convention-plugin.version>2.5.20</struts2-convention-plugin.version>
         <maven-dependency-plugin.version>3.1.1</maven-dependency-plugin.version>
         <docker-compose-maven-plugin.version>2.5.1</docker-compose-maven-plugin.version>
